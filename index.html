@@ -2,13 +2,12 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>STELLA MARIS SUSHI</title>
 
 <style>
   :root{
     --bg:#0b0b0c;
-    --panel:#101114;
     --card:#15161a;
     --line:#262830;
     --text:#f3f3f3;
@@ -36,9 +35,9 @@
     background: rgba(15,16,18,.92);
     backdrop-filter: blur(12px);
     border-bottom:1px solid rgba(255,255,255,.08);
-    padding:14px 14px 10px;
+    padding:14px 14px 12px;
   }
-  .wrap{max-width:920px; margin:0 auto;}
+  .wrap{max-width:780px; margin:0 auto;}
   .brandRow{display:flex; align-items:center; gap:12px;}
   .logo{
     width:40px; height:40px; border-radius:14px;
@@ -50,18 +49,18 @@
     border:1px solid rgba(202,167,106,.25);
     user-select:none;
   }
-  h1{margin:0; font-size:18px; letter-spacing:.4px; font-weight:1000;}
+  h1{margin:0; font-size:20px; letter-spacing:.8px; font-weight:1000;}
 
   .tabs{margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;}
   .tab{
-    padding:11px 14px;
+    padding:10px 14px;
     border-radius:16px;
     cursor:pointer;
-    font-size:13.5px;
-    font-weight:1000;
-    color: rgba(255,255,255,.85);
-    background: rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.10);
+    font-size:14px;
+    font-weight:950;
+    color: rgba(255,255,255,.90);
+    background: rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.12);
     user-select:none;
     transition: transform .08s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
@@ -69,28 +68,27 @@
   .tab:active{transform: translateY(1px) scale(.99);}
   .tab.active{
     background: rgba(202,167,106,.16);
-    border-color: rgba(202,167,106,.35);
+    border-color: rgba(202,167,106,.38);
+    box-shadow: 0 10px 30px rgba(202,167,106,.12);
     color:#fff;
-    box-shadow: 0 10px 22px rgba(0,0,0,.25) inset;
   }
 
-  /* Contenido scroll */
+  /* Contenido */
   .content{
-    max-width:920px;
+    max-width:780px;
     margin:0 auto;
-    padding: 112px 14px 140px;
+    padding: 118px 14px 138px; /* header + footer */
   }
-
   .sectionTitle{
     margin: 10px 2px 12px;
     color: var(--gold);
-    letter-spacing:.35em;
+    letter-spacing:.30em;
     font-weight:1000;
     font-size: 12px;
     text-transform: uppercase;
   }
 
-  /* 1 sola columna SIEMPRE (así no se “cortan” 2 cards) */
+  /* SIEMPRE 1 columna (así nunca ves 2 cortadas) */
   .grid{
     display:grid;
     gap:14px;
@@ -106,58 +104,50 @@
     position:relative;
   }
 
-  /* IMAGEN: ancho lleno + foto completa (sin recortar) + fondo blur (cover) */
+  /* Imagen: ancho 100%, sin franjas, sin estirar, sin recortar */
   .imgBox{
-    height: 240px;
-    position:relative;
-    overflow:hidden;
+    width:100%;
+    background: rgba(0,0,0,.22);
     border-bottom:1px solid rgba(255,255,255,.06);
-    background: rgba(0,0,0,.18);
-    cursor: pointer;
-  }
-  .imgBox::before{
-    content:"";
-    position:absolute;
-    inset:-25px;
-    background-image: var(--bgimg);
-    background-size: cover;
-    background-position: center;
-    filter: blur(18px) brightness(.55) saturate(1.05);
-    transform: scale(1.15);
-  }
-  .imgBox::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background: radial-gradient(900px 280px at 50% 0%, rgba(202,167,106,.22), transparent 55%);
-    pointer-events:none;
   }
   .imgBox img{
-    position:relative;
-    z-index:1;
     width:100%;
-    height:100%;
-    object-fit: contain;           /* se ve TODA la foto (incluye el texto) */
-    object-position: center;
+    height:auto;           /* CLAVE: no se estira */
     display:block;
+    cursor:pointer;
+  }
+  /* Placeholder cuando falta foto */
+  .imgPlaceholder{
+    width:100%;
+    aspect-ratio: 16 / 9;
+    display:grid;
+    place-items:center;
+    color: rgba(255,255,255,.25);
+    font-weight:1000;
+    letter-spacing:.10em;
+    background:
+      radial-gradient(220px 140px at 20% 20%, rgba(202,167,106,.20), transparent 60%),
+      radial-gradient(220px 140px at 80% 0%, rgba(255,255,255,.06), transparent 60%),
+      rgba(0,0,0,.18);
   }
 
   .priceTag{
     position:absolute;
     top:12px; right:12px;
-    background: rgba(0,0,0,.60);
-    border:1px solid rgba(255,255,255,.14);
+    background: rgba(0,0,0,.55);
+    border:1px solid rgba(255,255,255,.12);
     padding:8px 12px;
     border-radius:999px;
     font-weight:1100;
     letter-spacing:.3px;
-    z-index: 5;
   }
 
-  .body{ padding: 14px 14px 14px; }
+  .body{
+    padding: 12px 14px 14px;
+  }
   .name{margin:0; font-size:18px; font-weight:1100; line-height:1.15;}
-  .meta{margin-top:7px; font-size:13px; color:var(--muted); line-height:1.25;}
-  .meta b{color: rgba(255,255,255,.90); font-weight:1000;}
+  .meta{margin-top:6px; font-size:13px; color:var(--muted); line-height:1.25;}
+  .meta b{color: rgba(255,255,255,.92); font-weight:1000;}
   .list{
     margin:10px 0 0;
     padding-left: 18px;
@@ -183,23 +173,23 @@
     font-weight:900;
   }
   .qtyPill{
-    padding:8px 12px;
+    padding:7px 12px;
     border-radius:999px;
-    border:1px solid rgba(202,167,106,.26);
+    border:1px solid rgba(202,167,106,.28);
     background: rgba(202,167,106,.10);
     color:#fff;
-    min-width:56px;
+    min-width:52px;
     text-align:center;
     font-weight:1100;
   }
 
-  .btns{display:flex; gap:10px; align-items:center;}
+  .btns{display:flex; gap:10px;}
   .btn{
     border:none;
     cursor:pointer;
     user-select:none;
     font-weight:1100;
-    padding:12px 16px;
+    padding:12px 14px;
     border-radius: 14px;
     background: rgba(255,255,255,.06);
     border:1px solid rgba(255,255,255,.12);
@@ -211,20 +201,14 @@
     transform: translateY(1px) scale(.98);
     filter: brightness(.95);
   }
-  /* Se nota el click */
-  .btn:focus{outline:none;}
-  .btn:active, .btn.pressed{
-    box-shadow: 0 0 0 3px rgba(202,167,106,.20);
-  }
-
   .btn.add{
     background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
     border:1px solid rgba(202,167,106,.55);
     color:#1a140b;
+    box-shadow: 0 10px 30px rgba(202,167,106,.14);
   }
   .btn.minus{
     background: rgba(255,255,255,.04);
-    min-width:54px;
   }
 
   /* Footer fijo */
@@ -237,7 +221,7 @@
     padding:10px 12px;
   }
   .footerInner{
-    max-width:920px;
+    max-width:780px;
     margin:0 auto;
     display:flex;
     gap:10px;
@@ -248,111 +232,98 @@
   .totals{
     display:flex;
     flex-direction:column;
-    gap:4px;
+    gap:6px;
     padding:10px 12px;
     border-radius: 16px;
     background: rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.10);
-    min-width: 250px;
+    width: 100%;
   }
-  .totals .big{font-weight:1100; font-size:18px;}
+  .totals .big{font-weight:1100; font-size:16px;}
   .totals .small{color:var(--muted); font-weight:900; font-size:13px;}
-  .totals .extrasLine{color: rgba(202,167,106,.95); font-weight:1000;}
+  .totals .extrasLine{
+    color: rgba(202,167,106,.95);
+    font-weight:1000;
+    font-size:13px;
+    margin-top:2px;
+  }
+  .totals .extrasLine span{
+    color: rgba(255,255,255,.85);
+    font-weight:900;
+  }
 
-  .footerBtns{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+  .footerBtns{display:flex; gap:10px; align-items:center; width:100%;}
   .btnGhost{
-    padding:13px 16px;
-    border-radius: 16px;
+    padding:12px 14px;
+    border-radius: 14px;
     background: rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.10);
     color:#fff;
     font-weight:1100;
     cursor:pointer;
-    transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
+    transition: transform .08s ease, filter .15s ease;
     -webkit-tap-highlight-color: transparent;
     min-width:110px;
   }
-  .btnGhost:active{transform: translateY(1px) scale(.98); filter:brightness(.95); box-shadow: 0 0 0 3px rgba(202,167,106,.14);}
+  .btnGhost:active{transform: translateY(1px) scale(.98); filter:brightness(.95);}
   .btnWA{
-    padding:13px 18px;
-    border-radius: 16px;
+    padding:12px 16px;
+    border-radius: 14px;
     background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
     border:1px solid rgba(202,167,106,.55);
     color:#1a140b;
     font-weight:1200;
     cursor:pointer;
-    min-width: 210px;
+    flex:1;
     text-align:center;
-    transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
+    transition: transform .08s ease, filter .15s ease;
     -webkit-tap-highlight-color: transparent;
   }
-  .btnWA:active{transform: translateY(1px) scale(.98); filter:brightness(.95); box-shadow: 0 0 0 3px rgba(202,167,106,.18);}
+  .btnWA:active{transform: translateY(1px) scale(.98); filter:brightness(.95);}
 
-  @media (max-width:520px){
-    .totals{min-width: 100%;}
-    .footerBtns{width:100%; justify-content:space-between;}
-    .btnWA{flex:1;}
-    .imgBox{height: 260px;}
-  }
-
-  /* MODAL para agrandar foto */
+  /* Modal zoom de foto */
   .modal{
-    position:fixed;
-    inset:0;
+    position:fixed; inset:0;
+    background: rgba(0,0,0,.82);
     z-index:2000;
     display:none;
     align-items:center;
     justify-content:center;
-    background: rgba(0,0,0,.78);
-    backdrop-filter: blur(10px);
-    padding: 18px;
+    padding:18px;
   }
   .modal.open{display:flex;}
   .modalInner{
-    position:relative;
-    width:min(920px, 96vw);
-    max-height: 86vh;
+    width:min(980px, 100%);
+    max-height: 92vh;
+    background: rgba(20,20,24,.65);
+    border:1px solid rgba(255,255,255,.12);
     border-radius: 18px;
     overflow:hidden;
-    border:1px solid rgba(255,255,255,.14);
-    box-shadow: 0 30px 90px rgba(0,0,0,.65);
-    background: rgba(10,10,12,.70);
-  }
-  .modalInner::before{
-    content:"";
-    position:absolute;
-    inset:-25px;
-    background-image: var(--modalbg);
-    background-size: cover;
-    background-position:center;
-    filter: blur(22px) brightness(.55);
-    transform: scale(1.15);
-  }
-  .modalImg{
+    box-shadow: 0 30px 90px rgba(0,0,0,.6);
     position:relative;
-    z-index:1;
+  }
+  .modalInner img{
     width:100%;
-    height: 86vh;
-    max-height: 86vh;
-    object-fit: contain; /* se ve toda */
+    height: 92vh;
+    max-height: 92vh;
+    object-fit: contain;
     display:block;
-    background: transparent;
+    background:#000;
   }
   .modalClose{
     position:absolute;
-    top:12px; right:12px;
-    z-index:2;
+    top:10px; right:10px;
     border:none;
     cursor:pointer;
+    border-radius:999px;
     padding:10px 12px;
-    border-radius: 999px;
-    background: rgba(0,0,0,.55);
-    border:1px solid rgba(255,255,255,.16);
-    color:#fff;
     font-weight:1100;
+    color:#fff;
+    background: rgba(0,0,0,.55);
+    border:1px solid rgba(255,255,255,.14);
     -webkit-tap-highlight-color: transparent;
   }
-  .modalClose:active{transform: translateY(1px) scale(.98);}
+  .modalClose:active{transform: translateY(1px) scale(.98); filter:brightness(.95);}
 </style>
 </head>
 
@@ -381,7 +352,7 @@
     <div class="totals">
       <div class="big" id="totalMoney">Total: $0</div>
       <div class="small" id="totalPieces">Total de piezas: 0</div>
-      <div class="small extrasLine" id="extrasSummary">Salsas/Adicionales: —</div>
+      <div class="extrasLine" id="extrasLine">Salsas/Adicionales: <span>—</span></div>
     </div>
     <div class="footerBtns">
       <button class="btnGhost" id="btnClear">Vaciar</button>
@@ -390,108 +361,91 @@
   </div>
 </div>
 
-<!-- Modal imagen -->
+<!-- Modal -->
 <div class="modal" id="modal" onclick="closeModal(event)">
-  <div class="modalInner" id="modalInner">
-    <button class="modalClose" onclick="closeModal(event)">✕</button>
-    <img class="modalImg" id="modalImg" alt="Foto ampliada" />
+  <div class="modalInner" onclick="event.stopPropagation()">
+    <button class="modalClose" onclick="closeModal()">Cerrar</button>
+    <img id="modalImg" src="" alt="">
   </div>
 </div>
 
 <script>
-  // WhatsApp
   const WA = "5491164194866";
 
-  // Helpers
   const fmtMoney = (n) => {
     const x = Math.round(Number(n)||0);
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
-  // Estado
   let activeTab = "combos";
   const cart = {}; // id -> qty
 
-  // Menú
-  // IMPORTANTE: estos nombres tienen que coincidir con los archivos del repo
-  // (vos ya subiste: buenos-aires.PNG, guacamole.PNG, philadelphia.PNG)
   const MENU = [
     // ===== Combos =====
-    {
-      id:"combo10", tab:"combos",
-      name:"Combo 10 piezas",
-      pieces:10,
-      price:16000,
+    { id:"combo10", tab:"combos", name:"Combo 10 piezas", pieces:10, price:16000,
       includesRule:"Incluye 1 salsa de soja fija",
-      composition:["4 Philadelphia","3 New York","3 California"],
-      img:""
-    },
-    {
-      id:"combo15", tab:"combos",
-      name:"Combo 15 piezas",
-      pieces:15,
-      price:22000,
+      composition:["4 Philadelphia","3 New York","3 California"], img:"" },
+    { id:"combo15", tab:"combos", name:"Combo 15 piezas", pieces:15, price:22000,
       includesRule:"Incluye 1 salsa de soja fija",
-      composition:["5 New York","5 California","5 Buenos Aires"],
-      img:""
-    },
-    {
-      id:"combo20", tab:"combos",
-      name:"Combo 20 piezas",
-      pieces:20,
-      price:30000,
+      composition:["5 New York","5 California","5 Buenos Aires"], img:"" },
+    { id:"combo20", tab:"combos", name:"Combo 20 piezas", pieces:20, price:30000,
       includesRule:"Incluye 1 salsa de soja fija",
-      composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese salmón"],
-      img:""
-    },
-    {
-      id:"combo30", tab:"combos",
-      name:"Combo 30 piezas",
-      pieces:30,
-      price:45000,
+      composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese salmón"], img:"" },
+    { id:"combo30", tab:"combos", name:"Combo 30 piezas", pieces:30, price:45000,
       includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección",
-      composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"],
-      img:""
-    },
-    {
-      id:"combo40", tab:"combos",
-      name:"Combo 40 piezas",
-      pieces:40,
-      price:55000,
-      includesRule:"Incluye 2 salsas de soja fijas + 1 salsa a elección",
-      composition:["10 Philadelphia","10 Maki de salmón","10 Niguiris de salmón","10 New York"],
-      img:""
-    },
-    {
-      id:"combo50", tab:"combos",
-      name:"Combo 50 piezas",
-      pieces:50,
-      price:70000,
-      includesRule:"Incluye 2 salsas de soja fijas + 2 salsas a elección",
-      composition:["10 Ebi langostino","10 Crazy","10 Salmón crispy","10 Tamago","10 Keki"],
-      img:""
-    },
+      composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"], img:"" },
+    { id:"combo40", tab:"combos", name:"Combo 40 piezas", pieces:40, price:55000,
+      includesRule:"Incluye 2 sojas fijas + 1 salsa a elección",
+      composition:["10 Philadelphia","10 Maki de salmón","10 Niguiris de salmón","10 New York"], img:"" },
+    { id:"combo50", tab:"combos", name:"Combo 50 piezas", pieces:50, price:70000,
+      includesRule:"Incluye 2 sojas fijas + 2 salsas a elección",
+      composition:["10 Ebi langostino","10 Crazy","10 Salmón crispy","10 Tamago","10 Keki"], img:"" },
 
     // ===== Rolls (x5) =====
     { id:"philadelphia", tab:"rolls", name:"Philadelphia", pieces:5, price:9000, desc:"Salmón fresco + queso crema.", img:"philadelphia.PNG" },
     { id:"buenos_aires", tab:"rolls", name:"Buenos Aires", pieces:5, price:11000, desc:"Langostino + queso + palta, con salsa BA.", img:"buenos-aires.PNG" },
     { id:"guacamole", tab:"rolls", name:"Guacamole", pieces:5, price:10500, desc:"Salmón + queso con topping de guacamole.", img:"guacamole.PNG" },
 
-    // ===== Extras =====
+    // (el resto queda igual; sin foto por ahora)
+    { id:"newyork", tab:"rolls", name:"New York", pieces:5, price:9000, desc:"(Completá ingredientes).", img:"" },
+    { id:"california", tab:"rolls", name:"California", pieces:5, price:8500, desc:"(Completá ingredientes).", img:"" },
+    { id:"alaska", tab:"rolls", name:"Alaska", pieces:5, price:9500, desc:"(Completá ingredientes).", img:"" },
+    { id:"alaska_ahumado", tab:"rolls", name:"Alaska Ahumado", pieces:5, price:10000, desc:"(Completá ingredientes).", img:"" },
+    { id:"avocado", tab:"rolls", name:"Avocado", pieces:5, price:9000, desc:"(Completá ingredientes).", img:"" },
+    { id:"vegetariano", tab:"rolls", name:"Vegetariano", pieces:5, price:7500, desc:"Zanahoria + palta + queso.", img:"" },
+    { id:"crazy", tab:"rolls", name:"Crazy", pieces:5, price:10500, desc:"(Completá ingredientes).", img:"" },
+    { id:"paradise", tab:"rolls", name:"Paradise", pieces:5, price:11500, desc:"(Completá ingredientes).", img:"" },
+    { id:"japan_flowers", tab:"rolls", name:"Japan Flowers", pieces:5, price:11000, desc:"(Completá ingredientes).", img:"" },
+    { id:"tamago_roll", tab:"rolls", name:"Tamago", pieces:5, price:8000, desc:"(Completá ingredientes).", img:"" },
+    { id:"salmon_crispy", tab:"rolls", name:"Salmón Crispy", pieces:5, price:10500, desc:"(Completá ingredientes).", img:"" },
+
+    // Makis / Niguiris / Sashimis (x5)
+    { id:"maki_salmon", tab:"rolls", name:"Maki de salmón", pieces:5, price:8500, desc:"Salmón.", img:"" },
+    { id:"maki_salmon_ahumado", tab:"rolls", name:"Maki de salmón ahumado", pieces:5, price:9500, desc:"Salmón ahumado.", img:"" },
+    { id:"maki_atun", tab:"rolls", name:"Maki de atún", pieces:5, price:8000, desc:"Atún.", img:"" },
+    { id:"maki_veggie", tab:"rolls", name:"Maki veggie", pieces:5, price:7500, desc:"Vegetales.", img:"" },
+
+    { id:"niguiri_salmon", tab:"rolls", name:"Niguiri de salmón", pieces:5, price:8500, desc:"Arroz + salmón.", img:"" },
+    { id:"niguiri_salmon_ah", tab:"rolls", name:"Niguiri de salmón ahumado", pieces:5, price:9500, desc:"Arroz + salmón ahumado.", img:"" },
+    { id:"keki_niguiri", tab:"rolls", name:"Niguiri Keki", pieces:5, price:10500, desc:"(Completá).", img:"" },
+
+    { id:"sashimi_salmon", tab:"rolls", name:"Sashimi de salmón", pieces:5, price:10000, desc:"Cortes de salmón.", img:"" },
+    { id:"sashimi_flameado", tab:"rolls", name:"Sashimi de salmón flameado", pieces:5, price:11500, desc:"Cortes flameados.", img:"" },
+
+    // ===== Salsas / Adicionales (unidad) =====
     { id:"soja", tab:"extras", name:"Salsa de soja", pieces:0, price:850, desc:"Unidad.", img:"" },
     { id:"salsa_ba", tab:"extras", name:"Salsa Buenos Aires", pieces:0, price:1300, desc:"Unidad.", img:"" },
     { id:"mostaza_miel", tab:"extras", name:"Salsa mostaza y miel", pieces:0, price:1300, desc:"Unidad.", img:"" },
     { id:"maracuya", tab:"extras", name:"Salsa maracuyá", pieces:0, price:1500, desc:"Unidad.", img:"" },
+    { id:"guacamole_salsa", tab:"extras", name:"Salsa guacamole", pieces:0, price:850, desc:"Unidad.", img:"" },
     { id:"criolla", tab:"extras", name:"Criolla", pieces:0, price:750, desc:"Unidad.", img:"" },
     { id:"jengibre", tab:"extras", name:"Jengibre", pieces:0, price:750, desc:"Unidad.", img:"" },
-    { id:"pepino", tab:"extras", name:"Pepino", pieces:0, price:700, desc:"Unidad.", img:"" }
+    { id:"pepino", tab:"extras", name:"Pepino", pieces:0, price:700, desc:"Unidad.", img:"" },
   ];
 
   const getQty = (id) => cart[id] || 0;
 
-  function haptic() {
-    try { if (navigator.vibrate) navigator.vibrate(12); } catch(e){}
-  }
+  function haptic(){ try{ if(navigator.vibrate) navigator.vibrate(10);}catch(e){} }
 
   function setTab(tab, el){
     activeTab = tab;
@@ -504,7 +458,6 @@
   function add(id){
     cart[id] = (cart[id]||0) + 1;
     haptic();
-    flashButton();
     updateTotals();
     updateQtyPills();
   }
@@ -514,14 +467,8 @@
     cart[id] -= 1;
     if (cart[id] <= 0) delete cart[id];
     haptic();
-    flashButton();
     updateTotals();
     updateQtyPills();
-  }
-
-  function flashButton(){
-    // micro feedback visual extra (además del :active)
-    // no hace falta apuntar un botón puntual; iOS ya marca :active bien
   }
 
   function clearCart(){
@@ -545,21 +492,21 @@
     return { totalMoney, totalPieces };
   }
 
-  function extrasSummary(){
+  function buildExtrasSummary(){
     const extras = Object.entries(cart)
       .map(([id, qty]) => ({ qty, item: MENU.find(x => x.id === id) }))
-      .filter(x => x.item && x.item.pieces === 0)
-      .sort((a,b) => (a.item.name).localeCompare(b.item.name));
+      .filter(x => x.item && x.item.tab === "extras" && x.qty > 0)
+      .sort((a,b) => a.item.name.localeCompare(b.item.name));
 
-    if (!extras.length) return "Salsas/Adicionales: —";
-    return "Salsas/Adicionales: " + extras.map(x => `${x.qty}x ${x.item.name}`).join(" · ");
+    if (!extras.length) return "—";
+    return extras.map(x => `${x.qty}x ${x.item.name}`).join(" • ");
   }
 
   function updateTotals(){
     const { totalMoney, totalPieces } = totals();
     document.getElementById("totalMoney").textContent = `Total: $${fmtMoney(totalMoney)}`;
     document.getElementById("totalPieces").textContent = `Total de piezas: ${totalPieces}`;
-    document.getElementById("extrasSummary").textContent = extrasSummary();
+    document.getElementById("extrasLine").innerHTML = `Salsas/Adicionales: <span>${buildExtrasSummary()}</span>`;
   }
 
   function updateQtyPills(){
@@ -583,14 +530,12 @@
     let totalPieces = 0;
 
     for (const {qty, item} of entries){
-      const lineMoney = (item.price||0) * qty;
-      totalMoney += lineMoney;
-
-      const itemPieces = (item.pieces||0) * qty;
-      totalPieces += itemPieces;
+      totalMoney += (item.price||0) * qty;
+      totalPieces += (item.pieces||0) * qty;
 
       if (item.pieces > 0) {
         const xBase = item.pieces === 5 ? " x5" : "";
+        const itemPieces = (item.pieces||0) * qty;
         sushiLines.push(`${qty}x ${item.name}${xBase} – ${itemPieces} piezas`);
       } else {
         extraLines.push(`${qty}x ${item.name}`);
@@ -598,7 +543,7 @@
     }
 
     let msg = "";
-    msg += "Hola Stella Maris Sushi 🍣\n\n";
+    msg += "Hola STELLA MARIS SUSHI 🍣\n\n";
     msg += "Quiero pedir:\n\n";
     msg += "🍣 Sushi:\n";
     msg += (sushiLines.length ? sushiLines.join("\n") : "—") + "\n\n";
@@ -607,7 +552,8 @@
       msg += extraLines.join("\n") + "\n\n";
     }
     msg += `Total de piezas: ${totalPieces}\n`;
-    msg += `Total: $${fmtMoney(totalMoney)}\n`;
+    msg += `Total: $${fmtMoney(totalMoney)}\n\n`;
+    msg += "Retiro en el local.";
 
     return msg;
   }
@@ -623,51 +569,34 @@
   }
 
   // Modal
-  function openModal(src){
-    if (!src) return;
+  function openModal(src, alt){
     const modal = document.getElementById("modal");
-    const modalImg = document.getElementById("modalImg");
-    const modalInner = document.getElementById("modalInner");
-    modalImg.src = src;
-    modalInner.style.setProperty("--modalbg", `url('${src}')`);
+    const img = document.getElementById("modalImg");
+    img.src = src;
+    img.alt = alt || "";
     modal.classList.add("open");
   }
-
   function closeModal(e){
-    // si apretás la X o el fondo, cierra
     const modal = document.getElementById("modal");
-    if (e && e.target && (e.target.id === "modal" || e.target.classList.contains("modalClose"))) {
-      modal.classList.remove("open");
-      document.getElementById("modalImg").src = "";
-    } else if (e && e.target && e.target.tagName === "BUTTON") {
-      modal.classList.remove("open");
-      document.getElementById("modalImg").src = "";
-    }
+    const img = document.getElementById("modalImg");
+    modal.classList.remove("open");
+    img.src = "";
   }
-
-  // Exponer al scope global (para onclick inline)
-  window.openModal = openModal;
-  window.closeModal = closeModal;
+  document.addEventListener("keydown", (e)=>{ if(e.key==="Escape") closeModal(); });
 
   function cardHTML(item){
     const price = item.price ? `$${fmtMoney(item.price)}` : "—";
     const qty = getQty(item.id);
 
-    const base = (item.pieces === 5) ? "x5 piezas" : (item.pieces > 0 ? `${item.pieces} piezas` : "Unidad");
+    const imgBlock = item.img
+      ? `<div class="imgBox"><img src="${item.img}" alt="${item.name}" onclick="openModal('${item.img}','${item.name}')"></div>`
+      : `<div class="imgPlaceholder">FOTO (pendiente)</div>`;
 
+    const base = (item.pieces === 5) ? "x5 piezas" : (item.pieces > 0 ? `${item.pieces} piezas` : "Unidad");
     const desc = item.tab === "combos"
       ? `<div class="meta"><b>${base}</b> · ${item.includesRule || ""}</div>
          ${(item.composition && item.composition.length) ? `<ul class="list">${item.composition.map(x=>`<li>${x}</li>`).join("")}</ul>` : ""}`
       : `<div class="meta"><b>${base}</b> · ${item.desc || ""}</div>`;
-
-    // imagen: si hay, blur + contain, con modal al click
-    const imgBlock = item.img
-      ? `<div class="imgBox" style="--bgimg:url('${item.img}')" onclick="openModal('${item.img}')">
-           <img src="${item.img}" alt="${item.name}" loading="lazy" />
-         </div>`
-      : `<div class="imgBox" style="--bgimg:radial-gradient(300px 200px at 30% 30%, rgba(202,167,106,.20), transparent 60%)">
-           <img src="" alt="" style="display:none" />
-         </div>`;
 
     return `
       <div class="card">
