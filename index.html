@@ -2,387 +2,480 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Sushi Stella Maris</title>
-
   <style>
     :root{
-      --bg:#0f0f12;
-      --card:#17171c;
-      --card2:#1d1d23;
-      --text:#f3f3f6;
-      --muted:#b8b8c6;
+      --bg:#0b0b10;
+      --bg2:#0f0f16;
+      --card:#16161d;
+      --card2:#1c1c25;
       --line:#2a2a33;
+      --text:#f4f4f8;
+      --muted:#b9b9c9;
       --gold:#d8b26b;
       --gold2:#b88b3c;
-      --shadow: 0 12px 28px rgba(0,0,0,.35);
+      --shadow: 0 16px 40px rgba(0,0,0,.45);
+      --radius: 22px;
     }
     *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background: radial-gradient(1200px 800px at 20% 10%, rgba(216,178,107,.18), transparent 55%),
-                  radial-gradient(900px 700px at 80% 30%, rgba(184,139,60,.12), transparent 55%),
-                  var(--bg);
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(216,178,107,.18), transparent 55%),
+        radial-gradient(900px 500px at 80% 20%, rgba(184,139,60,.12), transparent 60%),
+        radial-gradient(900px 700px at 50% 95%, rgba(90,70,30,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
       color:var(--text);
-      padding:18px 14px 160px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      -webkit-font-smoothing:antialiased;
+      padding-bottom: 130px; /* espacio para barra inferior */
     }
 
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:14px;
+    /* Header */
+    .wrap{max-width:980px;margin:0 auto;padding:18px 16px 0}
+    .top{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding-top: 6px;
     }
-    .title{
-      font-size:22px;
+    .brand{
       font-weight:800;
       letter-spacing:.2px;
+      font-size:26px;
     }
-    .pill{
-      background: rgba(216,178,107,.14);
-      border: 1px solid rgba(216,178,107,.28);
-      color: var(--gold);
-      padding:10px 12px;
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 14px;
       border-radius:999px;
+      border:1px solid rgba(216,178,107,.35);
+      background: rgba(20,20,28,.55);
+      color: var(--gold);
+      box-shadow: 0 10px 25px rgba(0,0,0,.25);
       font-weight:700;
-      font-size:14px;
-      display:flex;
-      align-items:center;
-      gap:8px;
       white-space:nowrap;
     }
-    .pill small{color:rgba(216,178,107,.85); font-weight:700}
+    .badge .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--gold);
+      box-shadow:0 0 0 4px rgba(216,178,107,.15);
+    }
 
+    /* Tabs */
     .tabs{
-      display:flex;
-      gap:10px;
-      margin:10px 0 10px;
-      flex-wrap:nowrap; /* una línea */
-      overflow:hidden;
+      display:flex;gap:10px;flex-wrap:nowrap;overflow:hidden;
+      margin:16px 0 10px;
     }
     .tab{
-      flex:1;
-      min-width:0;
-      text-align:center;
-      padding:12px 10px;
-      border-radius:14px;
-      background: rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(18,18,26,.58);
       color: var(--text);
+      padding:10px 14px;
+      border-radius:999px;
       font-weight:800;
-      letter-spacing:.2px;
-      user-select:none;
+      min-width: 0;
+      flex: 0 0 auto;
       cursor:pointer;
-      transition: .15s ease;
+      user-select:none;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
     }
-    .tab:active{ transform: scale(.98); }
+    .tab:active{transform: translateY(1px) scale(.99)}
     .tab.active{
-      background: rgba(216,178,107,.16);
-      border:1px solid rgba(216,178,107,.35);
+      border-color: rgba(216,178,107,.5);
+      background: rgba(216,178,107,.12);
       color: var(--gold);
-      box-shadow: 0 0 0 1px rgba(216,178,107,.10) inset;
     }
 
-    .hint{
+    .subline{
+      margin:10px 2px 14px;
       color: var(--muted);
-      font-size:14px;
-      margin:8px 2px 10px;
+      font-weight:600;
       line-height:1.35;
     }
-    .hint b{color:var(--gold)}
+    .subline b{color:var(--gold)}
+    .subline .mini{
+      display:inline-block;margin-left:8px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(20,20,28,.45);
+      color:#ddd;
+      font-weight:700;
+      font-size:12px;
+    }
+
+    /* Grid / Cards */
     .grid{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:14px;
+    }
+    @media (min-width:900px){
+      .grid{grid-template-columns: repeat(3, minmax(0, 1fr));}
     }
 
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius:18px;
-      overflow:hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
-      position:relative;
-    }
-
-    /* Imagen más chica para que no estire mucho */
-    .img-wrap{
-      height:150px;
       overflow:hidden;
-      background: rgba(255,255,255,.03);
-      cursor:pointer;
       position:relative;
     }
-    .img-wrap img{
+    .media{
+      position:relative;
+      height:150px; /* más chica para que no se estire cuando metas fotos */
+      background:
+        radial-gradient(500px 200px at 40% 20%, rgba(216,178,107,.18), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.10));
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .media img{
       width:100%;
       height:100%;
       object-fit:cover;
       display:block;
-      filter: saturate(1.02) contrast(1.05);
     }
-    .img-tag{
-      position:absolute;
-      top:10px;
-      left:10px;
-      background: rgba(0,0,0,.45);
-      border: 1px solid rgba(255,255,255,.10);
-      color: rgba(255,255,255,.85);
+    .zoomHint{
+      position:absolute;left:12px;right:12px;top:10px;
+      display:flex;justify-content:center;
+      pointer-events:none;
+    }
+    .zoomHint span{
+      font-weight:800;
       font-size:12px;
-      padding:6px 10px;
+      color: rgba(255,255,255,.9);
+      background: rgba(0,0,0,.30);
+      border:1px solid rgba(255,255,255,.12);
+      padding:7px 10px;
       border-radius:999px;
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(10px);
     }
-
-    .card-body{
-      padding:12px 12px 14px;
-    }
-    .card h3{
-      margin:0 0 6px;
-      font-size:18px;
-      font-weight:900;
-      display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      gap:10px;
+    .content{padding:12px 12px 12px}
+    .row1{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .title{
+      font-weight:900;font-size:18px;line-height:1.05;
     }
     .price{
       color: var(--gold);
-      font-weight:900;
+      font-weight:950;
+      font-size:18px;
       white-space:nowrap;
     }
     .desc{
-      margin:0 0 12px;
+      margin-top:6px;
       color: var(--muted);
-      font-size:14px;
+      font-weight:650;
+      font-size:13.5px;
       line-height:1.25;
-      min-height:34px;
+      min-height: 34px;
+    }
+    .meta{
+      margin-top:10px;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+    }
+    .pill{
+      display:inline-flex;align-items:center;justify-content:center;
+      border-radius:999px;
+      padding:8px 10px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(20,20,28,.40);
+      color: rgba(255,255,255,.9);
+      font-weight:900;
+      font-size:13px;
+      min-width:52px;
+      user-select:none;
     }
 
-    .actions{
-      display:flex;
+    /* Buttons (que se sientan presionados) */
+    .btn{
+      border:0;
+      border-radius:16px;
+      padding:11px 14px;
+      font-weight:950;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .08s ease, filter .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .btn:active{transform: translateY(2px) scale(.99)}
+    .btnAdd{
+      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(235,235,235,.92));
+      color:#111;
+      box-shadow: 0 10px 22px rgba(0,0,0,.25);
+      min-width: 120px;
+    }
+    .btnAdd:hover{filter:brightness(1.02)}
+    .btnGhost{
+      background: rgba(18,18,26,.45);
+      border:1px solid rgba(255,255,255,.10);
+      color: rgba(255,255,255,.92);
+    }
+    .btnGhost:hover{filter:brightness(1.05)}
+    .btnGold{
+      background: linear-gradient(180deg, rgba(216,178,107,.30), rgba(184,139,60,.22));
+      border:1px solid rgba(216,178,107,.35);
+      color: var(--gold);
+    }
+    .btnGold:hover{filter:brightness(1.08)}
+
+    /* Bottom bar */
+    .bar{
+      position:fixed;left:0;right:0;bottom:0;
+      padding:12px 12px calc(12px + env(safe-area-inset-bottom));
+      background: rgba(10,10,14,.78);
+      border-top:1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(14px);
+    }
+    .barInner{
+      max-width:980px;margin:0 auto;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px 14px;
       align-items:center;
-      justify-content:space-between;
+    }
+    .totals{
+      display:grid;gap:6px;
+      font-weight:850;
+      color: rgba(255,255,255,.92);
+    }
+    .totals .mut{color: var(--muted); font-weight:750}
+    .includes{
+      text-align:right;
+      color: rgba(255,255,255,.90);
+      font-weight:800;
+      line-height:1.2;
+    }
+    .includes b{color:var(--gold)}
+    .chosenBox{
+      grid-column:1 / -1;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      color: var(--muted);
+      font-weight:750;
+    }
+    .chosenBox .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(216,178,107,.22);
+      background: rgba(216,178,107,.08);
+      color: rgba(255,255,255,.9);
+      font-weight:850;
+      max-width: 100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .actions{
+      grid-column:1 / -1;
+      display:grid;
+      grid-template-columns: 1fr 1.4fr;
       gap:10px;
     }
 
-    .badge{
-      background: rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-      color: rgba(255,255,255,.90);
-      padding:8px 10px;
-      border-radius:999px;
-      font-weight:900;
-      min-width:52px;
-      text-align:center;
-    }
-
-    .btn{
-      flex:1;
-      border:none;
-      border-radius:12px;
-      padding:12px 14px;
-      font-weight:1000;
-      font-size:16px;
-      cursor:pointer;
-      transition:.15s ease;
-      background: linear-gradient(135deg, var(--gold), var(--gold2));
-      color:#181818;
-      box-shadow: 0 8px 18px rgba(216,178,107,.18);
-    }
-    .btn:active{ transform: scale(.95); }
-    .btn.secondary{
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:none;
-    }
-
-    /* Footer fijo */
-    .footer{
-      position:fixed;
-      left:0; right:0; bottom:0;
-      background: rgba(15,15,18,.88);
-      border-top: 1px solid rgba(255,255,255,.08);
-      backdrop-filter: blur(10px);
-      padding:12px 14px 16px;
-    }
-    .footer-row{
-      display:flex;
-      justify-content:space-between;
-      gap:16px;
-      align-items:flex-start;
-      margin-bottom:10px;
-    }
-    .totals{
-      flex:1;
-      color: var(--muted);
-      font-size:14px;
-      line-height:1.55;
-    }
-    .totals b{ color: var(--text); }
-    .includes{
-      flex:1.1;
-      color: var(--muted);
-      font-size:14px;
-      line-height:1.35;
-      text-align:left;
-    }
-    .includes b{ color: var(--text); }
-    .selection-line{
-      margin-top:6px;
-      color: var(--muted);
-      font-size:13px;
-    }
-    .selection-line b{ color: var(--gold); }
-
-    .footer-actions{
-      display:flex;
-      gap:12px;
-    }
-    .footer-actions .btn{
-      padding:14px 14px;
-      border-radius:14px;
-      font-size:16px;
-    }
-
-    /* Modal imagen */
+    /* Modal */
     .modal{
+      position:fixed;inset:0;
       display:none;
-      position:fixed;
-      inset:0;
-      background: rgba(0,0,0,.86);
-      justify-content:center;
-      align-items:center;
-      z-index:999;
+      align-items:center;justify-content:center;
+      background: rgba(0,0,0,.6);
+      backdrop-filter: blur(10px);
       padding:16px;
+      z-index:50;
     }
-    .modal img{
-      max-width:95%;
-      max-height:92%;
-      border-radius:14px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    .modal.open{display:flex}
+    .modalCard{
+      width:min(720px, 100%);
+      border-radius: 22px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(20,20,28,.75);
+      box-shadow: 0 26px 80px rgba(0,0,0,.6);
+      position:relative;
     }
-
-    /* Toast */
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:130px;
-      transform:translateX(-50%);
-      background: rgba(0,0,0,.72);
-      border:1px solid rgba(255,255,255,.12);
-      color: rgba(255,255,255,.92);
-      padding:10px 12px;
-      border-radius:12px;
-      font-size:14px;
-      display:none;
-      z-index:1000;
-      backdrop-filter: blur(8px);
+    .modalCard img{
+      width:100%;height:auto;display:block;max-height: 75vh;object-fit:contain;
+      background: #0a0a0f;
     }
-
-    @media (max-width:360px){
-      .grid{ grid-template-columns: 1fr; }
-      .img-wrap{ height:160px; }
-      .tabs{ gap:8px; }
-      .tab{ padding:11px 8px; font-size:14px; }
+    .modalClose{
+      position:absolute;top:10px;right:10px;
+      width:40px;height:40px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.35);
+      color:#fff;font-weight:950;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      user-select:none;
     }
+    .modalClose:active{transform:translateY(2px)}
   </style>
 </head>
 
 <body>
-  <div class="topbar">
-    <div class="title">Sushi Stella Maris</div>
-    <div class="pill"><small>Soja incluida</small> ✓</div>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">Sushi Stella Maris</div>
+      <div class="badge" title="Siempre incluida">
+        <span class="dot"></span>
+        Soja incluida ✓
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" id="tabCombos" onclick="setTab('combos')">Combos</button>
+      <button class="tab" id="tabRolls" onclick="setTab('rolls')">Rolls</button>
+      <button class="tab" id="tabSalsas" onclick="setTab('salsas')">Salsas</button>
+    </div>
+
+    <div class="subline" id="subline"></div>
+
+    <div class="grid" id="grid"></div>
   </div>
 
-  <div class="tabs">
-    <div class="tab active" id="tabCombos" onclick="setTab('combos')">Combos</div>
-    <div class="tab" id="tabRolls" onclick="setTab('rolls')">Rolls</div>
-    <div class="tab" id="tabSalsas" onclick="setTab('salsas')">Salsas</div>
+  <!-- Modal -->
+  <div class="modal" id="modal" onclick="closeModal(event)">
+    <div class="modalCard">
+      <div class="modalClose" onclick="forceCloseModal()">✕</div>
+      <img id="modalImg" alt="Foto" />
+    </div>
   </div>
 
-  <div class="hint" id="hint"></div>
-
-  <div class="grid" id="grid"></div>
-
-  <!-- Footer -->
-  <div class="footer">
-    <div class="footer-row">
+  <!-- Bottom bar -->
+  <div class="bar">
+    <div class="barInner">
       <div class="totals">
-        <div>Total piezas: <b id="totalPiezas">0</b></div>
-        <div>Total: <b id="totalPrice">$ 0</b></div>
-        <div class="selection-line">
-          <b>Salsas/Adicionales:</b> <span id="selectedExtras">—</span>
-        </div>
+        <div><span class="mut">Total piezas:</span> <span id="totalPieces">0</span></div>
+        <div><span class="mut">Total:</span> $ <span id="totalPrice">0</span></div>
       </div>
 
       <div class="includes">
-        <div>Incluye:</div>
-        <div><b>Wasabi + Pepino + Jengibre + Soja</b></div>
+        Incluye: <b>Wasabi</b> + <b>Pepino</b> + <b>Jengibre</b> + <b>Soja</b>
+      </div>
+
+      <div class="chosenBox">
+        <div class="chip" id="chosenExtras">Salsas/Adicionales: —</div>
+        <div class="mut" id="creditsInfo"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btnGhost" onclick="clearAll()">Vaciar</button>
+        <button class="btn btnGold" onclick="copyOrder()">Copiar pedido</button>
       </div>
     </div>
-
-    <div class="footer-actions">
-      <button class="btn secondary" onclick="vaciar()">Vaciar</button>
-      <button class="btn" onclick="copiarPedido()">Copiar pedido</button>
-    </div>
   </div>
-
-  <!-- Modal imagen -->
-  <div id="imageModal" class="modal" onclick="closeImage()">
-    <img id="modalImg" alt="imagen ampliada">
-  </div>
-
-  <div class="toast" id="toast">Copiado ✅</div>
 
   <script>
-    // ====== DATA ======
-    // (por ahora solo 3 Rolls con tus 3 fotos PNG)
+    // =========================
+    //  DATA (EDITAR ACÁ)
+    // =========================
+
+    // IMPORTANTE: GitHub Pages es sensible a mayúsculas/minúsculas.
+    // Usá EXACTO el nombre del archivo en el repo (ej: philadelphia.PNG).
     const rolls = [
-      { id:"philadelphia", name:"Philadelphia", price:9000, pieces:5, img:"philadelphia.PNG", desc:"Salmón fresco + queso crema." },
-      { id:"buenos-aires", name:"Buenos Aires", price:11000, pieces:5, img:"buenos-aires.PNG", desc:"Langostino + queso + palta, con salsa BA." },
-      { id:"guacamole", name:"Guacamole", price:10500, pieces:5, img:"guacamole.PNG", desc:"Salmón + queso con topping de guacamole." },
+      {
+        id:"philadelphia",
+        name:"Philadelphia",
+        price:9000,
+        piecesPerUnit:5,
+        img:"philadelphia.PNG",
+        desc:"Salmón fresco + queso crema."
+      },
+      {
+        id:"buenos-aires",
+        name:"Buenos Aires",
+        price:11000,
+        piecesPerUnit:5,
+        img:"buenos-aires.PNG",
+        desc:"Langostino + queso + palta, con salsa BA."
+      },
+      {
+        id:"guacamole",
+        name:"Guacamole",
+        price:10500,
+        piecesPerUnit:5,
+        img:"guacamole.PNG",
+        desc:"Salmón + queso, topping de guacamole."
+      },
     ];
 
-    // Combos (reglas que me diste)
-    // Soja fija SIEMPRE. Extras incluidos según tamaño:
-    // 10: 1 a elección
-    // 15: 1 a elección
-    // 20: 1 a elección
-    // 30: 1 + 1 a elección
-    // 40: 2 + 1 a elección
-    // 50: 2 + 2 a elección
+    // Combos (precios según tu imagen)
+    // credits = cuántas salsas/adicionales "incluye" el combo (además de soja fija)
+    // Regla pedida:
+    // 10: 1
+    // 15: 1
+    // 20: 1
+    // 30: 1 y 1 a elección  -> 2
+    // 40: 2 y 1 a elección  -> 3
+    // 50: 2 y 2 a elección  -> 4
     const combos = [
-      { id:"c10",  name:"Combo 10 piezas", pieces:10, price:16000, includesText:"Incluye: Soja fija + 1 salsa/adicional a elección." },
-      { id:"c15",  name:"Combo 15 piezas", pieces:15, price:22000, includesText:"Incluye: Soja fija + 1 salsa/adicional a elección." },
-      { id:"c20",  name:"Combo 20 piezas", pieces:20, price:28000, includesText:"Incluye: Soja fija + 1 salsa/adicional a elección." },
-      { id:"c30",  name:"Combo 30 piezas", pieces:30, price:40000, includesText:"Incluye: Soja fija + 1 + 1 a elección." },
-      { id:"c40",  name:"Combo 40 piezas", pieces:40, price:52000, includesText:"Incluye: Soja fija + 2 + 1 a elección." },
-      { id:"c50",  name:"Combo 50 piezas", pieces:50, price:65000, includesText:"Incluye: Soja fija + 2 + 2 a elección." },
-    ];
+      { id:"combo10",  name:"Combo 10 piezas",  pieces:10, price:16000, credits:1,
+        desc:"Variedad de rolls (selección del día)." },
+      { id:"combo15",  name:"Combo 15 piezas",  pieces:15, price:22000, credits:1,
+        desc:"Variedad de rolls (selección del día)." },
+      { id:"combo20",  name:"Combo 20 piezas",  pieces:20, price:28000, credits:1,
+        desc:"Mayor variedad de rolls (selección del día)." },
+      { id:"combo30",  name:"Combo 30 piezas",  pieces:30, price:40000, credits:2,
+        desc:"Amplia variedad de rolls (selección del día)." },
+      { id:"combo40",  name:"Combo 40 piezas",  pieces:40, price:0, credits:3,
+        desc:"(Precio a definir) Amplia variedad de rolls." },
+      { id:"combo50",  name:"Combo 50 piezas",  pieces:50, price:0, credits:4,
+        desc:"(Precio a definir) Amplia variedad de rolls." },
+    ].filter(x => x.price > 0); // si todavía no querés mostrar 40/50, quedan ocultos
 
-    // Salsas y Adicionales (van de a 1, NO suman piezas)
+    // Salsas y adicionales (van de a 1, NO suman piezas)
     const extras = [
-      { id:"soja",   name:"Salsa de Soja", price:850,  type:"Salsa" },
-      { id:"ba",     name:"Salsa Buenos Aires", price:1300, type:"Salsa" },
-      { id:"mym",    name:"Salsa Mostaza y Miel", price:1300, type:"Salsa" },
-      { id:"maracuya",name:"Salsa Maracuyá", price:1500, type:"Salsa" },
-      { id:"guac",   name:"Guacamole", price:850, type:"Adicional" },
-      { id:"criolla",name:"Criolla", price:750, type:"Adicional" },
-      { id:"jengibre",name:"Jengibre", price:750, type:"Adicional" },
-      { id:"pepino", name:"Pepino", price:700, type:"Adicional" },
+      { id:"soja",       name:"Salsa de Soja",      price:850,  type:"salsa" },
+      { id:"ba",         name:"Salsa Buenos Aires", price:1300, type:"salsa" },
+      { id:"mm",         name:"Salsa Mostaza y Miel", price:1300, type:"salsa" },
+      { id:"maracuya",   name:"Salsa Maracuyá",     price:1500, type:"salsa" },
+
+      { id:"guacExtra",  name:"Guacamole",          price:850,  type:"adicional" },
+      { id:"criolla",    name:"Criolla",            price:750,  type:"adicional" },
+      { id:"jengibre",   name:"Jengibre",           price:750,  type:"adicional" },
+      { id:"pepino",     name:"Pepino",             price:700,  type:"adicional" },
     ];
 
-    // ====== STATE ======
+    // =========================
+    //  STATE
+    // =========================
     let tab = "combos";
-    // items de sushi (rolls y combos) -> { label, unitPrice, unitPieces, qty }
-    const cartSushi = new Map();
-    // extras (salsas/adicionales) -> { name, price, qty }
-    const cartExtras = new Map();
+    const cart = {
+      combos: new Map(),   // id -> qty
+      rolls:  new Map(),   // id -> qty
+      extras: new Map(),   // id -> qty
+    };
 
-    // ====== UI RENDER ======
+    // =========================
+    //  HELPERS
+    // =========================
+    const money = (n) => (n||0).toLocaleString("es-AR");
+    const getRoll = (id) => rolls.find(x=>x.id===id);
+    const getCombo = (id) => combos.find(x=>x.id===id);
+    const getExtra = (id) => extras.find(x=>x.id===id);
+
+    function includedCredits(){
+      let c = 0;
+      for (const [id, qty] of cart.combos.entries()){
+        const combo = getCombo(id);
+        if (combo) c += (combo.credits||0) * qty;
+      }
+      return c;
+    }
+
+    function extrasCount(){
+      let n = 0;
+      for (const [, qty] of cart.extras.entries()) n += qty;
+      return n;
+    }
+
+    function extrasIncludedApplied(){
+      // los primeros "credits" extras se descuentan (quedan $0)
+      return Math.min(includedCredits(), extrasCount());
+    }
+
+    function extrasPaidCount(){
+      return Math.max(0, extrasCount() - includedCredits());
+    }
+
+    // =========================
+    //  RENDER
+    // =========================
     function setTab(next){
       tab = next;
       document.getElementById("tabCombos").classList.toggle("active", tab==="combos");
@@ -393,229 +486,345 @@
 
     function render(){
       const grid = document.getElementById("grid");
-      const hint = document.getElementById("hint");
       grid.innerHTML = "";
 
-      if(tab==="combos"){
-        hint.innerHTML = `Soja incluida. Wasabi + pepino + jengibre incluidos. <b>Salsas extra según combo.</b>`;
-        combos.forEach(c => grid.appendChild(comboCard(c)));
-      }
-      if(tab==="rolls"){
-        hint.innerHTML = `Cada roll es <b>x5</b> piezas.`;
-        rolls.forEach(r => grid.appendChild(rollCard(r)));
-      }
-      if(tab==="salsas"){
-        hint.innerHTML = `Salsas y adicionales van <b>de a 1</b> (no suman piezas).`;
-        extras.forEach(e => grid.appendChild(extraCard(e)));
+      const sub = document.getElementById("subline");
+      if (tab==="rolls"){
+        sub.innerHTML = `Cada roll es <b>x5</b> piezas. <span class="mini">Tocar foto para agrandar</span>`;
+      } else if (tab==="combos"){
+        sub.innerHTML = `Soja incluida. Wasabi + pepino + jengibre incluidos. <b>Salsas/adicionales</b> extra según combo. <span class="mini">Los “incluidos” se descuentan al agregar en Salsas</span>`;
+      } else {
+        const c = includedCredits();
+        sub.innerHTML = `Salsas y adicionales van de a <b>1</b> (no suman piezas). <span class="mini">Incluidos por combos: ${c}</span>`;
       }
 
-      updateTotals();
-      updateExtrasLine();
+      if (tab==="rolls"){
+        rolls.forEach(item => grid.appendChild(renderRollCard(item)));
+      }
+      if (tab==="combos"){
+        combos.forEach(item => grid.appendChild(renderComboCard(item)));
+      }
+      if (tab==="salsas"){
+        extras.forEach(item => grid.appendChild(renderExtraCard(item)));
+      }
+
+      renderBottom();
     }
 
-    function rollCard(r){
+    function renderRollCard(item){
       const el = document.createElement("div");
       el.className = "card";
+
       el.innerHTML = `
-        <div class="img-wrap" onclick="openImage('${escapeQuotes(r.img)}')">
-          <span class="img-tag">Tocar para agrandar</span>
-          <img src="${escapeQuotes(r.img)}" alt="${escapeQuotes(r.name)}"
-               onerror="this.style.display='none'; this.parentElement.style.background='rgba(255,255,255,.05)';">
+        <div class="media" onclick="openModal('${escapeQuotes(item.img)}')">
+          <div class="zoomHint"><span>Tocar para agrandar</span></div>
+          <img src="${escapeHtml(item.img)}" alt="${escapeHtml(item.name)}" onerror="this.style.display='none'"/>
         </div>
-        <div class="card-body">
-          <h3>${escapeHtml(r.name)} <span class="price">$ ${formatNumber(r.price)}</span></h3>
-          <p class="desc">${escapeHtml(r.desc)}</p>
-          <div class="actions">
-            <div class="badge">x5</div>
-            <button class="btn" onclick="addSushi('${escapeQuotes(r.name)} x5', ${r.price}, ${r.pieces})">+ Agregar</button>
+        <div class="content">
+          <div class="row1">
+            <div class="title">${escapeHtml(item.name)}</div>
+            <div class="price">$ ${money(item.price)}</div>
+          </div>
+          <div class="desc">${escapeHtml(item.desc)}</div>
+          <div class="meta">
+            <div class="pill">x5</div>
+            <button class="btn btnAdd" onclick="addRoll('${escapeQuotes(item.id)}')">+ Agregar</button>
           </div>
         </div>
       `;
       return el;
     }
 
-    function comboCard(c){
+    function comboIncludeText(combo){
+      // texto EXACTO con la regla que pediste (soja fija siempre)
+      if (combo.pieces===10) return "Incluye: Soja fija + 1 salsa/adicional a elección.";
+      if (combo.pieces===15) return "Incluye: Soja fija + 1 salsa/adicional a elección.";
+      if (combo.pieces===20) return "Incluye: Soja fija + 1 salsa/adicional a elección.";
+      if (combo.pieces===30) return "Incluye: Soja fija + 1 + 1 a elección.";
+      if (combo.pieces===40) return "Incluye: Soja fija + 2 + 1 a elección.";
+      if (combo.pieces===50) return "Incluye: Soja fija + 2 + 2 a elección.";
+      return `Incluye: Soja fija + ${combo.credits||0} salsa/adicional.`;
+    }
+
+    function renderComboCard(item){
       const el = document.createElement("div");
       el.className = "card";
+
       el.innerHTML = `
-        <div class="img-wrap" style="display:flex;align-items:center;justify-content:center;">
-          <div style="text-align:center; padding:10px 12px;">
-            <div style="font-size:22px; font-weight:1000; color:rgba(255,255,255,.85);">${c.pieces} piezas</div>
-            <div style="margin-top:6px; font-size:18px; font-weight:1000; color:var(--gold);">Combo</div>
+        <div class="media" style="display:flex;align-items:center;justify-content:center;">
+          <div style="text-align:center;">
+            <div style="font-weight:950;font-size:22px;color:rgba(255,255,255,.9)">${item.pieces} piezas</div>
+            <div style="margin-top:4px;font-weight:900;color:var(--gold)">Combo</div>
           </div>
         </div>
-        <div class="card-body">
-          <h3>${escapeHtml(c.name)} <span class="price">$ ${formatNumber(c.price)}</span></h3>
-          <p class="desc">${escapeHtml(c.includesText)}</p>
-          <div class="actions">
-            <div class="badge">${c.pieces} piezas</div>
-            <button class="btn" onclick="addSushi('${escapeQuotes(c.name)}', ${c.price}, ${c.pieces})">+ Agregar</button>
+        <div class="content">
+          <div class="row1">
+            <div class="title">${escapeHtml(item.name)}</div>
+            <div class="price">$ ${money(item.price)}</div>
+          </div>
+          <div class="desc">${escapeHtml(item.desc)}<br><span style="color:rgba(255,255,255,.9);font-weight:800">${escapeHtml(comboIncludeText(item))}</span></div>
+          <div class="meta">
+            <div class="pill">${item.pieces} piezas</div>
+            <button class="btn btnAdd" onclick="addCombo('${escapeQuotes(item.id)}')">+ Agregar</button>
           </div>
         </div>
       `;
       return el;
     }
 
-    function extraCard(e){
+    function renderExtraCard(item){
       const el = document.createElement("div");
       el.className = "card";
+
+      // No usamos imagen acá (así evitamos “dos fotos” y queda liviano).
+      // Si después querés mini íconos/fotos, lo agregamos.
       el.innerHTML = `
-        <div class="img-wrap" style="display:flex;align-items:center;justify-content:center;">
-          <div style="text-align:center; padding:10px 12px;">
-            <div style="font-size:16px; font-weight:1000; color:rgba(255,255,255,.85);">${escapeHtml(e.type)}</div>
-            <div style="margin-top:6px; font-size:20px; font-weight:1000; color:var(--gold);">${escapeHtml(e.name)}</div>
+        <div class="media" style="height:120px;display:flex;align-items:center;justify-content:center;">
+          <div style="text-align:center; padding:0 10px;">
+            <div style="font-weight:950;font-size:18px;color:rgba(255,255,255,.95)">${escapeHtml(item.name)}</div>
+            <div style="margin-top:6px;font-weight:900;color:var(--gold)">$ ${money(item.price)}</div>
+            <div style="margin-top:8px;color:var(--muted);font-weight:750;font-size:12px">${item.type==="salsa" ? "Salsa (x1)" : "Adicional (x1)"}</div>
           </div>
         </div>
-        <div class="card-body">
-          <h3>${escapeHtml(e.name)} <span class="price">$ ${formatNumber(e.price)}</span></h3>
-          <p class="desc">Se suma al pedido (x1).</p>
-          <div class="actions">
-            <div class="badge">x1</div>
-            <button class="btn" onclick="addExtra('${escapeQuotes(e.name)}', ${e.price})">+ Agregar</button>
+        <div class="content">
+          <div class="meta">
+            <button class="btn btnGhost" onclick="removeExtra('${escapeQuotes(item.id)}')">−</button>
+            <div class="pill" id="qty_${escapeHtml(item.id)}">${cart.extras.get(item.id)||0}</div>
+            <button class="btn btnAdd" onclick="addExtra('${escapeQuotes(item.id)}')">+ Agregar</button>
+          </div>
+          <div class="desc" style="min-height:auto;margin-top:10px">
+            ${extrasPriceNote()}
           </div>
         </div>
       `;
       return el;
     }
 
-    // ====== CART LOGIC ======
-    function addSushi(label, unitPrice, unitPieces){
-      const key = label;
-      const current = cartSushi.get(key) || { label, unitPrice, unitPieces, qty:0 };
-      current.qty += 1;
-      cartSushi.set(key, current);
-      toast("Agregado ✅");
-      updateTotals();
+    function extrasPriceNote(){
+      const c = includedCredits();
+      if (c<=0) return "Si sumás combos, algunas salsas/adicionales pueden quedar incluidas.";
+      const used = extrasIncludedApplied();
+      const left = Math.max(0, c - extrasCount());
+      return `Incluidos por combos: <b style="color:var(--gold)">${c}</b>. Usados: <b style="color:var(--gold)">${used}</b>. Restan: <b style="color:var(--gold)">${left}</b>.`;
     }
 
-    function addExtra(name, price){
-      const current = cartExtras.get(name) || { name, price, qty:0 };
-      current.qty += 1;
-      cartExtras.set(name, current);
-      toast("Agregado ✅");
-      updateTotals();
-      updateExtrasLine();
-    }
+    function renderBottom(){
+      const pieces = totalPieces();
+      const price = totalPrice();
 
-    function vaciar(){
-      cartSushi.clear();
-      cartExtras.clear();
-      updateTotals();
-      updateExtrasLine();
-      toast("Vaciado ✅");
-    }
+      document.getElementById("totalPieces").textContent = pieces;
+      document.getElementById("totalPrice").textContent  = money(price);
 
-    function updateTotals(){
-      let piezas = 0;
-      let total = 0;
-
-      cartSushi.forEach(it=>{
-        piezas += it.unitPieces * it.qty;
-        total  += it.unitPrice * it.qty;
-      });
-      cartExtras.forEach(ex=>{
-        total += ex.price * ex.qty;
-      });
-
-      document.getElementById("totalPiezas").textContent = piezas;
-      document.getElementById("totalPrice").textContent = "$ " + formatNumber(total);
-    }
-
-    function updateExtrasLine(){
-      const el = document.getElementById("selectedExtras");
-      if(cartExtras.size===0){
-        el.textContent = "—";
-        return;
+      // Mostrar qué salsas/adicionales eligieron
+      const chosen = [];
+      for (const [id, qty] of cart.extras.entries()){
+        if (qty<=0) continue;
+        const ex = getExtra(id);
+        if (!ex) continue;
+        chosen.push(`${qty}x ${ex.name}`);
       }
-      const parts = [];
-      cartExtras.forEach(ex=>{
-        parts.push(`${ex.qty}x ${ex.name}`);
-      });
-      el.textContent = parts.join(" · ");
+      document.getElementById("chosenExtras").textContent = chosen.length ? `Salsas/Adicionales: ${chosen.join(" · ")}` : "Salsas/Adicionales: —";
+
+      // Info créditos
+      const c = includedCredits();
+      if (c>0){
+        const used = extrasIncludedApplied();
+        const left = Math.max(0, c - extrasCount());
+        document.getElementById("creditsInfo").textContent = `Incluidos: ${c} · Usados: ${used} · Restan: ${left}`;
+      } else {
+        document.getElementById("creditsInfo").textContent = "";
+      }
+
+      // actualizar cantidades en cards de salsas si estás en esa tab
+      if (tab==="salsas"){
+        extras.forEach(e=>{
+          const box = document.getElementById("qty_"+e.id);
+          if (box) box.textContent = cart.extras.get(e.id)||0;
+        });
+      }
     }
 
-    // ====== COPY MESSAGE (formato claro con x5 y piezas) ======
-    function copiarPedido(){
-      const sushiLines = [];
-      let totalPiezas = 0;
-      let total = 0;
+    // =========================
+    //  CART OPS
+    // =========================
+    function addRoll(id){
+      cart.rolls.set(id, (cart.rolls.get(id)||0)+1);
+      renderBottom();
+    }
+    function addCombo(id){
+      cart.combos.set(id, (cart.combos.get(id)||0)+1);
+      renderBottom();
+    }
+    function addExtra(id){
+      cart.extras.set(id, (cart.extras.get(id)||0)+1);
+      render();
+    }
+    function removeExtra(id){
+      const cur = cart.extras.get(id)||0;
+      if (cur<=0) return;
+      if (cur===1) cart.extras.delete(id);
+      else cart.extras.set(id, cur-1);
+      render();
+    }
+
+    function clearAll(){
+      cart.combos.clear();
+      cart.rolls.clear();
+      cart.extras.clear();
+      render();
+    }
+
+    function totalPieces(){
+      let p = 0;
+      for (const [id, qty] of cart.rolls.entries()){
+        const r = getRoll(id);
+        if (r) p += (r.piecesPerUnit||0) * qty;
+      }
+      for (const [id, qty] of cart.combos.entries()){
+        const c = getCombo(id);
+        if (c) p += (c.pieces||0) * qty;
+      }
+      return p;
+    }
+
+    function totalPrice(){
+      let t = 0;
+      for (const [id, qty] of cart.rolls.entries()){
+        const r = getRoll(id);
+        if (r) t += (r.price||0) * qty;
+      }
+      for (const [id, qty] of cart.combos.entries()){
+        const c = getCombo(id);
+        if (c) t += (c.price||0) * qty;
+      }
+
+      // Extras: los primeros "credits" quedan incluidos ($0)
+      const allExtras = [];
+      for (const [id, qty] of cart.extras.entries()){
+        const ex = getExtra(id);
+        if (!ex) continue;
+        for (let i=0;i<qty;i++) allExtras.push(ex);
+      }
+
+      const credits = includedCredits();
+      // descuento (incluidos) aplicado a los más caros o a los primeros?
+      // Para que no te “duela”, aplico el incluido a los más caros primero.
+      allExtras.sort((a,b)=> (b.price||0)-(a.price||0));
+
+      let paid = allExtras;
+      if (credits>0) paid = allExtras.slice(credits); // los primeros credits quedan 0
+
+      for (const ex of paid){
+        t += (ex.price||0);
+      }
+
+      return t;
+    }
+
+    // =========================
+    //  COPY ORDER
+    // =========================
+    function copyOrder(){
+      const lines = [];
+      lines.push("Hola Stella Maris Sushi 🍣");
+      lines.push("");
+      lines.push("Quiero pedir:");
+      lines.push("");
 
       // Sushi
-      cartSushi.forEach(it=>{
-        const piezasItem = it.unitPieces * it.qty;
-        totalPiezas += piezasItem;
-        total += it.unitPrice * it.qty;
+      const sushiLines = [];
 
-        // Si es roll (termina en x5) mostramos como pediste
-        if(it.label.endsWith(" x5")){
-          // ej: "2x Philadelphia x5 – 10 piezas"
-          const nombre = it.label.replace(" x5","");
-          sushiLines.push(`${it.qty}x ${nombre} x5 – ${piezasItem} piezas`);
-        }else{
-          // combo
-          sushiLines.push(`${it.qty}x ${it.label} – ${piezasItem} piezas`);
-        }
-      });
+      // Rolls: mostrar “x5 – N piezas”
+      for (const [id, qty] of cart.rolls.entries()){
+        const r = getRoll(id);
+        if (!r || qty<=0) continue;
+        const pieces = qty * (r.piecesPerUnit||0);
+        sushiLines.push(`🍣 Sushi:`);
+        break;
+      }
+      // si no hay rolls pero hay combos, igual mostramos Sushi:
+      if (!sushiLines.length && cart.combos.size>0) sushiLines.push("🍣 Sushi:");
 
-      // Extras
+      // rolls
+      for (const [id, qty] of cart.rolls.entries()){
+        const r = getRoll(id);
+        if (!r || qty<=0) continue;
+        const pieces = qty * (r.piecesPerUnit||0);
+        sushiLines.push(`${qty}x ${r.name} x5 – ${pieces} piezas`);
+      }
+      // combos
+      for (const [id, qty] of cart.combos.entries()){
+        const c = getCombo(id);
+        if (!c || qty<=0) continue;
+        const pieces = qty * (c.pieces||0);
+        sushiLines.push(`${qty}x ${c.name} – ${pieces} piezas`);
+      }
+
+      // Salsas y adicionales
       const extraLines = [];
-      cartExtras.forEach(ex=>{
-        extraLines.push(`${ex.qty}x ${ex.name}`);
-        total += ex.price * ex.qty;
-      });
+      for (const [id, qty] of cart.extras.entries()){
+        const ex = getExtra(id);
+        if (!ex || qty<=0) continue;
+        extraLines.push(`${qty}x ${ex.name}`);
+      }
 
-      const header = `Hola Stella Maris Sushi 🍣\n\nQuiero pedir:\n\n`;
-      const sushiBlock = `🍣 Sushi:\n${(sushiLines.length? sushiLines : ["(sin sushi)"]).map(s=>"• "+s).join("\n")}\n\n`;
-      const extrasBlock = `🥣 Salsas y adicionales:\n${(extraLines.length? extraLines : ["(sin extras)"]).map(s=>"• "+s).join("\n")}\n\n`;
-      const totalsBlock = `Total de piezas: ${totalPiezas}\nTotal: $ ${formatNumber(total)}\n\nRetiro en el local.`;
+      lines.push(...sushiLines);
 
-      const msg = header + sushiBlock + extrasBlock + totalsBlock;
+      if (extraLines.length){
+        lines.push("");
+        lines.push("🥣 Salsas y adicionales:");
+        lines.push(...extraLines);
+      }
 
-      navigator.clipboard.writeText(msg).then(()=>{
-        toast("Copiado ✅");
+      lines.push("");
+      lines.push(`Total de piezas: ${totalPieces()}`);
+      lines.push(`Total: $ ${money(totalPrice())}`);
+      lines.push("");
+      lines.push("Retiro en el local.");
+
+      const txt = lines.join("\n");
+
+      navigator.clipboard.writeText(txt).then(()=>{
+        alert("Pedido copiado ✅");
       }).catch(()=>{
-        // fallback iOS viejo
-        const ta = document.createElement("textarea");
-        ta.value = msg;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
-        toast("Copiado ✅");
+        prompt("Copiá el pedido:", txt);
       });
     }
 
-    // ====== IMAGE MODAL ======
-    function openImage(src){
+    // =========================
+    //  MODAL
+    // =========================
+    function openModal(src){
+      if (!src) return;
       const img = document.getElementById("modalImg");
       img.src = src;
-      document.getElementById("imageModal").style.display = "flex";
+      document.getElementById("modal").classList.add("open");
     }
-    function closeImage(){
-      document.getElementById("imageModal").style.display = "none";
+    function closeModal(e){
+      if (e.target && e.target.id === "modal"){
+        document.getElementById("modal").classList.remove("open");
+      }
+    }
+    function forceCloseModal(){
+      document.getElementById("modal").classList.remove("open");
     }
 
-    // ====== HELPERS ======
-    function formatNumber(n){
-      return (n||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
-    function toast(text){
-      const t = document.getElementById("toast");
-      t.textContent = text;
-      t.style.display = "block";
-      clearTimeout(window.__toastTimer);
-      window.__toastTimer = setTimeout(()=>t.style.display="none", 900);
-    }
+    // =========================
+    //  SAFE STRING
+    // =========================
     function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, m => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-      }[m]));
+      return String(s||"")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
     }
     function escapeQuotes(s){
-      return String(s).replace(/'/g, "\\'");
+      return String(s||"").replaceAll("'","\\'");
     }
 
-    // Init
+    // init
     render();
   </script>
 </body>
