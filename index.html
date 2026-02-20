@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sushi Stella Maris</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<title>STELLA MARIS SUSHI</title>
 
 <style>
   :root{
@@ -14,7 +14,6 @@
     --text:#f3f3f3;
     --muted:#b7b7b7;
     --gold:#caa76a;
-    --gold2:#8f6f3f;
     --shadow: 0 18px 55px rgba(0,0,0,.55);
     --radius:18px;
   }
@@ -37,9 +36,9 @@
     background: rgba(15,16,18,.92);
     backdrop-filter: blur(12px);
     border-bottom:1px solid rgba(255,255,255,.08);
-    padding:14px 14px 12px;
+    padding:14px 14px 10px;
   }
-  .wrap{max-width:720px; margin:0 auto;}
+  .wrap{max-width:920px; margin:0 auto;}
   .brandRow{display:flex; align-items:center; gap:12px;}
   .logo{
     width:40px; height:40px; border-radius:14px;
@@ -51,54 +50,47 @@
     border:1px solid rgba(202,167,106,.25);
     user-select:none;
   }
-  h1{margin:0; font-size:18px; letter-spacing:.2px; font-weight:950;}
+  h1{margin:0; font-size:18px; letter-spacing:.4px; font-weight:1000;}
 
-  /* Tabs: una sola línea */
-  .tabs{
-    margin-top:12px;
-    display:flex;
-    gap:10px;
-    flex-wrap:nowrap;
-  }
+  .tabs{margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;}
   .tab{
-    flex:1;
-    text-align:center;
-    padding:11px 10px;
-    border-radius:14px;
+    padding:11px 14px;
+    border-radius:16px;
     cursor:pointer;
-    font-size:14px;
-    font-weight:900;
-    color: rgba(255,255,255,.90);
+    font-size:13.5px;
+    font-weight:1000;
+    color: rgba(255,255,255,.85);
     background: rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.10);
     user-select:none;
-    transition: transform .08s ease, background .15s ease, border-color .15s ease, filter .15s ease;
+    transition: transform .08s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
   }
-  .tab:active{transform: translateY(1px) scale(.99); filter:brightness(.95);}
+  .tab:active{transform: translateY(1px) scale(.99);}
   .tab.active{
     background: rgba(202,167,106,.16);
-    border-color: rgba(202,167,106,.40);
+    border-color: rgba(202,167,106,.35);
     color:#fff;
+    box-shadow: 0 10px 22px rgba(0,0,0,.25) inset;
   }
 
   /* Contenido scroll */
   .content{
-    max-width:720px;
+    max-width:920px;
     margin:0 auto;
-    padding: 120px 14px 150px; /* header + footer */
+    padding: 112px 14px 140px;
   }
 
   .sectionTitle{
-    margin: 10px 2px 10px;
+    margin: 10px 2px 12px;
     color: var(--gold);
     letter-spacing:.35em;
-    font-weight:950;
+    font-weight:1000;
     font-size: 12px;
     text-transform: uppercase;
   }
 
-  /* SIEMPRE 1 columna (nada de 2 cortados) */
+  /* 1 sola columna SIEMPRE (así no se “cortan” 2 cards) */
   .grid{
     display:grid;
     gap:14px;
@@ -114,50 +106,58 @@
     position:relative;
   }
 
-  /* Imagen: sin estirar + se ve toda (incluye texto de la foto) */
+  /* IMAGEN: ancho lleno + foto completa (sin recortar) + fondo blur (cover) */
   .imgBox{
-    height: 250px; /* más grande para Rolls */
-    background:
-      radial-gradient(220px 140px at 20% 20%, rgba(202,167,106,.14), transparent 60%),
-      radial-gradient(220px 140px at 80% 0%, rgba(255,255,255,.06), transparent 60%),
-      rgba(0,0,0,.30);
+    height: 240px;
+    position:relative;
+    overflow:hidden;
     border-bottom:1px solid rgba(255,255,255,.06);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color: rgba(255,255,255,.35);
-    font-weight:900;
-    letter-spacing:.08em;
+    background: rgba(0,0,0,.18);
+    cursor: pointer;
+  }
+  .imgBox::before{
+    content:"";
+    position:absolute;
+    inset:-25px;
+    background-image: var(--bgimg);
+    background-size: cover;
+    background-position: center;
+    filter: blur(18px) brightness(.55) saturate(1.05);
+    transform: scale(1.15);
+  }
+  .imgBox::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: radial-gradient(900px 280px at 50% 0%, rgba(202,167,106,.22), transparent 55%);
+    pointer-events:none;
   }
   .imgBox img{
+    position:relative;
+    z-index:1;
     width:100%;
     height:100%;
-    object-fit:contain; /* clave: NO recorta y NO estira */
+    object-fit: contain;           /* se ve TODA la foto (incluye el texto) */
+    object-position: center;
     display:block;
-    background: rgba(0,0,0,.55);
-  }
-
-  /* Combos y Salsas: imagen un poco más baja */
-  .card[data-tab="combos"] .imgBox,
-  .card[data-tab="extras"] .imgBox{
-    height: 200px;
   }
 
   .priceTag{
     position:absolute;
     top:12px; right:12px;
     background: rgba(0,0,0,.60);
-    border:1px solid rgba(255,255,255,.12);
-    padding:7px 12px;
+    border:1px solid rgba(255,255,255,.14);
+    padding:8px 12px;
     border-radius:999px;
-    font-weight:1000;
+    font-weight:1100;
     letter-spacing:.3px;
+    z-index: 5;
   }
 
-  .body{ padding: 12px 14px 14px; }
-  .name{margin:0; font-size:18px; font-weight:1000; line-height:1.15;}
-  .meta{margin-top:6px; font-size:13px; color:var(--muted); line-height:1.25;}
-  .meta b{color: rgba(255,255,255,.92); font-weight:950;}
+  .body{ padding: 14px 14px 14px; }
+  .name{margin:0; font-size:18px; font-weight:1100; line-height:1.15;}
+  .meta{margin-top:7px; font-size:13px; color:var(--muted); line-height:1.25;}
+  .meta b{color: rgba(255,255,255,.90); font-weight:1000;}
   .list{
     margin:10px 0 0;
     padding-left: 18px;
@@ -183,23 +183,23 @@
     font-weight:900;
   }
   .qtyPill{
-    padding:7px 11px;
+    padding:8px 12px;
     border-radius:999px;
-    border:1px solid rgba(202,167,106,.28);
+    border:1px solid rgba(202,167,106,.26);
     background: rgba(202,167,106,.10);
     color:#fff;
-    min-width:52px;
+    min-width:56px;
     text-align:center;
-    font-weight:1000;
+    font-weight:1100;
   }
 
-  .btns{display:flex; gap:10px;}
+  .btns{display:flex; gap:10px; align-items:center;}
   .btn{
     border:none;
     cursor:pointer;
     user-select:none;
-    font-weight:1000;
-    padding:12px 14px;
+    font-weight:1100;
+    padding:12px 16px;
     border-radius: 14px;
     background: rgba(255,255,255,.06);
     border:1px solid rgba(255,255,255,.12);
@@ -207,18 +207,25 @@
     transition: transform .08s ease, filter .15s ease, background .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
   }
-  /* que se note más el "presionado" */
   .btn:active{
-    transform: translateY(2px) scale(.97);
-    filter: brightness(.92);
-    box-shadow: inset 0 2px 10px rgba(0,0,0,.45);
+    transform: translateY(1px) scale(.98);
+    filter: brightness(.95);
   }
+  /* Se nota el click */
+  .btn:focus{outline:none;}
+  .btn:active, .btn.pressed{
+    box-shadow: 0 0 0 3px rgba(202,167,106,.20);
+  }
+
   .btn.add{
     background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
     border:1px solid rgba(202,167,106,.55);
     color:#1a140b;
   }
-  .btn.minus{ background: rgba(255,255,255,.04); }
+  .btn.minus{
+    background: rgba(255,255,255,.04);
+    min-width:54px;
+  }
 
   /* Footer fijo */
   .footer{
@@ -230,7 +237,7 @@
     padding:10px 12px;
   }
   .footerInner{
-    max-width:720px;
+    max-width:920px;
     margin:0 auto;
     display:flex;
     gap:10px;
@@ -238,7 +245,6 @@
     justify-content:space-between;
     flex-wrap:wrap;
   }
-
   .totals{
     display:flex;
     flex-direction:column;
@@ -247,51 +253,106 @@
     border-radius: 16px;
     background: rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.10);
-    width: 100%;
+    min-width: 250px;
   }
-  .totals .big{font-weight:1000; font-size:16px;}
+  .totals .big{font-weight:1100; font-size:18px;}
   .totals .small{color:var(--muted); font-weight:900; font-size:13px;}
-  .totals .extrasLine{
-    margin-top:2px;
-    font-size:13px;
-    font-weight:900;
-    color: rgba(255,255,255,.80);
-  }
-  .totals .extrasLine b{ color: var(--gold); }
+  .totals .extrasLine{color: rgba(202,167,106,.95); font-weight:1000;}
 
-  .footerBtns{
-    width:100%;
-    display:flex;
-    gap:10px;
-    align-items:center;
-  }
+  .footerBtns{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
   .btnGhost{
-    flex:0 0 auto;
-    padding:12px 14px;
-    border-radius: 14px;
+    padding:13px 16px;
+    border-radius: 16px;
     background: rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.10);
     color:#fff;
-    font-weight:1000;
+    font-weight:1100;
     cursor:pointer;
     transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
+    min-width:110px;
   }
-  .btnGhost:active{transform: translateY(2px) scale(.97); filter:brightness(.92); box-shadow: inset 0 2px 10px rgba(0,0,0,.45);}
+  .btnGhost:active{transform: translateY(1px) scale(.98); filter:brightness(.95); box-shadow: 0 0 0 3px rgba(202,167,106,.14);}
   .btnWA{
-    flex:1;
-    padding:12px 16px;
-    border-radius: 14px;
+    padding:13px 18px;
+    border-radius: 16px;
     background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
     border:1px solid rgba(202,167,106,.55);
     color:#1a140b;
-    font-weight:1100;
+    font-weight:1200;
     cursor:pointer;
+    min-width: 210px;
     text-align:center;
     transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
   }
-  .btnWA:active{transform: translateY(2px) scale(.97); filter:brightness(.92); box-shadow: inset 0 2px 10px rgba(0,0,0,.35);}
+  .btnWA:active{transform: translateY(1px) scale(.98); filter:brightness(.95); box-shadow: 0 0 0 3px rgba(202,167,106,.18);}
+
+  @media (max-width:520px){
+    .totals{min-width: 100%;}
+    .footerBtns{width:100%; justify-content:space-between;}
+    .btnWA{flex:1;}
+    .imgBox{height: 260px;}
+  }
+
+  /* MODAL para agrandar foto */
+  .modal{
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background: rgba(0,0,0,.78);
+    backdrop-filter: blur(10px);
+    padding: 18px;
+  }
+  .modal.open{display:flex;}
+  .modalInner{
+    position:relative;
+    width:min(920px, 96vw);
+    max-height: 86vh;
+    border-radius: 18px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.14);
+    box-shadow: 0 30px 90px rgba(0,0,0,.65);
+    background: rgba(10,10,12,.70);
+  }
+  .modalInner::before{
+    content:"";
+    position:absolute;
+    inset:-25px;
+    background-image: var(--modalbg);
+    background-size: cover;
+    background-position:center;
+    filter: blur(22px) brightness(.55);
+    transform: scale(1.15);
+  }
+  .modalImg{
+    position:relative;
+    z-index:1;
+    width:100%;
+    height: 86vh;
+    max-height: 86vh;
+    object-fit: contain; /* se ve toda */
+    display:block;
+    background: transparent;
+  }
+  .modalClose{
+    position:absolute;
+    top:12px; right:12px;
+    z-index:2;
+    border:none;
+    cursor:pointer;
+    padding:10px 12px;
+    border-radius: 999px;
+    background: rgba(0,0,0,.55);
+    border:1px solid rgba(255,255,255,.16);
+    color:#fff;
+    font-weight:1100;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .modalClose:active{transform: translateY(1px) scale(.98);}
 </style>
 </head>
 
@@ -301,7 +362,7 @@
     <div class="brandRow">
       <div class="logo">✦</div>
       <div>
-        <h1>Sushi Stella Maris</h1>
+        <h1>STELLA MARIS SUSHI</h1>
       </div>
     </div>
 
@@ -320,7 +381,7 @@
     <div class="totals">
       <div class="big" id="totalMoney">Total: $0</div>
       <div class="small" id="totalPieces">Total de piezas: 0</div>
-      <div class="extrasLine" id="extrasLine"><b>Salsas/Adicionales:</b> —</div>
+      <div class="small extrasLine" id="extrasSummary">Salsas/Adicionales: —</div>
     </div>
     <div class="footerBtns">
       <button class="btnGhost" id="btnClear">Vaciar</button>
@@ -329,20 +390,31 @@
   </div>
 </div>
 
+<!-- Modal imagen -->
+<div class="modal" id="modal" onclick="closeModal(event)">
+  <div class="modalInner" id="modalInner">
+    <button class="modalClose" onclick="closeModal(event)">✕</button>
+    <img class="modalImg" id="modalImg" alt="Foto ampliada" />
+  </div>
+</div>
+
 <script>
+  // WhatsApp
   const WA = "5491164194866";
 
+  // Helpers
   const fmtMoney = (n) => {
     const x = Math.round(Number(n)||0);
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
+  // Estado
   let activeTab = "combos";
   const cart = {}; // id -> qty
 
   // Menú
-  // IMPORTANTE: imágenes en la raíz del repo:
-  // philadelphia.PNG / buenos-aires.PNG / guacamole.PNG
+  // IMPORTANTE: estos nombres tienen que coincidir con los archivos del repo
+  // (vos ya subiste: buenos-aires.PNG, guacamole.PNG, philadelphia.PNG)
   const MENU = [
     // ===== Combos =====
     {
@@ -403,24 +475,13 @@
     // ===== Rolls (x5) =====
     { id:"philadelphia", tab:"rolls", name:"Philadelphia", pieces:5, price:9000, desc:"Salmón fresco + queso crema.", img:"philadelphia.PNG" },
     { id:"buenos_aires", tab:"rolls", name:"Buenos Aires", pieces:5, price:11000, desc:"Langostino + queso + palta, con salsa BA.", img:"buenos-aires.PNG" },
+    { id:"guacamole", tab:"rolls", name:"Guacamole", pieces:5, price:10500, desc:"Salmón + queso con topping de guacamole.", img:"guacamole.PNG" },
 
-    // Roll Guacamole (usa tu imagen guacamole.PNG)
-    { id:"guacamole_roll", tab:"rolls", name:"Guacamole", pieces:5, price:10500, desc:"Salmón + queso crema con topping de guacamole.", img:"guacamole.PNG" },
-
-    // (dejé algunos más para que no se rompa nada; después los completás)
-    { id:"newyork", tab:"rolls", name:"New York", pieces:5, price:9000, desc:"(completás ingredientes).", img:"" },
-    { id:"california", tab:"rolls", name:"California", pieces:5, price:8500, desc:"(completás ingredientes).", img:"" },
-    { id:"vegetariano", tab:"rolls", name:"Vegetariano", pieces:5, price:7500, desc:"Zanahoria + palta + queso.", img:"" },
-
-    // ===== Salsas/Adicionales (unidad) =====
+    // ===== Extras =====
     { id:"soja", tab:"extras", name:"Salsa de soja", pieces:0, price:850, desc:"Unidad.", img:"" },
     { id:"salsa_ba", tab:"extras", name:"Salsa Buenos Aires", pieces:0, price:1300, desc:"Unidad.", img:"" },
     { id:"mostaza_miel", tab:"extras", name:"Salsa mostaza y miel", pieces:0, price:1300, desc:"Unidad.", img:"" },
     { id:"maracuya", tab:"extras", name:"Salsa maracuyá", pieces:0, price:1500, desc:"Unidad.", img:"" },
-
-    // Si querés mantener “Guacamole” como adicional aparte del roll:
-    { id:"guacamole_extra", tab:"extras", name:"Guacamole (adicional)", pieces:0, price:850, desc:"Unidad.", img:"" },
-
     { id:"criolla", tab:"extras", name:"Criolla", pieces:0, price:750, desc:"Unidad.", img:"" },
     { id:"jengibre", tab:"extras", name:"Jengibre", pieces:0, price:750, desc:"Unidad.", img:"" },
     { id:"pepino", tab:"extras", name:"Pepino", pieces:0, price:700, desc:"Unidad.", img:"" }
@@ -443,6 +504,7 @@
   function add(id){
     cart[id] = (cart[id]||0) + 1;
     haptic();
+    flashButton();
     updateTotals();
     updateQtyPills();
   }
@@ -452,8 +514,14 @@
     cart[id] -= 1;
     if (cart[id] <= 0) delete cart[id];
     haptic();
+    flashButton();
     updateTotals();
     updateQtyPills();
+  }
+
+  function flashButton(){
+    // micro feedback visual extra (además del :active)
+    // no hace falta apuntar un botón puntual; iOS ya marca :active bien
   }
 
   function clearCart(){
@@ -478,21 +546,20 @@
   }
 
   function extrasSummary(){
-    // solo salsas/adicionales (pieces == 0)
     const extras = Object.entries(cart)
-      .map(([id, qty]) => ({qty, item: MENU.find(x => x.id === id)}))
+      .map(([id, qty]) => ({ qty, item: MENU.find(x => x.id === id) }))
       .filter(x => x.item && x.item.pieces === 0)
-      .sort((a,b) => a.item.name.localeCompare(b.item.name));
+      .sort((a,b) => (a.item.name).localeCompare(b.item.name));
 
-    if (!extras.length) return "—";
-    return extras.map(x => `${x.qty}x ${x.item.name}`).join(" • ");
+    if (!extras.length) return "Salsas/Adicionales: —";
+    return "Salsas/Adicionales: " + extras.map(x => `${x.qty}x ${x.item.name}`).join(" · ");
   }
 
   function updateTotals(){
     const { totalMoney, totalPieces } = totals();
     document.getElementById("totalMoney").textContent = `Total: $${fmtMoney(totalMoney)}`;
     document.getElementById("totalPieces").textContent = `Total de piezas: ${totalPieces}`;
-    document.getElementById("extrasLine").innerHTML = `<b>Salsas/Adicionales:</b> ${extrasSummary()}`;
+    document.getElementById("extrasSummary").textContent = extrasSummary();
   }
 
   function updateQtyPills(){
@@ -516,12 +583,15 @@
     let totalPieces = 0;
 
     for (const {qty, item} of entries){
-      totalMoney += (item.price||0) * qty;
-      totalPieces += (item.pieces||0) * qty;
+      const lineMoney = (item.price||0) * qty;
+      totalMoney += lineMoney;
+
+      const itemPieces = (item.pieces||0) * qty;
+      totalPieces += itemPieces;
 
       if (item.pieces > 0) {
         const xBase = item.pieces === 5 ? " x5" : "";
-        sushiLines.push(`${qty}x ${item.name}${xBase} – ${(item.pieces||0)*qty} piezas`);
+        sushiLines.push(`${qty}x ${item.name}${xBase} – ${itemPieces} piezas`);
       } else {
         extraLines.push(`${qty}x ${item.name}`);
       }
@@ -537,8 +607,8 @@
       msg += extraLines.join("\n") + "\n\n";
     }
     msg += `Total de piezas: ${totalPieces}\n`;
-    msg += `Total: $${fmtMoney(totalMoney)}\n\n`;
-    msg += "Retiro en el local.";
+    msg += `Total: $${fmtMoney(totalMoney)}\n`;
+
     return msg;
   }
 
@@ -552,13 +622,36 @@
     window.open(url, "_blank");
   }
 
+  // Modal
+  function openModal(src){
+    if (!src) return;
+    const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modalImg");
+    const modalInner = document.getElementById("modalInner");
+    modalImg.src = src;
+    modalInner.style.setProperty("--modalbg", `url('${src}')`);
+    modal.classList.add("open");
+  }
+
+  function closeModal(e){
+    // si apretás la X o el fondo, cierra
+    const modal = document.getElementById("modal");
+    if (e && e.target && (e.target.id === "modal" || e.target.classList.contains("modalClose"))) {
+      modal.classList.remove("open");
+      document.getElementById("modalImg").src = "";
+    } else if (e && e.target && e.target.tagName === "BUTTON") {
+      modal.classList.remove("open");
+      document.getElementById("modalImg").src = "";
+    }
+  }
+
+  // Exponer al scope global (para onclick inline)
+  window.openModal = openModal;
+  window.closeModal = closeModal;
+
   function cardHTML(item){
     const price = item.price ? `$${fmtMoney(item.price)}` : "—";
     const qty = getQty(item.id);
-
-    const imgBlock = item.img
-      ? `<div class="imgBox"><img src="${item.img}" alt="${item.name}"></div>`
-      : `<div class="imgBox">Foto (pendiente)</div>`;
 
     const base = (item.pieces === 5) ? "x5 piezas" : (item.pieces > 0 ? `${item.pieces} piezas` : "Unidad");
 
@@ -567,8 +660,17 @@
          ${(item.composition && item.composition.length) ? `<ul class="list">${item.composition.map(x=>`<li>${x}</li>`).join("")}</ul>` : ""}`
       : `<div class="meta"><b>${base}</b> · ${item.desc || ""}</div>`;
 
+    // imagen: si hay, blur + contain, con modal al click
+    const imgBlock = item.img
+      ? `<div class="imgBox" style="--bgimg:url('${item.img}')" onclick="openModal('${item.img}')">
+           <img src="${item.img}" alt="${item.name}" loading="lazy" />
+         </div>`
+      : `<div class="imgBox" style="--bgimg:radial-gradient(300px 200px at 30% 30%, rgba(202,167,106,.20), transparent 60%)">
+           <img src="" alt="" style="display:none" />
+         </div>`;
+
     return `
-      <div class="card" data-tab="${item.tab}">
+      <div class="card">
         <div class="priceTag">${price}</div>
         ${imgBlock}
         <div class="body">
