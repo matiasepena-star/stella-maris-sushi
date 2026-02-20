@@ -1,155 +1,378 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stella Maris Sushi</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stella Maris Sushi</title>
+  <style>
+    :root{
+      --bg:#0f0f10;
+      --panel:#171718;
+      --panel2:#1d1d1f;
+      --text:#f3f3f4;
+      --muted:#a9a9ad;
+      --gold:#c8a24a;
+      --gold2:#b38e3e;
+      --red:#e11d2a;
+      --shadow: 0 18px 40px rgba(0,0,0,.55);
+      --radius: 22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 50% -120px, rgba(200,162,74,.18), rgba(0,0,0,0)) , var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:980px;margin:0 auto;padding:18px 14px 120px}
+    .top{
+      background: linear-gradient(180deg, rgba(0,0,0,.85), rgba(0,0,0,.35));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius);
+      padding:18px 18px;
+      box-shadow: var(--shadow);
+      position:sticky; top:10px; z-index:5;
+      backdrop-filter: blur(8px);
+    }
+    .brandRow{display:flex;gap:14px;align-items:center}
+    .badge{
+      width:44px;height:44px;border-radius:14px;
+      display:grid;place-items:center;
+      background: radial-gradient(18px 18px at 30% 30%, rgba(255,255,255,.14), rgba(255,255,255,0)) , rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .badge span{font-size:18px}
+    .brand h1{margin:0;font-size:22px;letter-spacing:.9px}
+    .brand p{margin:4px 0 0;color:var(--muted);font-size:13px;line-height:1.25}
+    .pillRow{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:12px
+    }
+    .pill{
+      padding:10px 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      color: #d8d8dc;
+      font-size:13px;
+    }
+    .pill strong{color:#fff}
+    .pill.gold{
+      background: rgba(200,162,74,.12);
+      border-color: rgba(200,162,74,.22);
+      color:#f1e6c9;
+    }
 
-<style>
-body{
-  margin:0;
-  font-family: Arial, sans-serif;
-  background:#111;
-  color:white;
-  text-align:center;
-}
+    h2.section{
+      margin:18px 6px 10px;
+      font-size:15px;
+      letter-spacing: 1.4px;
+      color: var(--gold);
+    }
+    .hint{
+      margin:0 6px 14px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.35;
+    }
 
-header{
-  background:black;
-  padding:20px;
-  font-size:24px;
-  font-weight:bold;
-}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:14px;
+    }
+    @media (max-width:620px){
+      .grid{grid-template-columns:1fr}
+      .wrap{padding-bottom:150px}
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      position:relative;
+      min-height:170px;
+    }
+    .img{
+      height:96px;
+      background:
+        radial-gradient(220px 110px at 30% 30%, rgba(200,162,74,.25), rgba(0,0,0,0)),
+        linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .priceTag{
+      position:absolute;top:10px;right:10px;
+      background: rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.12);
+      padding:8px 10px;
+      border-radius: 14px;
+      font-weight:700;
+      letter-spacing:.4px;
+    }
+    .body{
+      padding:14px 14px 16px;
+      display:flex;justify-content:space-between;gap:10px;
+      align-items:flex-end;
+    }
+    .title{margin:0;font-size:18px}
+    .sub{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .add{
+      width:54px;height:54px;border-radius:18px;
+      border:1px solid rgba(200,162,74,.22);
+      background: rgba(200,162,74,.12);
+      color: #f3e6c7;
+      font-size:28px;
+      display:grid;place-items:center;
+      cursor:pointer;
+      user-select:none;
+    }
+    .add:active{transform: scale(.98)}
+    .qtyBubble{
+      position:absolute;
+      left:12px; top:10px;
+      background: rgba(225,29,42,.92);
+      border:1px solid rgba(255,255,255,.18);
+      padding:6px 10px;
+      border-radius: 14px;
+      font-weight:800;
+      display:none;
+    }
 
-.section{
-  padding:20px;
-}
-
-.card{
-  background:#1c1c1c;
-  margin:20px;
-  padding:25px;
-  border-radius:20px;
-}
-
-button{
-  background:#e50914;
-  border:none;
-  color:white;
-  padding:12px 25px;
-  border-radius:10px;
-  font-size:16px;
-  cursor:pointer;
-  margin-top:15px;
-}
-
-button:hover{
-  opacity:0.8;
-}
-
-.cart{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  background:black;
-  padding:15px;
-  font-size:18px;
-}
-.confirm{
-  background:#c9a227;
-  color:black;
-  margin-left:10px;
-}
-</style>
+    .bottomBar{
+      position:fixed;left:0;right:0;bottom:0;
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(10px);
+      border-top:1px solid rgba(255,255,255,.08);
+      padding:12px 12px 16px;
+      z-index:10;
+    }
+    .bottomInner{
+      max-width:980px;margin:0 auto;
+      display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+    }
+    .totalBox{
+      flex:1;
+      min-width: 220px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: 18px;
+      padding:12px 14px;
+    }
+    .totalBox .big{font-size:22px;font-weight:900;margin:0}
+    .totalBox .small{margin:4px 0 0;color:var(--muted);font-size:13px}
+    .btn{
+      border:none;
+      border-radius: 18px;
+      padding:14px 16px;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .btnClear{
+      background: rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.10);
+      color:#fff;
+    }
+    .btnWa{
+      background: linear-gradient(180deg, var(--gold), var(--gold2));
+      color:#111;
+      border:1px solid rgba(0,0,0,.25);
+      flex:1;
+      min-width: 230px;
+    }
+    .btnWa:disabled{
+      opacity:.45; cursor:not-allowed;
+    }
+    .noteNoDelivery{
+      margin-top:10px;
+      color: rgba(255,255,255,.55);
+      font-size:12px;
+      text-align:center;
+    }
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brandRow">
+        <div class="badge"><span>✦</span></div>
+        <div class="brand">
+          <h1>STELLA MARIS SUSHI</h1>
+          <p>Menú digital · <strong>Retiro en el local</strong> (sin delivery)</p>
+        </div>
+      </div>
 
-<header>Stella Maris Sushi</header>
+      <div class="pillRow">
+        <div class="pill gold"><strong>Rolls & Piezas</strong> · todas las opciones son de <strong>5 piezas</strong></div>
+      </div>
+    </div>
 
-<div class="section">
+    <h2 class="section">ESPECIALES</h2>
+    <p class="hint">Tocá el <strong>+</strong> para sumar al pedido. Abajo se arma el total y el mensaje de WhatsApp.</p>
+    <div class="grid" id="gridEspeciales"></div>
 
-  <div class="card">
-    <h2>Combo 15 piezas</h2>
-    <p>$27.000</p>
-    <button onclick="addToCart('combo15')">Agregar</button>
+    <h2 class="section">COMBOS</h2>
+    <p class="hint">Los combos ya traen la cantidad de piezas indicada.</p>
+    <div class="grid" id="gridCombos"></div>
   </div>
 
-  <div class="card">
-    <h2>Combo 30 piezas</h2>
-    <p>$48.000</p>
-    <button onclick="addToCart('combo30')">Agregar</button>
+  <div class="bottomBar">
+    <div class="bottomInner">
+      <div class="totalBox">
+        <p class="big" id="totalMoney">Total: $0</p>
+        <p class="small" id="totalPieces">Total de piezas: 0</p>
+      </div>
+      <button class="btn btnClear" id="btnClear">Vaciar</button>
+      <button class="btn btnWa" id="btnWa" disabled>Confirmar por WhatsApp</button>
+      <div class="noteNoDelivery">Retiro en el local · Sin delivery</div>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>Avocado (5 piezas)</h2>
-    <p>$9.000</p>
-    <button onclick="addToCart('avocado')">Agregar</button>
-  </div>
+  <script>
+    // ===== CONFIG =====
+    const WHATSAPP_NUMBER = "5491164194866"; // <- tu número
 
-</div>
+    // Catálogo (podés cambiar nombres/precios cuando quieras)
+    // Para los Rolls/Piezas: siempre 5 piezas
+    const ESPECIALES = [
+      { id:"tamago",  name:"Tamago",  subtitle:"(5 piezas)", pieces:5, price: 8000 },
+      { id:"keki",    name:"Keki",    subtitle:"(5 piezas)", pieces:5, price:10500 },
+      { id:"maki_atun", name:"Maki de atún", subtitle:"(5 piezas)", pieces:5, price:10500 },
+      { id:"crazy",   name:"Crazy",   subtitle:"(5 piezas)", pieces:5, price:10500 },
+      { id:"avocado", name:"Avocado", subtitle:"(5 piezas)", pieces:5, price: 9000 },
+      { id:"criolla", name:"Criolla", subtitle:"(5 piezas)", pieces:5, price: 9000 }
+    ];
 
-<div class="cart">
-  Total: <span id="total">$0</span>
-  <button class="confirm" onclick="sendOrder()">Confirmar por WhatsApp</button>
-</div>
+    const COMBOS = [
+      { id:"combo15", name:"Combo 15 piezas", subtitle:"", pieces:15, price:27000 },
+      { id:"combo30", name:"Combo 30 piezas", subtitle:"", pieces:30, price:48000 }
+    ];
 
-<script>
+    // ===== HELPERS =====
+    const cart = {}; // id -> qty
 
-const WHATSAPP_NUMBER = "5491164194866";
+    function moneyARS(n){
+      // 27000 -> $27.000
+      return "$" + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
 
-const PRODUCTS = {
-  combo15: { name:"Combo 15 piezas", price:27000, pieces:15 },
-  combo30: { name:"Combo 30 piezas", price:48000, pieces:30 },
-  avocado: { name:"Avocado", price:9000, pieces:5 }
-};
+    function createCard(item, container){
+      const el = document.createElement("div");
+      el.className = "card";
+      el.innerHTML = `
+        <div class="qtyBubble" id="qty-${item.id}"></div>
+        <div class="img"></div>
+        <div class="priceTag">${moneyARS(item.price)}</div>
+        <div class="body">
+          <div>
+            <p class="title">${item.name}</p>
+            <p class="sub">${item.subtitle || ""}</p>
+          </div>
+          <div class="add" role="button" aria-label="Agregar ${item.name}">+</div>
+        </div>
+      `;
 
-let cart = {};
+      el.querySelector(".add").addEventListener("click", () => {
+        cart[item.id] = (cart[item.id] || 0) + 1;
+        updateUI();
+      });
 
-function money(n){
-  return "$" + n.toLocaleString("es-AR");
-}
+      container.appendChild(el);
+    }
 
-function addToCart(id){
-  if(!cart[id]) cart[id]=0;
-  cart[id]++;
-  updateTotal();
-}
+    function build(){
+      const gridEsp = document.getElementById("gridEspeciales");
+      const gridComb = document.getElementById("gridCombos");
 
-function updateTotal(){
-  let total = 0;
-  for(let id in cart){
-    total += PRODUCTS[id].price * cart[id];
-  }
-  document.getElementById("total").innerText = money(total);
-}
+      ESPECIALES.forEach(i => createCard(i, gridEsp));
+      COMBOS.forEach(i => createCard(i, gridComb));
 
-function sendOrder(){
-  let message = "Hola Stella Maris Sushi 🍣\n\nQuiero pedir:\n";
+      document.getElementById("btnClear").addEventListener("click", () => {
+        Object.keys(cart).forEach(k => delete cart[k]);
+        updateUI();
+      });
 
-  let total = 0;
-  let totalPieces = 0;
+      document.getElementById("btnWa").addEventListener("click", () => {
+        const link = buildWhatsAppLink();
+        if(link) window.location.href = link;
+      });
 
-  for(let id in cart){
-    const product = PRODUCTS[id];
-    const qty = cart[id];
-    const subtotal = product.price * qty;
-    const pieces = product.pieces * qty;
+      updateUI();
+    }
 
-    total += subtotal;
-    totalPieces += pieces;
+    function getItemById(id){
+      return ESPECIALES.concat(COMBOS).find(x => x.id === id);
+    }
 
-    message += `• ${qty}x ${product.name} (${pieces} piezas) (${money(subtotal)})\n`;
-  }
+    function updateUI(){
+      let totalMoney = 0;
+      let totalPieces = 0;
 
-  message += `\nTotal de piezas: ${totalPieces}\n`;
-  message += `Total: ${money(total)}.`;
+      Object.keys(cart).forEach(id => {
+        const qty = cart[id] || 0;
+        const item = getItemById(id);
+        if(!item || qty <= 0) return;
 
-  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-  window.open(url, "_blank");
-}
+        totalMoney += item.price * qty;
+        totalPieces += item.pieces * qty;
 
-</script>
+        const bubble = document.getElementById(`qty-${id}`);
+        if(bubble){
+          bubble.style.display = "inline-block";
+          bubble.textContent = `${qty}x`;
+        }
+      });
 
+      // Apagar burbujas de lo que quedó en 0
+      ESPECIALES.concat(COMBOS).forEach(item => {
+        const bubble = document.getElementById(`qty-${item.id}`);
+        if(bubble && (!cart[item.id] || cart[item.id] <= 0)){
+          bubble.style.display = "none";
+          bubble.textContent = "";
+        }
+      });
+
+      document.getElementById("totalMoney").textContent = `Total: ${moneyARS(totalMoney)}`;
+      document.getElementById("totalPieces").textContent = `Total de piezas: ${totalPieces}`;
+
+      const btn = document.getElementById("btnWa");
+      btn.disabled = totalMoney <= 0;
+    }
+
+    function buildWhatsAppLink(){
+      const lines = [];
+      let totalMoney = 0;
+      let totalPieces = 0;
+
+      const all = ESPECIALES.concat(COMBOS);
+
+      all.forEach(item => {
+        const qty = cart[item.id] || 0;
+        if(qty <= 0) return;
+        totalMoney += item.price * qty;
+        totalPieces += item.pieces * qty;
+
+        // En el mensaje: mostrar piezas cuando sea roll/pieza (5), y los combos ya lo dicen en el nombre
+        const label = item.name.includes("piezas") ? item.name : `${item.name} (${item.pieces} piezas)`;
+        lines.push(`• ${qty}x ${label} (${moneyARS(item.price)})`);
+      });
+
+      if(totalMoney <= 0) return "";
+
+      const msg =
+`Hola Stella Maris Sushi 🍣
+
+Quiero pedir:
+${lines.join("\n")}
+
+Total de piezas: ${totalPieces}
+Total: ${moneyARS(totalMoney)}.
+
+Retiro en el local (sin delivery).`;
+
+      return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    }
+
+    build();
+  </script>
 </body>
 </html>
