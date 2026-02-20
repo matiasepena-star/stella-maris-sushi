@@ -17,10 +17,6 @@
     --gold2:#8f6f3f;
     --shadow: 0 18px 55px rgba(0,0,0,.55);
     --radius:18px;
-
-    /* se calculan por JS (para que NO tape nada) */
-    --headerH: 120px;
-    --footerH: 128px;
   }
 
   *{box-sizing:border-box}
@@ -76,29 +72,21 @@
     background: rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.10);
     user-select:none;
-    transition: transform .08s ease, background .15s ease, border-color .15s ease, filter .15s ease, box-shadow .15s ease;
+    transition: transform .08s ease, background .15s ease, border-color .15s ease, filter .15s ease;
     -webkit-tap-highlight-color: transparent;
   }
-  .tab:active{
-    transform: translateY(2px) scale(.985);
-    filter:brightness(.92);
-    box-shadow: inset 0 2px 10px rgba(0,0,0,.45);
-  }
+  .tab:active{transform: translateY(1px) scale(.99); filter:brightness(.95);}
   .tab.active{
     background: rgba(202,167,106,.16);
     border-color: rgba(202,167,106,.40);
     color:#fff;
   }
 
-  /* Contenido scroll (NO se tapa: padding se calcula por JS) */
+  /* Contenido scroll */
   .content{
     max-width:720px;
     margin:0 auto;
-    padding:
-      calc(var(--headerH) + 14px)
-      14px
-      calc(var(--footerH) + 16px + env(safe-area-inset-bottom))
-      14px;
+    padding: 120px 14px 150px; /* header + footer */
   }
 
   .sectionTitle{
@@ -110,7 +98,7 @@
     text-transform: uppercase;
   }
 
-  /* 1 columna siempre */
+  /* SIEMPRE 1 columna (nada de 2 cortados) */
   .grid{
     display:grid;
     gap:14px;
@@ -126,9 +114,9 @@
     position:relative;
   }
 
-  /* Imagen: NO estirar (contain), tamaño controlado para que entre con footer */
+  /* Imagen: sin estirar + se ve toda (incluye texto de la foto) */
   .imgBox{
-    height: 210px; /* base (rolls) */
+    height: 250px; /* más grande para Rolls */
     background:
       radial-gradient(220px 140px at 20% 20%, rgba(202,167,106,.14), transparent 60%),
       radial-gradient(220px 140px at 80% 0%, rgba(255,255,255,.06), transparent 60%),
@@ -140,36 +128,19 @@
     color: rgba(255,255,255,.35);
     font-weight:900;
     letter-spacing:.08em;
-    position:relative;
   }
-  .imgBox.clickable{ cursor: zoom-in; }
   .imgBox img{
     width:100%;
     height:100%;
-    object-fit:contain;      /* clave: se ve completa + texto */
+    object-fit:contain; /* clave: NO recorta y NO estira */
     display:block;
     background: rgba(0,0,0,.55);
   }
 
-  /* Combos y Salsas un poco más bajas */
+  /* Combos y Salsas: imagen un poco más baja */
   .card[data-tab="combos"] .imgBox,
   .card[data-tab="extras"] .imgBox{
-    height: 190px;
-  }
-
-  /* “tocar” visual en la foto */
-  .imgHint{
-    position:absolute;
-    bottom:10px; left:10px;
-    padding:6px 10px;
-    border-radius:999px;
-    font-weight:900;
-    font-size:12px;
-    color: rgba(255,255,255,.85);
-    background: rgba(0,0,0,.45);
-    border:1px solid rgba(255,255,255,.12);
-    backdrop-filter: blur(10px);
-    pointer-events:none;
+    height: 200px;
   }
 
   .priceTag{
@@ -235,8 +206,8 @@
     color:#fff;
     transition: transform .08s ease, filter .15s ease, background .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
-    box-shadow: 0 10px 22px rgba(0,0,0,.22);
   }
+  /* que se note más el "presionado" */
   .btn:active{
     transform: translateY(2px) scale(.97);
     filter: brightness(.92);
@@ -249,14 +220,14 @@
   }
   .btn.minus{ background: rgba(255,255,255,.04); }
 
-  /* Footer fijo (compacto y SIN tapar) */
+  /* Footer fijo */
   .footer{
     position:fixed; left:0; right:0; bottom:0;
     z-index:1000;
     background: rgba(10,10,12,.88);
     backdrop-filter: blur(12px);
     border-top:1px solid rgba(255,255,255,.10);
-    padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+    padding:10px 12px;
   }
   .footerInner{
     max-width:720px;
@@ -278,16 +249,13 @@
     border:1px solid rgba(255,255,255,.10);
     width: 100%;
   }
-  .totals .big{font-weight:1000; font-size:15px;}
+  .totals .big{font-weight:1000; font-size:16px;}
   .totals .small{color:var(--muted); font-weight:900; font-size:13px;}
   .totals .extrasLine{
     margin-top:2px;
-    font-size:12.5px;
+    font-size:13px;
     font-weight:900;
     color: rgba(255,255,255,.80);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
   .totals .extrasLine b{ color: var(--gold); }
 
@@ -308,13 +276,8 @@
     cursor:pointer;
     transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
-    box-shadow: 0 10px 22px rgba(0,0,0,.22);
   }
-  .btnGhost:active{
-    transform: translateY(2px) scale(.97);
-    filter:brightness(.92);
-    box-shadow: inset 0 2px 10px rgba(0,0,0,.45);
-  }
+  .btnGhost:active{transform: translateY(2px) scale(.97); filter:brightness(.92); box-shadow: inset 0 2px 10px rgba(0,0,0,.45);}
   .btnWA{
     flex:1;
     padding:12px 16px;
@@ -327,85 +290,13 @@
     text-align:center;
     transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
-    box-shadow: 0 10px 22px rgba(0,0,0,.22);
   }
-  .btnWA:active{
-    transform: translateY(2px) scale(.97);
-    filter:brightness(.92);
-    box-shadow: inset 0 2px 10px rgba(0,0,0,.35);
-  }
-
-  /* ===== Modal para agrandar foto (con nombre) ===== */
-  .modal{
-    position:fixed;
-    inset:0;
-    z-index:2000;
-    background: rgba(0,0,0,.78);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:18px;
-  }
-  .modal.show{ display:flex; }
-  .modalCard{
-    width:min(680px, 100%);
-    border-radius: 18px;
-    overflow:hidden;
-    border:1px solid rgba(255,255,255,.12);
-    background: rgba(12,12,14,.96);
-    box-shadow: 0 30px 90px rgba(0,0,0,.75);
-    position:relative;
-  }
-  .modalTop{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    padding:12px 14px;
-    border-bottom:1px solid rgba(255,255,255,.10);
-  }
-  .modalTitle{
-    font-weight:1000;
-    font-size:15px;
-    letter-spacing:.2px;
-    color:#fff;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-  .modalClose{
-    border:none;
-    cursor:pointer;
-    border-radius:12px;
-    padding:10px 12px;
-    font-weight:1000;
-    background: rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.12);
-    color:#fff;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .modalClose:active{
-    transform: translateY(2px) scale(.97);
-    filter:brightness(.92);
-    box-shadow: inset 0 2px 10px rgba(0,0,0,.45);
-  }
-  .modalImgWrap{
-    background: rgba(0,0,0,.55);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .modalImg{
-    width:100%;
-    height:min(72vh, 720px);
-    object-fit:contain; /* se ve TODO + texto de la foto */
-    display:block;
-  }
+  .btnWA:active{transform: translateY(2px) scale(.97); filter:brightness(.92); box-shadow: inset 0 2px 10px rgba(0,0,0,.35);}
 </style>
 </head>
 
 <body>
-<header id="siteHeader">
+<header>
   <div class="wrap">
     <div class="brandRow">
       <div class="logo">✦</div>
@@ -424,7 +315,7 @@
 
 <div class="content" id="content"></div>
 
-<div class="footer" id="siteFooter">
+<div class="footer">
   <div class="footerInner">
     <div class="totals">
       <div class="big" id="totalMoney">Total: $0</div>
@@ -434,19 +325,6 @@
     <div class="footerBtns">
       <button class="btnGhost" id="btnClear">Vaciar</button>
       <button class="btnWA" id="btnWA">Confirmar por WhatsApp</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal foto -->
-<div class="modal" id="imgModal" onclick="closeModalIfBackdrop(event)">
-  <div class="modalCard" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
-    <div class="modalTop">
-      <div class="modalTitle" id="modalTitle">—</div>
-      <button class="modalClose" onclick="closeModal()">Cerrar ✕</button>
-    </div>
-    <div class="modalImgWrap">
-      <img class="modalImg" id="modalImg" src="" alt="">
     </div>
   </div>
 </div>
@@ -463,19 +341,73 @@
   const cart = {}; // id -> qty
 
   // Menú
+  // IMPORTANTE: imágenes en la raíz del repo:
+  // philadelphia.PNG / buenos-aires.PNG / guacamole.PNG
   const MENU = [
     // ===== Combos =====
-    { id:"combo10", tab:"combos", name:"Combo 10 piezas", pieces:10, price:16000, includesRule:"Incluye 1 salsa de soja fija", composition:["4 Philadelphia","3 New York","3 California"], img:"" },
-    { id:"combo15", tab:"combos", name:"Combo 15 piezas", pieces:15, price:22000, includesRule:"Incluye 1 salsa de soja fija", composition:["5 New York","5 California","5 Buenos Aires"], img:"" },
-    { id:"combo20", tab:"combos", name:"Combo 20 piezas", pieces:20, price:30000, includesRule:"Incluye 1 salsa de soja fija", composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese salmón"], img:"" },
-    { id:"combo30", tab:"combos", name:"Combo 30 piezas", pieces:30, price:45000, includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección", composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"], img:"" },
-    { id:"combo40", tab:"combos", name:"Combo 40 piezas", pieces:40, price:55000, includesRule:"Incluye 2 salsas de soja fijas + 1 salsa a elección", composition:["10 Philadelphia","10 Maki de salmón","10 Niguiris de salmón","10 New York"], img:"" },
-    { id:"combo50", tab:"combos", name:"Combo 50 piezas", pieces:50, price:70000, includesRule:"Incluye 2 salsas de soja fijas + 2 salsas a elección", composition:["10 Ebi langostino","10 Crazy","10 Salmón crispy","10 Tamago","10 Keki"], img:"" },
+    {
+      id:"combo10", tab:"combos",
+      name:"Combo 10 piezas",
+      pieces:10,
+      price:16000,
+      includesRule:"Incluye 1 salsa de soja fija",
+      composition:["4 Philadelphia","3 New York","3 California"],
+      img:""
+    },
+    {
+      id:"combo15", tab:"combos",
+      name:"Combo 15 piezas",
+      pieces:15,
+      price:22000,
+      includesRule:"Incluye 1 salsa de soja fija",
+      composition:["5 New York","5 California","5 Buenos Aires"],
+      img:""
+    },
+    {
+      id:"combo20", tab:"combos",
+      name:"Combo 20 piezas",
+      pieces:20,
+      price:30000,
+      includesRule:"Incluye 1 salsa de soja fija",
+      composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese salmón"],
+      img:""
+    },
+    {
+      id:"combo30", tab:"combos",
+      name:"Combo 30 piezas",
+      pieces:30,
+      price:45000,
+      includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección",
+      composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"],
+      img:""
+    },
+    {
+      id:"combo40", tab:"combos",
+      name:"Combo 40 piezas",
+      pieces:40,
+      price:55000,
+      includesRule:"Incluye 2 salsas de soja fijas + 1 salsa a elección",
+      composition:["10 Philadelphia","10 Maki de salmón","10 Niguiris de salmón","10 New York"],
+      img:""
+    },
+    {
+      id:"combo50", tab:"combos",
+      name:"Combo 50 piezas",
+      pieces:50,
+      price:70000,
+      includesRule:"Incluye 2 salsas de soja fijas + 2 salsas a elección",
+      composition:["10 Ebi langostino","10 Crazy","10 Salmón crispy","10 Tamago","10 Keki"],
+      img:""
+    },
 
     // ===== Rolls (x5) =====
     { id:"philadelphia", tab:"rolls", name:"Philadelphia", pieces:5, price:9000, desc:"Salmón fresco + queso crema.", img:"philadelphia.PNG" },
     { id:"buenos_aires", tab:"rolls", name:"Buenos Aires", pieces:5, price:11000, desc:"Langostino + queso + palta, con salsa BA.", img:"buenos-aires.PNG" },
+
+    // Roll Guacamole (usa tu imagen guacamole.PNG)
     { id:"guacamole_roll", tab:"rolls", name:"Guacamole", pieces:5, price:10500, desc:"Salmón + queso crema con topping de guacamole.", img:"guacamole.PNG" },
+
+    // (dejé algunos más para que no se rompa nada; después los completás)
     { id:"newyork", tab:"rolls", name:"New York", pieces:5, price:9000, desc:"(completás ingredientes).", img:"" },
     { id:"california", tab:"rolls", name:"California", pieces:5, price:8500, desc:"(completás ingredientes).", img:"" },
     { id:"vegetariano", tab:"rolls", name:"Vegetariano", pieces:5, price:7500, desc:"Zanahoria + palta + queso.", img:"" },
@@ -485,7 +417,10 @@
     { id:"salsa_ba", tab:"extras", name:"Salsa Buenos Aires", pieces:0, price:1300, desc:"Unidad.", img:"" },
     { id:"mostaza_miel", tab:"extras", name:"Salsa mostaza y miel", pieces:0, price:1300, desc:"Unidad.", img:"" },
     { id:"maracuya", tab:"extras", name:"Salsa maracuyá", pieces:0, price:1500, desc:"Unidad.", img:"" },
+
+    // Si querés mantener “Guacamole” como adicional aparte del roll:
     { id:"guacamole_extra", tab:"extras", name:"Guacamole (adicional)", pieces:0, price:850, desc:"Unidad.", img:"" },
+
     { id:"criolla", tab:"extras", name:"Criolla", pieces:0, price:750, desc:"Unidad.", img:"" },
     { id:"jengibre", tab:"extras", name:"Jengibre", pieces:0, price:750, desc:"Unidad.", img:"" },
     { id:"pepino", tab:"extras", name:"Pepino", pieces:0, price:700, desc:"Unidad.", img:"" }
@@ -543,6 +478,7 @@
   }
 
   function extrasSummary(){
+    // solo salsas/adicionales (pieces == 0)
     const extras = Object.entries(cart)
       .map(([id, qty]) => ({qty, item: MENU.find(x => x.id === id)}))
       .filter(x => x.item && x.item.pieces === 0)
@@ -616,40 +552,12 @@
     window.open(url, "_blank");
   }
 
-  // ===== Modal =====
-  function openModal(src, title){
-    const modal = document.getElementById("imgModal");
-    const img = document.getElementById("modalImg");
-    const t = document.getElementById("modalTitle");
-    t.textContent = title || "—";
-    img.src = src;
-    img.alt = title || "";
-    modal.classList.add("show");
-  }
-  function closeModal(){
-    const modal = document.getElementById("imgModal");
-    const img = document.getElementById("modalImg");
-    modal.classList.remove("show");
-    img.src = "";
-    img.alt = "";
-  }
-  function closeModalIfBackdrop(e){
-    // si toca el fondo (no la tarjeta), cerrar
-    if (e.target && e.target.id === "imgModal") closeModal();
-  }
-
   function cardHTML(item){
     const price = item.price ? `$${fmtMoney(item.price)}` : "—";
     const qty = getQty(item.id);
 
-    const hasImg = !!item.img;
-
-    const imgBlock = hasImg
-      ? `
-        <div class="imgBox clickable" onclick="openModal('${item.img}','${item.name.replace(/'/g,"\\'")}')">
-          <img src="${item.img}" alt="${item.name}">
-          <div class="imgHint">Tocar para agrandar</div>
-        </div>`
+    const imgBlock = item.img
+      ? `<div class="imgBox"><img src="${item.img}" alt="${item.name}"></div>`
       : `<div class="imgBox">Foto (pendiente)</div>`;
 
     const base = (item.pieces === 5) ? "x5 piezas" : (item.pieces > 0 ? `${item.pieces} piezas` : "Unidad");
@@ -695,47 +603,12 @@
 
     updateTotals();
     updateQtyPills();
-    syncSafeAreas(); // por si cambió altura por render
-  }
-
-  // ===== Anti-tapado: calcular alto real de header/footer =====
-  function syncSafeAreas(){
-    const h = document.getElementById("siteHeader");
-    const f = document.getElementById("siteFooter");
-    if (!h || !f) return;
-
-    const headerH = Math.ceil(h.getBoundingClientRect().height);
-    const footerH = Math.ceil(f.getBoundingClientRect().height);
-
-    document.documentElement.style.setProperty("--headerH", headerH + "px");
-    document.documentElement.style.setProperty("--footerH", footerH + "px");
-  }
-
-  // Observa cambios de tamaño (iPhone, zoom, etc.)
-  let ro;
-  function initResizeObservers(){
-    try{
-      ro = new ResizeObserver(() => syncSafeAreas());
-      ro.observe(document.getElementById("siteHeader"));
-      ro.observe(document.getElementById("siteFooter"));
-    }catch(e){
-      // fallback
-      window.addEventListener("resize", syncSafeAreas);
-    }
   }
 
   document.getElementById("btnClear").addEventListener("click", clearCart);
   document.getElementById("btnWA").addEventListener("click", sendWA);
 
-  // Cerrar modal con ESC (por si está en compu)
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeModal();
-  });
-
-  initResizeObservers();
   render();
-  // primer cálculo
-  setTimeout(syncSafeAreas, 0);
 </script>
 </body>
 </html>
