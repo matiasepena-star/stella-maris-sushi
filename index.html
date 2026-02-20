@@ -8,16 +8,22 @@
 <style>
   :root{
     --bg:#0b0b0c;
-    --card:#15161a;
+    --panel:#0f1012;
+    --card:#14151a;
     --line:#262830;
     --text:#f3f3f3;
     --muted:#b7b7b7;
     --gold:#caa76a;
+    --gold2:#8f6f3f;
     --shadow: 0 18px 55px rgba(0,0,0,.55);
-    --radius:18px;
+    --radius:20px;
+
+    /* Ajuste clave: alto de foto (compacto) */
+    --imgH: 250px;
   }
 
   *{box-sizing:border-box}
+  html,body{height:100%}
   body{
     margin:0;
     font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;
@@ -28,19 +34,19 @@
     color:var(--text);
   }
 
-  /* Header fijo */
   header{
     position:fixed; top:0; left:0; right:0;
     z-index:1000;
-    background: rgba(15,16,18,.92);
-    backdrop-filter: blur(12px);
-    border-bottom:1px solid rgba(255,255,255,.08);
+    background: rgba(12,12,14,.88);
+    backdrop-filter: blur(14px);
+    border-bottom:1px solid rgba(255,255,255,.10);
     padding:14px 14px 12px;
   }
-  .wrap{max-width:780px; margin:0 auto;}
+
+  .wrap{max-width:920px; margin:0 auto;}
   .brandRow{display:flex; align-items:center; gap:12px;}
   .logo{
-    width:40px; height:40px; border-radius:14px;
+    width:44px; height:44px; border-radius:16px;
     display:grid; place-items:center;
     color:var(--gold);
     background:
@@ -48,47 +54,53 @@
       linear-gradient(135deg, rgba(202,167,106,.28), rgba(202,167,106,.08));
     border:1px solid rgba(202,167,106,.25);
     user-select:none;
+    box-shadow: 0 12px 26px rgba(0,0,0,.35);
   }
-  h1{margin:0; font-size:20px; letter-spacing:.8px; font-weight:1000;}
+  h1{
+    margin:0;
+    font-size:22px;
+    letter-spacing:.12em;
+    font-weight:1000;
+  }
 
   .tabs{margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;}
   .tab{
-    padding:10px 14px;
-    border-radius:16px;
+    padding:12px 16px;
+    border-radius:18px;
     cursor:pointer;
-    font-size:14px;
-    font-weight:950;
-    color: rgba(255,255,255,.90);
-    background: rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.12);
+    font-size:16px;
+    font-weight:900;
+    color: rgba(255,255,255,.85);
+    background: rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.10);
     user-select:none;
     transition: transform .08s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
   }
   .tab:active{transform: translateY(1px) scale(.99);}
   .tab.active{
-    background: rgba(202,167,106,.16);
-    border-color: rgba(202,167,106,.38);
-    box-shadow: 0 10px 30px rgba(202,167,106,.12);
+    background: rgba(202,167,106,.14);
+    border-color: rgba(202,167,106,.35);
+    box-shadow: 0 10px 24px rgba(0,0,0,.25);
     color:#fff;
   }
 
-  /* Contenido */
   .content{
-    max-width:780px;
+    max-width:920px;
     margin:0 auto;
-    padding: 118px 14px 138px; /* header + footer */
+    padding: 122px 14px 150px;
   }
+
   .sectionTitle{
     margin: 10px 2px 12px;
-    color: var(--gold);
-    letter-spacing:.30em;
+    color: rgba(202,167,106,.95);
+    letter-spacing:.55em;
     font-weight:1000;
-    font-size: 12px;
+    font-size: 13px;
     text-transform: uppercase;
   }
 
-  /* SIEMPRE 1 columna (así nunca ves 2 cortadas) */
+  /* UNA COLUMNA SIEMPRE (como pediste) */
   .grid{
     display:grid;
     gap:14px;
@@ -96,39 +108,64 @@
   }
 
   .card{
-    background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-    border:1px solid rgba(255,255,255,.08);
+    background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    border:1px solid rgba(255,255,255,.10);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     overflow:hidden;
     position:relative;
   }
 
-  /* Imagen: ancho 100%, sin franjas, sin estirar, sin recortar */
-  .imgBox{
-    width:100%;
-    background: rgba(0,0,0,.22);
-    border-bottom:1px solid rgba(255,255,255,.06);
+  /* ===== Foto: completa + sin estirar + ocupa el ancho del recuadro =====
+     Truco: fondo blur (cover) + foto principal (contain). */
+  .imgWrap{
+    height: var(--imgH);
+    position:relative;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    cursor: zoom-in;
+    -webkit-tap-highlight-color: transparent;
   }
-  .imgBox img{
+  .imgBg, .imgMain{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+  }
+  .imgBg img{
+    width:100%; height:100%;
+    object-fit:cover;
+    filter: blur(14px) brightness(.75);
+    transform: scale(1.08);
+  }
+  .imgMain{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px;
+  }
+  .imgMain img{
     width:100%;
-    height:auto;           /* CLAVE: no se estira */
+    height:100%;
+    object-fit:contain; /* foto completa */
     display:block;
-    cursor:pointer;
   }
-  /* Placeholder cuando falta foto */
+  .imgOverlay{
+    position:absolute; inset:auto 0 0 0;
+    height: 44%;
+    background: linear-gradient(180deg, transparent, rgba(0,0,0,.35), rgba(0,0,0,.55));
+    pointer-events:none;
+  }
   .imgPlaceholder{
-    width:100%;
-    aspect-ratio: 16 / 9;
-    display:grid;
-    place-items:center;
-    color: rgba(255,255,255,.25);
+    height: var(--imgH);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color: rgba(255,255,255,.35);
     font-weight:1000;
-    letter-spacing:.10em;
+    letter-spacing:.08em;
     background:
-      radial-gradient(220px 140px at 20% 20%, rgba(202,167,106,.20), transparent 60%),
+      radial-gradient(220px 140px at 20% 20%, rgba(202,167,106,.22), transparent 60%),
       radial-gradient(220px 140px at 80% 0%, rgba(255,255,255,.06), transparent 60%),
-      rgba(0,0,0,.18);
+      rgba(0,0,0,.20);
+    border-bottom:1px solid rgba(255,255,255,.06);
   }
 
   .priceTag{
@@ -136,23 +173,32 @@
     top:12px; right:12px;
     background: rgba(0,0,0,.55);
     border:1px solid rgba(255,255,255,.12);
-    padding:8px 12px;
+    padding:9px 12px;
     border-radius:999px;
     font-weight:1100;
     letter-spacing:.3px;
+    font-size: 18px;
   }
 
-  .body{
-    padding: 12px 14px 14px;
+  .body{ padding: 14px 14px 14px; }
+  .name{
+    margin:0;
+    font-size: 28px;
+    font-weight:1100;
+    line-height:1.08;
   }
-  .name{margin:0; font-size:18px; font-weight:1100; line-height:1.15;}
-  .meta{margin-top:6px; font-size:13px; color:var(--muted); line-height:1.25;}
-  .meta b{color: rgba(255,255,255,.92); font-weight:1000;}
+  .meta{
+    margin-top:8px;
+    font-size:18px;
+    color: rgba(255,255,255,.82);
+    line-height:1.25;
+  }
+  .meta b{color:#fff; font-weight:1000;}
   .list{
     margin:10px 0 0;
     padding-left: 18px;
     color: rgba(255,255,255,.78);
-    font-size: 13px;
+    font-size: 16.5px;
     line-height:1.35;
   }
 
@@ -161,53 +207,63 @@
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:10px;
+    gap:12px;
     padding-top: 12px;
     border-top: 1px solid rgba(255,255,255,.08);
   }
 
   .qty{
     display:flex; align-items:center; gap:10px;
-    font-size:13px;
-    color: var(--muted);
+    font-size:17px;
+    color: rgba(255,255,255,.75);
     font-weight:900;
   }
   .qtyPill{
-    padding:7px 12px;
+    padding:8px 14px;
     border-radius:999px;
-    border:1px solid rgba(202,167,106,.28);
-    background: rgba(202,167,106,.10);
+    border:1px solid rgba(202,167,106,.26);
+    background: rgba(202,167,106,.08);
     color:#fff;
-    min-width:52px;
+    min-width:58px;
     text-align:center;
     font-weight:1100;
   }
 
-  .btns{display:flex; gap:10px;}
+  .btns{display:flex; gap:12px; align-items:center;}
   .btn{
     border:none;
     cursor:pointer;
     user-select:none;
     font-weight:1100;
-    padding:12px 14px;
-    border-radius: 14px;
+    padding:14px 18px;
+    border-radius: 16px;
     background: rgba(255,255,255,.06);
     border:1px solid rgba(255,255,255,.12);
     color:#fff;
-    transition: transform .08s ease, filter .15s ease, background .15s ease, box-shadow .15s ease;
+    transition: transform .08s ease, filter .15s ease, box-shadow .15s ease, background .15s ease;
     -webkit-tap-highlight-color: transparent;
   }
+
+  /* Botón con “se nota que toca” */
   .btn:active{
     transform: translateY(1px) scale(.98);
     filter: brightness(.95);
   }
+
   .btn.add{
     background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
     border:1px solid rgba(202,167,106,.55);
     color:#1a140b;
-    box-shadow: 0 10px 30px rgba(202,167,106,.14);
+    box-shadow: 0 10px 22px rgba(202,167,106,.18);
   }
+  .btn.add:active{
+    box-shadow: 0 0 0 3px rgba(202,167,106,.25), 0 8px 18px rgba(0,0,0,.25);
+  }
+
   .btn.minus{
+    width:56px;
+    text-align:center;
+    font-size:18px;
     background: rgba(255,255,255,.04);
   }
 
@@ -221,7 +277,7 @@
     padding:10px 12px;
   }
   .footerInner{
-    max-width:780px;
+    max-width:920px;
     margin:0 auto;
     display:flex;
     gap:10px;
@@ -233,97 +289,121 @@
     display:flex;
     flex-direction:column;
     gap:6px;
-    padding:10px 12px;
-    border-radius: 16px;
+    padding:12px 14px;
+    border-radius: 18px;
     background: rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.10);
-    width: 100%;
+    min-width: 320px;
   }
-  .totals .big{font-weight:1100; font-size:16px;}
-  .totals .small{color:var(--muted); font-weight:900; font-size:13px;}
-  .totals .extrasLine{
-    color: rgba(202,167,106,.95);
-    font-weight:1000;
-    font-size:13px;
-    margin-top:2px;
-  }
-  .totals .extrasLine span{
-    color: rgba(255,255,255,.85);
-    font-weight:900;
-  }
+  .totals .big{font-weight:1100; font-size:22px;}
+  .totals .small{color:rgba(255,255,255,.85); font-weight:1000; font-size:18px;}
+  .totals .extras{color:rgba(202,167,106,.95); font-weight:1100; font-size:18px;}
 
-  .footerBtns{display:flex; gap:10px; align-items:center; width:100%;}
+  .footerBtns{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
   .btnGhost{
-    padding:12px 14px;
-    border-radius: 14px;
+    padding:16px 18px;
+    border-radius: 16px;
     background: rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.10);
     color:#fff;
     font-weight:1100;
     cursor:pointer;
-    transition: transform .08s ease, filter .15s ease;
+    transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
-    min-width:110px;
+    min-width: 120px;
   }
-  .btnGhost:active{transform: translateY(1px) scale(.98); filter:brightness(.95);}
+  .btnGhost:active{
+    transform: translateY(1px) scale(.98);
+    filter:brightness(.95);
+  }
   .btnWA{
-    padding:12px 16px;
-    border-radius: 14px;
+    padding:16px 20px;
+    border-radius: 16px;
     background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
     border:1px solid rgba(202,167,106,.55);
     color:#1a140b;
     font-weight:1200;
     cursor:pointer;
-    flex:1;
+    min-width: 260px;
     text-align:center;
-    transition: transform .08s ease, filter .15s ease;
+    transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
   }
-  .btnWA:active{transform: translateY(1px) scale(.98); filter:brightness(.95);}
+  .btnWA:active{
+    transform: translateY(1px) scale(.98);
+    filter:brightness(.95);
+    box-shadow: 0 0 0 3px rgba(202,167,106,.22);
+  }
 
-  /* Modal zoom de foto */
+  @media (max-width:520px){
+    .totals{min-width: 100%;}
+    .footerBtns{width:100%; justify-content:space-between;}
+    .btnWA{flex:1;}
+    .name{font-size:26px;}
+    .meta{font-size:17px;}
+    .qty{font-size:16px;}
+    :root{ --imgH: 240px; } /* un pelo más compacto en pantallas chicas */
+  }
+
+  /* ===== Modal para agrandar foto ===== */
   .modal{
     position:fixed; inset:0;
-    background: rgba(0,0,0,.82);
-    z-index:2000;
+    background: rgba(0,0,0,.78);
+    backdrop-filter: blur(10px);
+    z-index:5000;
     display:none;
     align-items:center;
     justify-content:center;
-    padding:18px;
+    padding:16px;
   }
-  .modal.open{display:flex;}
-  .modalInner{
-    width:min(980px, 100%);
-    max-height: 92vh;
-    background: rgba(20,20,24,.65);
+  .modal.show{display:flex;}
+  .modalCard{
+    width:min(920px, 100%);
+    max-height: 88vh;
+    background: rgba(12,12,14,.92);
     border:1px solid rgba(255,255,255,.12);
     border-radius: 18px;
     overflow:hidden;
-    box-shadow: 0 30px 90px rgba(0,0,0,.6);
+    box-shadow: 0 25px 70px rgba(0,0,0,.55);
     position:relative;
-  }
-  .modalInner img{
-    width:100%;
-    height: 92vh;
-    max-height: 92vh;
-    object-fit: contain;
-    display:block;
-    background:#000;
   }
   .modalClose{
     position:absolute;
     top:10px; right:10px;
-    border:none;
-    cursor:pointer;
-    border-radius:999px;
-    padding:10px 12px;
-    font-weight:1100;
+    width:42px; height:42px;
+    border-radius: 14px;
+    border:1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.06);
     color:#fff;
-    background: rgba(0,0,0,.55);
-    border:1px solid rgba(255,255,255,.14);
+    font-size:22px;
+    font-weight:1000;
+    cursor:pointer;
     -webkit-tap-highlight-color: transparent;
   }
-  .modalClose:active{transform: translateY(1px) scale(.98); filter:brightness(.95);}
+  .modalClose:active{transform: translateY(1px) scale(.98);}
+  .modalImgWrap{
+    width:100%;
+    height: min(70vh, 560px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#000;
+  }
+  .modalImgWrap img{
+    width:100%;
+    height:100%;
+    object-fit:contain; /* se ve completa */
+    display:block;
+    background:#000;
+  }
+  .modalCaption{
+    padding:12px 14px 14px;
+    color: rgba(255,255,255,.90);
+    font-weight:1000;
+    letter-spacing:.02em;
+    font-size:18px;
+    border-top:1px solid rgba(255,255,255,.10);
+  }
 </style>
 </head>
 
@@ -340,7 +420,7 @@
     <div class="tabs">
       <div class="tab active" onclick="setTab('combos', this)">Combos</div>
       <div class="tab" onclick="setTab('rolls', this)">Rolls</div>
-      <div class="tab" onclick="setTab('extras', this)">Salsas</div>
+      <div class="tab" onclick="setTab('salsas', this)">Salsas</div>
     </div>
   </div>
 </header>
@@ -352,7 +432,7 @@
     <div class="totals">
       <div class="big" id="totalMoney">Total: $0</div>
       <div class="small" id="totalPieces">Total de piezas: 0</div>
-      <div class="extrasLine" id="extrasLine">Salsas/Adicionales: <span>—</span></div>
+      <div class="extras" id="totalExtras">Salsas/Adicionales: —</div>
     </div>
     <div class="footerBtns">
       <button class="btnGhost" id="btnClear">Vaciar</button>
@@ -361,91 +441,89 @@
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal" id="modal" onclick="closeModal(event)">
-  <div class="modalInner" onclick="event.stopPropagation()">
-    <button class="modalClose" onclick="closeModal()">Cerrar</button>
-    <img id="modalImg" src="" alt="">
+<!-- Modal de imagen -->
+<div class="modal" id="imgModal" onclick="closeModal(event)">
+  <div class="modalCard" role="dialog" aria-modal="true" onclick="event.stopPropagation()">
+    <button class="modalClose" onclick="hideModal()" aria-label="Cerrar">×</button>
+    <div class="modalImgWrap">
+      <img id="modalImg" src="" alt="">
+    </div>
+    <div class="modalCaption" id="modalCaption"></div>
   </div>
 </div>
 
 <script>
+  // WhatsApp
   const WA = "5491164194866";
 
+  // Helpers
   const fmtMoney = (n) => {
     const x = Math.round(Number(n)||0);
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
+  // Estado
   let activeTab = "combos";
   const cart = {}; // id -> qty
 
+  // ===== Menú =====
+  // Importante: nombres EXACTOS como están en GitHub (mayúsculas/minúsculas).
   const MENU = [
-    // ===== Combos =====
-    { id:"combo10", tab:"combos", name:"Combo 10 piezas", pieces:10, price:16000,
+    // Combos
+    {
+      id:"combo10", tab:"combos",
+      name:"Combo 10 piezas",
+      pieces:10, price:16000,
       includesRule:"Incluye 1 salsa de soja fija",
-      composition:["4 Philadelphia","3 New York","3 California"], img:"" },
-    { id:"combo15", tab:"combos", name:"Combo 15 piezas", pieces:15, price:22000,
+      composition:["4 Philadelphia","3 New York","3 California"],
+      img:""
+    },
+    {
+      id:"combo15", tab:"combos",
+      name:"Combo 15 piezas",
+      pieces:15, price:22000,
       includesRule:"Incluye 1 salsa de soja fija",
-      composition:["5 New York","5 California","5 Buenos Aires"], img:"" },
-    { id:"combo20", tab:"combos", name:"Combo 20 piezas", pieces:20, price:30000,
+      composition:["5 New York","5 California","5 Buenos Aires"],
+      img:""
+    },
+    {
+      id:"combo20", tab:"combos",
+      name:"Combo 20 piezas",
+      pieces:20, price:30000,
       includesRule:"Incluye 1 salsa de soja fija",
-      composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese salmón"], img:"" },
-    { id:"combo30", tab:"combos", name:"Combo 30 piezas", pieces:30, price:45000,
+      composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese salmón"],
+      img:""
+    },
+    {
+      id:"combo30", tab:"combos",
+      name:"Combo 30 piezas",
+      pieces:30, price:45000,
       includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección",
-      composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"], img:"" },
-    { id:"combo40", tab:"combos", name:"Combo 40 piezas", pieces:40, price:55000,
-      includesRule:"Incluye 2 sojas fijas + 1 salsa a elección",
-      composition:["10 Philadelphia","10 Maki de salmón","10 Niguiris de salmón","10 New York"], img:"" },
-    { id:"combo50", tab:"combos", name:"Combo 50 piezas", pieces:50, price:70000,
-      includesRule:"Incluye 2 sojas fijas + 2 salsas a elección",
-      composition:["10 Ebi langostino","10 Crazy","10 Salmón crispy","10 Tamago","10 Keki"], img:"" },
+      composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"],
+      img:""
+    },
 
-    // ===== Rolls (x5) =====
+    // Rolls (x5)
     { id:"philadelphia", tab:"rolls", name:"Philadelphia", pieces:5, price:9000, desc:"Salmón fresco + queso crema.", img:"philadelphia.PNG" },
     { id:"buenos_aires", tab:"rolls", name:"Buenos Aires", pieces:5, price:11000, desc:"Langostino + queso + palta, con salsa BA.", img:"buenos-aires.PNG" },
     { id:"guacamole", tab:"rolls", name:"Guacamole", pieces:5, price:10500, desc:"Salmón + queso con topping de guacamole.", img:"guacamole.PNG" },
 
-    // (el resto queda igual; sin foto por ahora)
+    // (podés seguir sumando los que faltan)
     { id:"newyork", tab:"rolls", name:"New York", pieces:5, price:9000, desc:"(Completá ingredientes).", img:"" },
     { id:"california", tab:"rolls", name:"California", pieces:5, price:8500, desc:"(Completá ingredientes).", img:"" },
-    { id:"alaska", tab:"rolls", name:"Alaska", pieces:5, price:9500, desc:"(Completá ingredientes).", img:"" },
-    { id:"alaska_ahumado", tab:"rolls", name:"Alaska Ahumado", pieces:5, price:10000, desc:"(Completá ingredientes).", img:"" },
-    { id:"avocado", tab:"rolls", name:"Avocado", pieces:5, price:9000, desc:"(Completá ingredientes).", img:"" },
-    { id:"vegetariano", tab:"rolls", name:"Vegetariano", pieces:5, price:7500, desc:"Zanahoria + palta + queso.", img:"" },
-    { id:"crazy", tab:"rolls", name:"Crazy", pieces:5, price:10500, desc:"(Completá ingredientes).", img:"" },
-    { id:"paradise", tab:"rolls", name:"Paradise", pieces:5, price:11500, desc:"(Completá ingredientes).", img:"" },
-    { id:"japan_flowers", tab:"rolls", name:"Japan Flowers", pieces:5, price:11000, desc:"(Completá ingredientes).", img:"" },
-    { id:"tamago_roll", tab:"rolls", name:"Tamago", pieces:5, price:8000, desc:"(Completá ingredientes).", img:"" },
-    { id:"salmon_crispy", tab:"rolls", name:"Salmón Crispy", pieces:5, price:10500, desc:"(Completá ingredientes).", img:"" },
 
-    // Makis / Niguiris / Sashimis (x5)
-    { id:"maki_salmon", tab:"rolls", name:"Maki de salmón", pieces:5, price:8500, desc:"Salmón.", img:"" },
-    { id:"maki_salmon_ahumado", tab:"rolls", name:"Maki de salmón ahumado", pieces:5, price:9500, desc:"Salmón ahumado.", img:"" },
-    { id:"maki_atun", tab:"rolls", name:"Maki de atún", pieces:5, price:8000, desc:"Atún.", img:"" },
-    { id:"maki_veggie", tab:"rolls", name:"Maki veggie", pieces:5, price:7500, desc:"Vegetales.", img:"" },
-
-    { id:"niguiri_salmon", tab:"rolls", name:"Niguiri de salmón", pieces:5, price:8500, desc:"Arroz + salmón.", img:"" },
-    { id:"niguiri_salmon_ah", tab:"rolls", name:"Niguiri de salmón ahumado", pieces:5, price:9500, desc:"Arroz + salmón ahumado.", img:"" },
-    { id:"keki_niguiri", tab:"rolls", name:"Niguiri Keki", pieces:5, price:10500, desc:"(Completá).", img:"" },
-
-    { id:"sashimi_salmon", tab:"rolls", name:"Sashimi de salmón", pieces:5, price:10000, desc:"Cortes de salmón.", img:"" },
-    { id:"sashimi_flameado", tab:"rolls", name:"Sashimi de salmón flameado", pieces:5, price:11500, desc:"Cortes flameados.", img:"" },
-
-    // ===== Salsas / Adicionales (unidad) =====
-    { id:"soja", tab:"extras", name:"Salsa de soja", pieces:0, price:850, desc:"Unidad.", img:"" },
-    { id:"salsa_ba", tab:"extras", name:"Salsa Buenos Aires", pieces:0, price:1300, desc:"Unidad.", img:"" },
-    { id:"mostaza_miel", tab:"extras", name:"Salsa mostaza y miel", pieces:0, price:1300, desc:"Unidad.", img:"" },
-    { id:"maracuya", tab:"extras", name:"Salsa maracuyá", pieces:0, price:1500, desc:"Unidad.", img:"" },
-    { id:"guacamole_salsa", tab:"extras", name:"Salsa guacamole", pieces:0, price:850, desc:"Unidad.", img:"" },
-    { id:"criolla", tab:"extras", name:"Criolla", pieces:0, price:750, desc:"Unidad.", img:"" },
-    { id:"jengibre", tab:"extras", name:"Jengibre", pieces:0, price:750, desc:"Unidad.", img:"" },
-    { id:"pepino", tab:"extras", name:"Pepino", pieces:0, price:700, desc:"Unidad.", img:"" },
+    // Salsas/Adicionales
+    { id:"soja", tab:"salsas", name:"Salsa de soja", pieces:0, price:850, desc:"Unidad.", img:"" },
+    { id:"salsa_ba", tab:"salsas", name:"Salsa Buenos Aires", pieces:0, price:1300, desc:"Unidad.", img:"" },
+    { id:"mostaza_miel", tab:"salsas", name:"Salsa mostaza y miel", pieces:0, price:1300, desc:"Unidad.", img:"" },
+    { id:"maracuya", tab:"salsas", name:"Salsa maracuyá", pieces:0, price:1500, desc:"Unidad.", img:"" }
   ];
 
   const getQty = (id) => cart[id] || 0;
 
-  function haptic(){ try{ if(navigator.vibrate) navigator.vibrate(10);}catch(e){} }
+  function haptic() {
+    try { if (navigator.vibrate) navigator.vibrate(12); } catch(e){}
+  }
 
   function setTab(tab, el){
     activeTab = tab;
@@ -492,21 +570,21 @@
     return { totalMoney, totalPieces };
   }
 
-  function buildExtrasSummary(){
+  function extrasSummary(){
     const extras = Object.entries(cart)
-      .map(([id, qty]) => ({ qty, item: MENU.find(x => x.id === id) }))
-      .filter(x => x.item && x.item.tab === "extras" && x.qty > 0)
-      .sort((a,b) => a.item.name.localeCompare(b.item.name));
+      .map(([id, qty]) => ({qty, item: MENU.find(x => x.id === id)}))
+      .filter(x => x.item && x.item.pieces === 0)
+      .sort((a,b)=> a.item.name.localeCompare(b.item.name));
 
     if (!extras.length) return "—";
-    return extras.map(x => `${x.qty}x ${x.item.name}`).join(" • ");
+    return extras.map(x => `${x.qty}x ${x.item.name}`).join(" · ");
   }
 
   function updateTotals(){
     const { totalMoney, totalPieces } = totals();
     document.getElementById("totalMoney").textContent = `Total: $${fmtMoney(totalMoney)}`;
     document.getElementById("totalPieces").textContent = `Total de piezas: ${totalPieces}`;
-    document.getElementById("extrasLine").innerHTML = `Salsas/Adicionales: <span>${buildExtrasSummary()}</span>`;
+    document.getElementById("totalExtras").textContent = `Salsas/Adicionales: ${extrasSummary()}`;
   }
 
   function updateQtyPills(){
@@ -530,12 +608,14 @@
     let totalPieces = 0;
 
     for (const {qty, item} of entries){
-      totalMoney += (item.price||0) * qty;
-      totalPieces += (item.pieces||0) * qty;
+      const lineMoney = (item.price||0) * qty;
+      totalMoney += lineMoney;
+
+      const itemPieces = (item.pieces||0) * qty;
+      totalPieces += itemPieces;
 
       if (item.pieces > 0) {
         const xBase = item.pieces === 5 ? " x5" : "";
-        const itemPieces = (item.pieces||0) * qty;
         sushiLines.push(`${qty}x ${item.name}${xBase} – ${itemPieces} piezas`);
       } else {
         extraLines.push(`${qty}x ${item.name}`);
@@ -543,7 +623,7 @@
     }
 
     let msg = "";
-    msg += "Hola STELLA MARIS SUSHI 🍣\n\n";
+    msg += "Hola Stella Maris Sushi 🍣\n\n";
     msg += "Quiero pedir:\n\n";
     msg += "🍣 Sushi:\n";
     msg += (sushiLines.length ? sushiLines.join("\n") : "—") + "\n\n";
@@ -552,9 +632,7 @@
       msg += extraLines.join("\n") + "\n\n";
     }
     msg += `Total de piezas: ${totalPieces}\n`;
-    msg += `Total: $${fmtMoney(totalMoney)}\n\n`;
-    msg += "Retiro en el local.";
-
+    msg += `Total: $${fmtMoney(totalMoney)}\n`;
     return msg;
   }
 
@@ -568,31 +646,43 @@
     window.open(url, "_blank");
   }
 
-  // Modal
-  function openModal(src, alt){
-    const modal = document.getElementById("modal");
-    const img = document.getElementById("modalImg");
-    img.src = src;
-    img.alt = alt || "";
-    modal.classList.add("open");
+  // ===== Modal imagen =====
+  function showModal(imgSrc, caption){
+    const m = document.getElementById("imgModal");
+    const i = document.getElementById("modalImg");
+    const c = document.getElementById("modalCaption");
+    i.src = imgSrc;
+    i.alt = caption || "";
+    c.textContent = caption || "";
+    m.classList.add("show");
+  }
+  function hideModal(){
+    const m = document.getElementById("imgModal");
+    const i = document.getElementById("modalImg");
+    m.classList.remove("show");
+    i.src = "";
   }
   function closeModal(e){
-    const modal = document.getElementById("modal");
-    const img = document.getElementById("modalImg");
-    modal.classList.remove("open");
-    img.src = "";
+    // click afuera cierra
+    if (e && e.target && e.target.id === "imgModal") hideModal();
   }
-  document.addEventListener("keydown", (e)=>{ if(e.key==="Escape") closeModal(); });
 
   function cardHTML(item){
     const price = item.price ? `$${fmtMoney(item.price)}` : "—";
     const qty = getQty(item.id);
 
+    // Imagen: completa + fondo blur para ocupar ancho del recuadro sin estirar
     const imgBlock = item.img
-      ? `<div class="imgBox"><img src="${item.img}" alt="${item.name}" onclick="openModal('${item.img}','${item.name}')"></div>`
-      : `<div class="imgPlaceholder">FOTO (pendiente)</div>`;
+      ? `
+        <div class="imgWrap" onclick="showModal('${item.img}', '${item.name}')">
+          <div class="imgBg"><img src="${item.img}" alt=""></div>
+          <div class="imgMain"><img src="${item.img}" alt="${item.name}"></div>
+          <div class="imgOverlay"></div>
+        </div>`
+      : `<div class="imgPlaceholder">Foto (pendiente)</div>`;
 
     const base = (item.pieces === 5) ? "x5 piezas" : (item.pieces > 0 ? `${item.pieces} piezas` : "Unidad");
+
     const desc = item.tab === "combos"
       ? `<div class="meta"><b>${base}</b> · ${item.includesRule || ""}</div>
          ${(item.composition && item.composition.length) ? `<ul class="list">${item.composition.map(x=>`<li>${x}</li>`).join("")}</ul>` : ""}`
