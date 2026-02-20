@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sushi Stella Maris</title>
+<title>Stella Maris Sushi</title>
 
 <style>
   :root{
     --bg:#0b0b0c;
     --panel:#101114;
     --card:#15161a;
+    --card2:#121318;
     --line:#262830;
     --text:#f3f3f3;
     --muted:#b7b7b7;
@@ -17,11 +18,6 @@
     --gold2:#8f6f3f;
     --shadow: 0 18px 55px rgba(0,0,0,.55);
     --radius:18px;
-
-    /* Tamaños por pestaña */
-    --imgH-combos: 170px;
-    --imgH-extras: 150px;
-    --imgH-rolls: 130px;
   }
 
   *{box-sizing:border-box}
@@ -35,7 +31,7 @@
     color:var(--text);
   }
 
-  /* Header fijo */
+  /* Layout fijo */
   header{
     position:fixed; top:0; left:0; right:0;
     z-index:1000;
@@ -56,79 +52,71 @@
     border:1px solid rgba(202,167,106,.25);
     user-select:none;
   }
-  h1{margin:0; font-size:18px; letter-spacing:.2px; font-weight:1000;}
-
-  .tabs{
+  h1{margin:0; font-size:18px; letter-spacing:.4px; font-weight:900;}
+  .sub{margin-top:4px; font-size:12.5px; color:var(--muted); line-height:1.2;}
+  .note{
     margin-top:10px;
-    display:flex;
-    gap:10px;
-    flex-wrap:nowrap;              /* una sola línea */
-    overflow:hidden;
+    font-size:12px;
+    color: rgba(255,255,255,.70);
   }
+  .note span{color:var(--gold); font-weight:800;}
+  .tabs{margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;}
   .tab{
-    flex:1;                         /* entran en una línea */
-    text-align:center;
-    padding:10px 12px;
+    padding:9px 12px;
     border-radius:14px;
     cursor:pointer;
     font-size:13px;
-    font-weight:900;
+    font-weight:800;
     color: rgba(255,255,255,.85);
     background: rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.10);
     user-select:none;
-    transition: transform .08s ease, background .15s ease, border-color .15s ease, box-shadow .12s ease;
-    -webkit-tap-highlight-color: transparent;
+    transition: transform .08s ease, background .15s ease, border-color .15s ease;
   }
-  .tab:active{
-    transform: translateY(2px) scale(.985);
-    box-shadow: inset 0 0 0 999px rgba(0,0,0,.18);
-  }
+  .tab:active{transform: translateY(1px) scale(.99);}
   .tab.active{
     background: rgba(202,167,106,.16);
     border-color: rgba(202,167,106,.35);
     color:#fff;
   }
 
-  /* Contenido */
+  /* Contenido scroll */
   .content{
     max-width:920px;
     margin:0 auto;
-    padding: 112px 14px 156px; /* deja lugar a header + footer */
+    padding: 148px 14px 140px; /* header + footer */
   }
-
-  .topHint{
-    margin: 10px 2px 12px;
-    font-size: 13px;
-    color: rgba(255,255,255,.78);
-  }
-  .topHint b{color:var(--gold); font-weight:1000;}
 
   .sectionTitle{
     margin: 8px 2px 10px;
     color: var(--gold);
     letter-spacing:.25em;
-    font-weight:1000;
+    font-weight:900;
     font-size: 12px;
     text-transform: uppercase;
   }
 
-  /* Grilla base (se redefine por tab con clases) */
+  /* GRID base */
   .grid{
     display:grid;
     gap:14px;
   }
-  .grid.rolls{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .grid.combos{ grid-template-columns: 1fr; }
-  .grid.extras{ grid-template-columns: 1fr; }
 
-  /* En pantallas grandes, rolls puede crecer a 3 si querés (opcional) */
-  @media (min-width: 980px){
-    .grid.rolls{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* ROLLS: 2 columnas SIEMPRE (celu incluido) */
+  .grid.rollsGrid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  /* En móvil, rolls sigue 2 columnas (como pediste) */
-  @media (max-width: 420px){
-    .grid.rolls{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* COMBOS y SALSAS: 1 columna */
+  .grid.singleGrid{
+    grid-template-columns: 1fr;
+  }
+
+  /* En pantallas grandes: rolls puede abrir un poco más (sigue 2 columnas) */
+  @media (min-width: 900px){
+    .grid.rollsGrid{
+      grid-template-columns: repeat(2, minmax(320px, 1fr));
+    }
   }
 
   .card{
@@ -140,47 +128,29 @@
     position:relative;
   }
 
-  /* Imagen (A: sin recorte) */
+  /* FOTO: Opción A (SIN RECORTAR NI DEFORMAR) */
   .imgBox{
-    width:100%;
+    height: 175px;               /* un toque más alta para que se luzca */
+    padding: 10px;               /* margen para que no pegue al borde */
     background:
-      radial-gradient(220px 140px at 20% 20%, rgba(202,167,106,.22), transparent 60%),
+      radial-gradient(220px 140px at 20% 20%, rgba(202,167,106,.18), transparent 60%),
       radial-gradient(220px 140px at 80% 0%, rgba(255,255,255,.06), transparent 60%),
       rgba(0,0,0,.35);
     border-bottom:1px solid rgba(255,255,255,.06);
-    position:relative;
     display:flex;
     align-items:center;
     justify-content:center;
-    overflow:hidden;
+    color: rgba(255,255,255,.35);
+    font-weight:900;
+    letter-spacing:.08em;
   }
-  .imgBox.combos{ height: var(--imgH-combos); }
-  .imgBox.extras{ height: var(--imgH-extras); }
-  .imgBox.rolls{ height: var(--imgH-rolls); }
-
   .imgBox img{
     width:100%;
     height:100%;
-    object-fit: contain; /* A: sin recorte */
-    object-position:center;
+    object-fit: contain;         /* CLAVE: se ve toda la imagen */
+    object-position: center;
     display:block;
-  }
-
-  .zoomHint{
-    position:absolute;
-    top:10px;
-    left:50%;
-    transform:translateX(-50%);
-    padding:7px 12px;
-    border-radius:999px;
-    background: rgba(0,0,0,.55);
-    border:1px solid rgba(255,255,255,.12);
-    color: rgba(255,255,255,.88);
-    font-weight:900;
-    font-size:12px;
-    letter-spacing:.02em;
-    user-select:none;
-    pointer-events:none;
+    border-radius: 12px;
   }
 
   .priceTag{
@@ -199,7 +169,7 @@
   }
   .name{margin:0; font-size:16px; font-weight:1000; line-height:1.15;}
   .meta{margin-top:6px; font-size:12.5px; color:var(--muted); line-height:1.25;}
-  .meta b{color: rgba(255,255,255,.90); font-weight:1000;}
+  .meta b{color: rgba(255,255,255,.90); font-weight:900;}
   .list{
     margin:10px 0 0;
     padding-left: 18px;
@@ -222,7 +192,7 @@
     display:flex; align-items:center; gap:10px;
     font-size:12.5px;
     color: var(--muted);
-    font-weight:900;
+    font-weight:800;
   }
   .qtyPill{
     padding:6px 10px;
@@ -230,7 +200,7 @@
     border:1px solid rgba(202,167,106,.26);
     background: rgba(202,167,106,.10);
     color:#fff;
-    min-width:50px;
+    min-width:48px;
     text-align:center;
     font-weight:1000;
   }
@@ -246,19 +216,15 @@
     background: rgba(255,255,255,.06);
     border:1px solid rgba(255,255,255,.12);
     color:#fff;
-    transition: transform .08s ease, filter .15s ease, background .15s ease, box-shadow .12s ease;
+    transition: transform .08s ease, filter .15s ease, background .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
   }
-
-  /* Más “presionado” */
+  /* Que se note el “clic” */
   .btn:active{
-    transform: translateY(3px) scale(.975);
+    transform: translateY(2px) scale(.97);
     filter: brightness(.92);
-    box-shadow:
-      inset 0 0 0 999px rgba(0,0,0,.18),
-      inset 0 10px 18px rgba(0,0,0,.35);
+    box-shadow: 0 8px 22px rgba(0,0,0,.55) inset;
   }
-
   .btn.add{
     background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
     border:1px solid rgba(202,167,106,.55);
@@ -268,11 +234,11 @@
     background: rgba(255,255,255,.04);
   }
 
-  /* Footer fijo */
+  /* Footer fijo compacto */
   .footer{
     position:fixed; left:0; right:0; bottom:0;
     z-index:1000;
-    background: rgba(10,10,12,.90);
+    background: rgba(10,10,12,.88);
     backdrop-filter: blur(12px);
     border-top:1px solid rgba(255,255,255,.10);
     padding:10px 12px;
@@ -282,41 +248,24 @@
     margin:0 auto;
     display:flex;
     gap:10px;
-    align-items:stretch;
+    align-items:center;
     justify-content:space-between;
     flex-wrap:wrap;
   }
   .totals{
-    flex:1;
     display:flex;
     flex-direction:column;
-    gap:6px;
-    padding:10px 12px;
+    gap:2px;
+    padding:8px 10px;
     border-radius: 14px;
     background: rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.10);
-    min-width: 240px;
+    min-width: 210px;
   }
   .totals .big{font-weight:1000; font-size:15px;}
-  .totals .small{color:var(--muted); font-weight:900; font-size:12.5px;}
-  .extrasLine{
-    color: rgba(255,255,255,.78);
-    font-size: 12.5px;
-    font-weight:800;
-    line-height:1.25;
-    white-space: nowrap;
-    overflow:hidden;
-    text-overflow: ellipsis;
-  }
-  .extrasLine b{color:var(--gold); font-weight:1000;}
+  .totals .small{color:var(--muted); font-weight:800; font-size:12.5px;}
 
-  .footerBtns{
-    display:flex;
-    gap:10px;
-    align-items:stretch;
-    flex-wrap:wrap;
-    min-width: 260px;
-  }
+  .footerBtns{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
   .btnGhost{
     padding:12px 14px;
     border-radius: 14px;
@@ -325,17 +274,10 @@
     color:#fff;
     font-weight:1000;
     cursor:pointer;
-    transition: transform .08s ease, filter .15s ease, box-shadow .12s ease;
+    transition: transform .08s ease, filter .15s ease;
     -webkit-tap-highlight-color: transparent;
-    min-width: 110px;
   }
-  .btnGhost:active{
-    transform: translateY(3px) scale(.975);
-    filter:brightness(.92);
-    box-shadow:
-      inset 0 0 0 999px rgba(0,0,0,.18),
-      inset 0 10px 18px rgba(0,0,0,.35);
-  }
+  .btnGhost:active{transform: translateY(2px) scale(.97); filter:brightness(.92);}
   .btnWA{
     padding:12px 16px;
     border-radius: 14px;
@@ -344,84 +286,17 @@
     color:#1a140b;
     font-weight:1100;
     cursor:pointer;
+    min-width: 190px;
     text-align:center;
-    transition: transform .08s ease, filter .15s ease, box-shadow .12s ease;
+    transition: transform .08s ease, filter .15s ease;
     -webkit-tap-highlight-color: transparent;
-    flex:1;
-    min-width: 180px;
   }
-  .btnWA:active{
-    transform: translateY(3px) scale(.975);
-    filter:brightness(.92);
-    box-shadow:
-      inset 0 0 0 999px rgba(0,0,0,.12),
-      inset 0 10px 18px rgba(0,0,0,.30);
-  }
+  .btnWA:active{transform: translateY(2px) scale(.97); filter:brightness(.92);}
 
   @media (max-width:520px){
-    .footerBtns{width:100%;}
     .totals{min-width: 100%;}
-  }
-
-  /* Modal para agrandar imagen */
-  .modal{
-    position:fixed; inset:0;
-    background: rgba(0,0,0,.78);
-    backdrop-filter: blur(6px);
-    z-index:2000;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:16px;
-  }
-  .modal.open{display:flex;}
-  .modalBox{
-    max-width: 980px;
-    width:100%;
-    border-radius: 18px;
-    overflow:hidden;
-    border:1px solid rgba(255,255,255,.12);
-    background: rgba(10,10,12,.92);
-    box-shadow: 0 30px 90px rgba(0,0,0,.65);
-    position:relative;
-  }
-  .modalImg{
-    width:100%;
-    height: 72vh;
-    object-fit: contain; /* sin recorte */
-    background: rgba(0,0,0,.65);
-    display:block;
-  }
-  .modalTop{
-    position:absolute; top:10px; left:10px; right:10px;
-    display:flex; justify-content:space-between; gap:10px;
-    pointer-events:none;
-  }
-  .modalPill{
-    pointer-events:none;
-    padding:8px 12px;
-    border-radius:999px;
-    background: rgba(0,0,0,.55);
-    border:1px solid rgba(255,255,255,.12);
-    color:#fff;
-    font-weight:1000;
-    font-size:12px;
-  }
-  .modalClose{
-    pointer-events:auto;
-    cursor:pointer;
-    padding:8px 12px;
-    border-radius:999px;
-    background: rgba(0,0,0,.70);
-    border:1px solid rgba(255,255,255,.14);
-    color:#fff;
-    font-weight:1100;
-    font-size:12px;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .modalClose:active{
-    transform: translateY(2px);
-    filter:brightness(.9);
+    .footerBtns{width:100%; justify-content:space-between;}
+    .btnWA{flex:1;}
   }
 </style>
 </head>
@@ -432,14 +307,19 @@
     <div class="brandRow">
       <div class="logo">✦</div>
       <div>
-        <h1>Sushi Stella Maris</h1>
+        <h1>STELLA MARIS SUSHI</h1>
+        <div class="sub">Menú digital · <b style="color:var(--gold);font-weight:900;">Retiro en el local</b> (sin delivery)</div>
       </div>
+    </div>
+
+    <div class="note">
+      Todos los pedidos incluyen <span>wasabi</span>, <span>pepino</span>, <span>jengibre</span> y <span>salsa de soja</span>.
     </div>
 
     <div class="tabs">
       <div class="tab active" onclick="setTab('combos', this)">Combos</div>
-      <div class="tab" onclick="setTab('rolls', this)">Rolls</div>
-      <div class="tab" onclick="setTab('extras', this)">Salsas</div>
+      <div class="tab" onclick="setTab('rolls', this)">Rolls & Piezas</div>
+      <div class="tab" onclick="setTab('extras', this)">Salsas & Adicionales</div>
     </div>
   </div>
 </header>
@@ -451,9 +331,7 @@
     <div class="totals">
       <div class="big" id="totalMoney">Total: $0</div>
       <div class="small" id="totalPieces">Total de piezas: 0</div>
-      <div class="extrasLine" id="extrasLine"><b>Salsas/Adicionales:</b> —</div>
     </div>
-
     <div class="footerBtns">
       <button class="btnGhost" id="btnClear">Vaciar</button>
       <button class="btnWA" id="btnWA">Confirmar por WhatsApp</button>
@@ -461,19 +339,7 @@
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal" id="modal">
-  <div class="modalBox">
-    <div class="modalTop">
-      <div class="modalPill" id="modalTitle">—</div>
-      <div class="modalClose" id="modalClose">Cerrar ✕</div>
-    </div>
-    <img class="modalImg" id="modalImg" alt="Foto">
-  </div>
-</div>
-
 <script>
-  /* WhatsApp */
   const WA = "5491164194866";
 
   const fmtMoney = (n) => {
@@ -482,23 +348,16 @@
   };
 
   let activeTab = "combos";
-  const cart = {}; // id -> qty
-
-  /*
-    IMÁGENES (GitHub):
-    - philadelphia.PNG
-    - buenos-aires.PNG
-    - guacamole.PNG
-  */
+  const cart = {};
 
   const MENU = [
-    /* ===== COMBOS ===== */
+    // ===== Combos =====
     {
       id:"combo10", tab:"combos",
       name:"Combo 10 piezas",
       pieces:10,
       price:16000,
-      includesRule:"Incluye: Soja fija (x1) + 1 a elección (según reglas).",
+      includesRule:"Incluye 1 salsa de soja fija",
       composition:["4 Philadelphia","3 New York","3 California"],
       img:""
     },
@@ -507,7 +366,7 @@
       name:"Combo 15 piezas",
       pieces:15,
       price:22000,
-      includesRule:"Incluye: Soja fija (x1) + 1 a elección (según reglas).",
+      includesRule:"Incluye 1 salsa de soja fija",
       composition:["5 New York","5 California","5 Buenos Aires"],
       img:""
     },
@@ -515,76 +374,76 @@
       id:"combo20", tab:"combos",
       name:"Combo 20 piezas",
       pieces:20,
-      price:28000,
-      includesRule:"Incluye: Soja fija (x1) + 1 a elección (según reglas).",
-      composition:["Mayor variedad de rolls (a definir)"],
+      price:30000,
+      includesRule:"Incluye 1 salsa de soja fija",
+      composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese salmón"],
       img:""
     },
     {
       id:"combo30", tab:"combos",
       name:"Combo 30 piezas",
       pieces:30,
-      price:40000,
-      includesRule:"Incluye: Soja fija (x1) + 1 a elección.",
-      composition:["Amplia variedad de rolls (a definir)"],
+      price:45000,
+      includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección",
+      composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"],
       img:""
     },
     {
       id:"combo40", tab:"combos",
       name:"Combo 40 piezas",
       pieces:40,
-      price:0,
-      includesRule:"Incluye: Soja fija (x2) + 1 a elección.",
-      composition:["(Definir composición)"],
+      price:55000,
+      includesRule:"Incluye 2 salsas de soja fijas + 1 salsa a elección",
+      composition:["10 Philadelphia","10 Maki de salmón","10 Niguiris de salmón","10 New York"],
       img:""
     },
     {
       id:"combo50", tab:"combos",
       name:"Combo 50 piezas",
       pieces:50,
-      price:0,
-      includesRule:"Incluye: Soja fija (x2) + 2 a elección.",
-      composition:["(Definir composición)"],
+      price:70000,
+      includesRule:"Incluye 2 salsas de soja fijas + 2 salsas a elección",
+      composition:["10 Ebi langostino","10 Crazy","10 Salmón crispy","10 Tamago","10 Keki"],
       img:""
     },
 
-    /* ===== ROLLS (x5) ===== */
+    // ===== Rolls & piezas (x5) =====
     { id:"philadelphia", tab:"rolls", name:"Philadelphia", pieces:5, price:9000, desc:"Salmón fresco + queso crema.", img:"philadelphia.PNG" },
     { id:"buenos_aires", tab:"rolls", name:"Buenos Aires", pieces:5, price:11000, desc:"Langostino + queso + palta, con salsa BA.", img:"buenos-aires.PNG" },
-    { id:"guacamole_roll", tab:"rolls", name:"Guacamole", pieces:5, price:10500, desc:"Salmón + queso con topping de guacamole.", img:"guacamole.PNG" },
 
-    /* (dejé ejemplos — después metés descripciones reales) */
-    { id:"newyork", tab:"rolls", name:"New York", pieces:5, price:9000, desc:"Salmón y palta.", img:"" },
-    { id:"california", tab:"rolls", name:"California", pieces:5, price:8500, desc:"Kani kama y palta.", img:"" },
-    { id:"alaska", tab:"rolls", name:"Alaska", pieces:5, price:9500, desc:"Salmón, queso y palta.", img:"" },
-    { id:"alaska_ahumado", tab:"rolls", name:"Alaska Ahumado", pieces:5, price:10000, desc:"Salmón ahumado, queso y palta.", img:"" },
-    { id:"crazy", tab:"rolls", name:"Crazy", pieces:5, price:10500, desc:"Palta y queso, envuelto en salmón.", img:"" },
-    { id:"avocado", tab:"rolls", name:"Avocado", pieces:5, price:9000, desc:"Salmón y queso rodeado de palta.", img:"" },
-    { id:"vegetariano", tab:"rolls", name:"Vegetariano", pieces:5, price:7500, desc:"Zanahoria, palta y queso.", img:"" },
-    { id:"tamago_roll", tab:"rolls", name:"Tamago", pieces:5, price:8000, desc:"Huevo dulce con salmón y queso.", img:"" },
+    { id:"newyork", tab:"rolls", name:"New York", pieces:5, price:9000, desc:"(Completás ingredientes).", img:"" },
+    { id:"california", tab:"rolls", name:"California", pieces:5, price:8500, desc:"(Completás ingredientes).", img:"" },
+    { id:"alaska", tab:"rolls", name:"Alaska", pieces:5, price:9500, desc:"(Completás ingredientes).", img:"" },
+    { id:"alaska_ahumado", tab:"rolls", name:"Alaska Ahumado", pieces:5, price:10000, desc:"(Completás ingredientes).", img:"" },
+    { id:"avocado", tab:"rolls", name:"Avocado", pieces:5, price:9000, desc:"(Completás ingredientes).", img:"" },
+    { id:"vegetariano", tab:"rolls", name:"Vegetariano", pieces:5, price:7500, desc:"Zanahoria + palta + queso.", img:"" },
+    { id:"crazy", tab:"rolls", name:"Crazy", pieces:5, price:10500, desc:"(Completás ingredientes).", img:"" },
+    { id:"paradise", tab:"rolls", name:"Paradise", pieces:5, price:11500, desc:"(Completás ingredientes).", img:"" },
+    { id:"japan_flowers", tab:"rolls", name:"Japan Flowers", pieces:5, price:11000, desc:"(Completás ingredientes).", img:"" },
+    { id:"tamago_roll", tab:"rolls", name:"Tamago", pieces:5, price:8000, desc:"(Completás ingredientes).", img:"" },
+    { id:"salmon_crispy", tab:"rolls", name:"Salmón Crispy", pieces:5, price:10500, desc:"(Completás ingredientes).", img:"" },
 
-    /* Makis (x5) */
-    { id:"maki_salmon", tab:"rolls", name:"Maki de salmón", pieces:5, price:8500, desc:"Salmón envuelto en arroz y alga.", img:"" },
+    // Makis (x5)
+    { id:"maki_salmon", tab:"rolls", name:"Maki de salmón", pieces:5, price:8500, desc:"Salmón.", img:"" },
     { id:"maki_salmon_ahumado", tab:"rolls", name:"Maki de salmón ahumado", pieces:5, price:9500, desc:"Salmón ahumado.", img:"" },
-    { id:"maki_atun", tab:"rolls", name:"Maki de atún", pieces:5, price:8000, desc:"Atún suave envuelto en arroz y alga.", img:"" },
-    { id:"maki_veggie", tab:"rolls", name:"Maki veggie", pieces:5, price:7500, desc:"Zanahoria, palta, mango y queso.", img:"" },
+    { id:"maki_atun", tab:"rolls", name:"Maki de atún", pieces:5, price:8000, desc:"Atún.", img:"" },
+    { id:"maki_veggie", tab:"rolls", name:"Maki veggie", pieces:5, price:7500, desc:"Vegetales.", img:"" },
 
-    /* Niguiris (x5) */
-    { id:"niguiri_salmon", tab:"rolls", name:"Niguiri de salmón", pieces:5, price:8500, desc:"Arroz y salmón fresco.", img:"" },
-    { id:"niguiri_salmon_ah", tab:"rolls", name:"Niguiri de salmón ahumado", pieces:5, price:9500, desc:"Arroz con salmón ahumado.", img:"" },
-    { id:"keki_niguiri", tab:"rolls", name:"KeKi", pieces:5, price:10500, desc:"Niguiri de salmón con queso, mango y palta.", img:"" },
+    // Niguiris (x5)
+    { id:"niguiri_salmon", tab:"rolls", name:"Niguiri de salmón", pieces:5, price:8500, desc:"Arroz + salmón.", img:"" },
+    { id:"niguiri_salmon_ah", tab:"rolls", name:"Niguiri de salmón ahumado", pieces:5, price:9500, desc:"Arroz + salmón ahumado.", img:"" },
+    { id:"keki_niguiri", tab:"rolls", name:"Niguiri Keki", pieces:5, price:10500, desc:"(Completás).", img:"" },
 
-    /* Sashimis (x5 cortes) */
-    { id:"sashimi_salmon", tab:"rolls", name:"Sashimi de salmón", pieces:5, price:10000, desc:"Cortes de salmón fresco.", img:"" },
-    { id:"sashimi_flameado", tab:"rolls", name:"Sashimi de salmón flameado", pieces:5, price:11500, desc:"Salmón sellado al fuego.", img:"" },
+    // Sashimis (x5)
+    { id:"sashimi_salmon", tab:"rolls", name:"Sashimi de salmón", pieces:5, price:10000, desc:"Cortes de salmón.", img:"" },
+    { id:"sashimi_flameado", tab:"rolls", name:"Sashimi de salmón flameado", pieces:5, price:11500, desc:"Cortes flameados.", img:"" },
 
-    /* ===== SALSAS / ADICIONALES (unidad) ===== */
+    // ===== Extras (unidad) =====
     { id:"soja", tab:"extras", name:"Salsa de soja", pieces:0, price:850, desc:"Unidad.", img:"" },
     { id:"salsa_ba", tab:"extras", name:"Salsa Buenos Aires", pieces:0, price:1300, desc:"Unidad.", img:"" },
     { id:"mostaza_miel", tab:"extras", name:"Salsa mostaza y miel", pieces:0, price:1300, desc:"Unidad.", img:"" },
     { id:"maracuya", tab:"extras", name:"Salsa maracuyá", pieces:0, price:1500, desc:"Unidad.", img:"" },
-
-    { id:"guacamole_extra", tab:"extras", name:"Guacamole", pieces:0, price:850, desc:"Unidad.", img:"" },
+    { id:"guacamole_salsa", tab:"extras", name:"Salsa guacamole", pieces:0, price:850, desc:"Unidad.", img:"" },
     { id:"criolla", tab:"extras", name:"Criolla", pieces:0, price:750, desc:"Unidad.", img:"" },
     { id:"jengibre", tab:"extras", name:"Jengibre", pieces:0, price:750, desc:"Unidad.", img:"" },
     { id:"pepino", tab:"extras", name:"Pepino", pieces:0, price:700, desc:"Unidad.", img:"" }
@@ -593,7 +452,7 @@
   const getQty = (id) => cart[id] || 0;
 
   function haptic() {
-    try { if (navigator.vibrate) navigator.vibrate(14); } catch(e){}
+    try { if (navigator.vibrate) navigator.vibrate(12); } catch(e){}
   }
 
   function setTab(tab, el){
@@ -641,21 +500,10 @@
     return { totalMoney, totalPieces };
   }
 
-  function extrasSummary(){
-    const extras = Object.entries(cart)
-      .map(([id, qty]) => ({ qty, item: MENU.find(x => x.id === id) }))
-      .filter(x => x.item && x.item.tab === "extras")
-      .sort((a,b) => a.item.name.localeCompare(b.item.name));
-
-    if (!extras.length) return "—";
-    return extras.map(x => `${x.qty}x ${x.item.name}`).join(" · ");
-  }
-
   function updateTotals(){
     const { totalMoney, totalPieces } = totals();
     document.getElementById("totalMoney").textContent = `Total: $${fmtMoney(totalMoney)}`;
     document.getElementById("totalPieces").textContent = `Total de piezas: ${totalPieces}`;
-    document.getElementById("extrasLine").innerHTML = `<b>Salsas/Adicionales:</b> ${extrasSummary()}`;
   }
 
   function updateQtyPills(){
@@ -679,7 +527,8 @@
     let totalPieces = 0;
 
     for (const {qty, item} of entries){
-      totalMoney += (item.price||0) * qty;
+      const lineMoney = (item.price||0) * qty;
+      totalMoney += lineMoney;
 
       const itemPieces = (item.pieces||0) * qty;
       totalPieces += itemPieces;
@@ -704,7 +553,6 @@
     msg += `Total de piezas: ${totalPieces}\n`;
     msg += `Total: $${fmtMoney(totalMoney)}\n\n`;
     msg += "Retiro en el local.";
-
     return msg;
   }
 
@@ -718,47 +566,15 @@
     window.open(url, "_blank");
   }
 
-  /* Modal */
-  const modal = document.getElementById("modal");
-  const modalImg = document.getElementById("modalImg");
-  const modalTitle = document.getElementById("modalTitle");
-  const modalClose = document.getElementById("modalClose");
-
-  function openModal(src, title){
-    modalImg.src = src;
-    modalTitle.textContent = title;
-    modal.classList.add("open");
-  }
-  function closeModal(){
-    modal.classList.remove("open");
-    modalImg.src = "";
-  }
-  modalClose.addEventListener("click", closeModal);
-  modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
-
   function cardHTML(item){
     const price = item.price ? `$${fmtMoney(item.price)}` : "—";
     const qty = getQty(item.id);
 
-    const base =
-      item.pieces === 5 ? "x5 piezas" :
-      item.pieces > 0 ? `${item.pieces} piezas` :
-      "Unidad";
+    const imgBlock = item.img
+      ? `<div class="imgBox"><img src="${item.img}" alt="${item.name}"></div>`
+      : `<div class="imgBox">Foto (pendiente)</div>`;
 
-    const imgClass = item.tab; // combos / rolls / extras
-    const hasImg = !!item.img;
-
-    const imgBlock = hasImg
-      ? `
-        <div class="imgBox ${imgClass}" onclick="openModal('${item.img}', '${item.name}')">
-          <img src="${item.img}" alt="${item.name}">
-          <div class="zoomHint">Tocar para agrandar</div>
-        </div>`
-      : `
-        <div class="imgBox ${imgClass}">
-          <div class="zoomHint">Foto (pendiente)</div>
-        </div>`;
-
+    const base = (item.pieces === 5) ? "x5 piezas" : (item.pieces > 0 ? `${item.pieces} piezas` : "Unidad");
     const desc = item.tab === "combos"
       ? `<div class="meta"><b>${base}</b> · ${item.includesRule || ""}</div>
          ${(item.composition && item.composition.length) ? `<ul class="list">${item.composition.map(x=>`<li>${x}</li>`).join("")}</ul>` : ""}`
@@ -789,16 +605,11 @@
 
     const title = activeTab === "combos"
       ? "COMBOS"
-      : (activeTab === "rolls" ? "ROLLS" : "SALSAS");
+      : (activeTab === "rolls" ? "ROLLS & PIEZAS" : "SALSAS & ADICIONALES");
 
-    const hint = activeTab === "rolls"
-      ? `Cada roll es <b>x5</b>.`
-      : (activeTab === "extras" ? `Salsas y adicionales por <b>unidad</b>.` : `Elegí tu combo y sumá extras si querés.`);
-
-    const gridClass = activeTab; // combos / rolls / extras
+    const gridClass = (activeTab === "rolls") ? "rollsGrid" : "singleGrid";
 
     root.innerHTML = `
-      <div class="topHint">${hint}</div>
       <div class="sectionTitle">${title}</div>
       <div class="grid ${gridClass}">
         ${items.map(cardHTML).join("")}
