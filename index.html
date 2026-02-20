@@ -98,7 +98,7 @@
     text-transform: uppercase;
   }
 
-  /* SIEMPRE 1 columna (nada de 2 cortados) */
+  /* SIEMPRE 1 columna */
   .grid{
     display:grid;
     gap:14px;
@@ -114,9 +114,9 @@
     position:relative;
   }
 
-  /* Imagen: sin estirar + se ve toda (incluye texto de la foto) */
+  /* Imagen: sin estirar + se ve toda */
   .imgBox{
-    height: 250px; /* más grande para Rolls */
+    height: 250px; /* Rolls */
     background:
       radial-gradient(220px 140px at 20% 20%, rgba(202,167,106,.14), transparent 60%),
       radial-gradient(220px 140px at 80% 0%, rgba(255,255,255,.06), transparent 60%),
@@ -128,13 +128,30 @@
     color: rgba(255,255,255,.35);
     font-weight:900;
     letter-spacing:.08em;
+    position:relative;
   }
   .imgBox img{
     width:100%;
     height:100%;
-    object-fit:contain; /* clave: NO recorta y NO estira */
+    object-fit:contain; /* NO recorta y NO estira */
     display:block;
     background: rgba(0,0,0,.55);
+  }
+
+  /* Hint "tocar para agrandar" (arriba-izquierda) */
+  .tapHint{
+    position:absolute;
+    top:10px; left:10px;
+    font-size:12px;
+    font-weight:950;
+    letter-spacing:.2px;
+    padding:7px 10px;
+    border-radius:999px;
+    color:#fff;
+    background: rgba(0,0,0,.55);
+    border:1px solid rgba(255,255,255,.12);
+    user-select:none;
+    pointer-events:none;
   }
 
   /* Combos y Salsas: imagen un poco más baja */
@@ -206,17 +223,31 @@
     color:#fff;
     transition: transform .08s ease, filter .15s ease, background .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
+
+    /* profundidad base (así se nota que es botón) */
+    box-shadow:
+      0 10px 22px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.08);
   }
-  /* que se note más el "presionado" */
+
+  /* que se note MÁS el presionado */
+  .btn.is-pressed,
   .btn:active{
-    transform: translateY(2px) scale(.97);
-    filter: brightness(.92);
-    box-shadow: inset 0 2px 10px rgba(0,0,0,.45);
+    transform: translateY(3px) scale(.965);
+    filter: brightness(.90);
+    box-shadow:
+      inset 0 3px 14px rgba(0,0,0,.55),
+      0 3px 10px rgba(0,0,0,.20);
   }
+
   .btn.add{
     background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
     border:1px solid rgba(202,167,106,.55);
     color:#1a140b;
+    box-shadow:
+      0 12px 26px rgba(202,167,106,.18),
+      0 10px 22px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.20);
   }
   .btn.minus{ background: rgba(255,255,255,.04); }
 
@@ -256,6 +287,9 @@
     font-size:13px;
     font-weight:900;
     color: rgba(255,255,255,.80);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
   }
   .totals .extrasLine b{ color: var(--gold); }
 
@@ -276,8 +310,18 @@
     cursor:pointer;
     transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
+    box-shadow:
+      0 10px 22px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.08);
   }
-  .btnGhost:active{transform: translateY(2px) scale(.97); filter:brightness(.92); box-shadow: inset 0 2px 10px rgba(0,0,0,.45);}
+  .btnGhost.is-pressed,
+  .btnGhost:active{
+    transform: translateY(3px) scale(.965);
+    filter:brightness(.90);
+    box-shadow:
+      inset 0 3px 14px rgba(0,0,0,.55),
+      0 3px 10px rgba(0,0,0,.20);
+  }
   .btnWA{
     flex:1;
     padding:12px 16px;
@@ -290,8 +334,171 @@
     text-align:center;
     transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
+    box-shadow:
+      0 12px 26px rgba(202,167,106,.18),
+      0 10px 22px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.20);
   }
-  .btnWA:active{transform: translateY(2px) scale(.97); filter:brightness(.92); box-shadow: inset 0 2px 10px rgba(0,0,0,.35);}
+  .btnWA.is-pressed,
+  .btnWA:active{
+    transform: translateY(3px) scale(.965);
+    filter:brightness(.90);
+    box-shadow:
+      inset 0 3px 14px rgba(0,0,0,.45),
+      0 3px 10px rgba(0,0,0,.20);
+  }
+
+  /* ===== Modal (imagen / elección de salsas) ===== */
+  .modal{
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    background: rgba(0,0,0,.72);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding: 16px;
+  }
+  .modal.show{display:flex;}
+  .modalCard{
+    width:100%;
+    max-width:720px;
+    background: rgba(15,16,18,.96);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius: 18px;
+    box-shadow: 0 28px 90px rgba(0,0,0,.65);
+    overflow:hidden;
+  }
+  .modalTop{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:12px 12px;
+    border-bottom:1px solid rgba(255,255,255,.10);
+  }
+  .modalTop .ttl{
+    font-weight:950;
+    letter-spacing:.2px;
+    font-size:14px;
+    color:#fff;
+  }
+  .closeBtn{
+    width:40px; height:40px;
+    border-radius: 12px;
+    border:1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.06);
+    color:#fff;
+    cursor:pointer;
+    font-size:18px;
+    font-weight:950;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow:
+      0 10px 22px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  .closeBtn:active{
+    transform: translateY(3px) scale(.965);
+    filter:brightness(.90);
+    box-shadow:
+      inset 0 3px 14px rgba(0,0,0,.55),
+      0 3px 10px rgba(0,0,0,.20);
+  }
+
+  /* modal imagen */
+  .modalBodyImg{
+    padding: 0;
+    background: rgba(0,0,0,.55);
+  }
+  .modalBodyImg img{
+    width:100%;
+    max-height: 78vh;
+    object-fit: contain;
+    display:block;
+    background: rgba(0,0,0,.55);
+  }
+
+  /* modal salsas */
+  .modalBody{
+    padding: 14px 14px 12px;
+  }
+  .helper{
+    color: rgba(255,255,255,.78);
+    font-size:13px;
+    font-weight:850;
+    margin: 0 0 10px;
+  }
+  .chips{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .chip{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:12px 12px;
+    border-radius: 16px;
+    border:1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.04);
+    cursor:pointer;
+    user-select:none;
+  }
+  .chip .left{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+  }
+  .chip .nm{
+    font-weight:950;
+    font-size:14px;
+  }
+  .chip .pr{
+    font-size:12.5px;
+    color: rgba(255,255,255,.70);
+    font-weight:850;
+  }
+  .chip input{
+    width:20px; height:20px;
+    accent-color: var(--gold);
+  }
+  .modalBottom{
+    padding: 12px 14px 14px;
+    border-top:1px solid rgba(255,255,255,.10);
+    display:flex;
+    gap:10px;
+  }
+  .btnModal{
+    flex:1;
+    padding:12px 14px;
+    border-radius: 14px;
+    font-weight:1100;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.06);
+    color:#fff;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow:
+      0 10px 22px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  .btnModal:active{
+    transform: translateY(3px) scale(.965);
+    filter:brightness(.90);
+    box-shadow:
+      inset 0 3px 14px rgba(0,0,0,.55),
+      0 3px 10px rgba(0,0,0,.20);
+  }
+  .btnModal.primary{
+    background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
+    border:1px solid rgba(202,167,106,.55);
+    color:#1a140b;
+    box-shadow:
+      0 12px 26px rgba(202,167,106,.18),
+      0 10px 22px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.20);
+  }
 </style>
 </head>
 
@@ -329,6 +536,37 @@
   </div>
 </div>
 
+<!-- Modal Imagen -->
+<div class="modal" id="imgModal">
+  <div class="modalCard">
+    <div class="modalTop">
+      <div class="ttl" id="imgModalTitle">Imagen</div>
+      <button class="closeBtn" onclick="closeImgModal()">×</button>
+    </div>
+    <div class="modalBodyImg">
+      <img id="imgModalEl" src="" alt="Imagen" />
+    </div>
+  </div>
+</div>
+
+<!-- Modal Elección de Salsas para combos -->
+<div class="modal" id="sauceModal">
+  <div class="modalCard">
+    <div class="modalTop">
+      <div class="ttl" id="sauceModalTitle">Elegí tus salsas</div>
+      <button class="closeBtn" onclick="closeSauceModal(true)">×</button>
+    </div>
+    <div class="modalBody">
+      <p class="helper" id="sauceHelper">Elegí 1 salsa.</p>
+      <div class="chips" id="sauceList"></div>
+    </div>
+    <div class="modalBottom">
+      <button class="btnModal" onclick="closeSauceModal(true)">Cancelar</button>
+      <button class="btnModal primary" onclick="confirmSauces()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
 <script>
   const WA = "5491164194866";
 
@@ -340,7 +578,7 @@
   let activeTab = "combos";
   const cart = {}; // id -> qty
 
-  // Menú
+  // ===== Menú =====
   // IMPORTANTE: imágenes en la raíz del repo:
   // philadelphia.PNG / buenos-aires.PNG / guacamole.PNG
   const MENU = [
@@ -352,7 +590,8 @@
       price:16000,
       includesRule:"Incluye 1 salsa de soja fija",
       composition:["4 Philadelphia","3 New York","3 California"],
-      img:""
+      img:"",
+      chooseSauces: 0
     },
     {
       id:"combo15", tab:"combos",
@@ -361,7 +600,8 @@
       price:22000,
       includesRule:"Incluye 1 salsa de soja fija",
       composition:["5 New York","5 California","5 Buenos Aires"],
-      img:""
+      img:"",
+      chooseSauces: 0
     },
     {
       id:"combo20", tab:"combos",
@@ -370,7 +610,8 @@
       price:30000,
       includesRule:"Incluye 1 salsa de soja fija",
       composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese salmón"],
-      img:""
+      img:"",
+      chooseSauces: 0
     },
     {
       id:"combo30", tab:"combos",
@@ -379,7 +620,8 @@
       price:45000,
       includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección",
       composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"],
-      img:""
+      img:"",
+      chooseSauces: 1
     },
     {
       id:"combo40", tab:"combos",
@@ -388,7 +630,8 @@
       price:55000,
       includesRule:"Incluye 2 salsas de soja fijas + 1 salsa a elección",
       composition:["10 Philadelphia","10 Maki de salmón","10 Niguiris de salmón","10 New York"],
-      img:""
+      img:"",
+      chooseSauces: 1
     },
     {
       id:"combo50", tab:"combos",
@@ -397,17 +640,16 @@
       price:70000,
       includesRule:"Incluye 2 salsas de soja fijas + 2 salsas a elección",
       composition:["10 Ebi langostino","10 Crazy","10 Salmón crispy","10 Tamago","10 Keki"],
-      img:""
+      img:"",
+      chooseSauces: 2
     },
 
     // ===== Rolls (x5) =====
     { id:"philadelphia", tab:"rolls", name:"Philadelphia", pieces:5, price:9000, desc:"Salmón fresco + queso crema.", img:"philadelphia.PNG" },
     { id:"buenos_aires", tab:"rolls", name:"Buenos Aires", pieces:5, price:11000, desc:"Langostino + queso + palta, con salsa BA.", img:"buenos-aires.PNG" },
-
-    // Roll Guacamole (usa tu imagen guacamole.PNG)
     { id:"guacamole_roll", tab:"rolls", name:"Guacamole", pieces:5, price:10500, desc:"Salmón + queso crema con topping de guacamole.", img:"guacamole.PNG" },
 
-    // (dejé algunos más para que no se rompa nada; después los completás)
+    // (placeholder)
     { id:"newyork", tab:"rolls", name:"New York", pieces:5, price:9000, desc:"(completás ingredientes).", img:"" },
     { id:"california", tab:"rolls", name:"California", pieces:5, price:8500, desc:"(completás ingredientes).", img:"" },
     { id:"vegetariano", tab:"rolls", name:"Vegetariano", pieces:5, price:7500, desc:"Zanahoria + palta + queso.", img:"" },
@@ -417,10 +659,7 @@
     { id:"salsa_ba", tab:"extras", name:"Salsa Buenos Aires", pieces:0, price:1300, desc:"Unidad.", img:"" },
     { id:"mostaza_miel", tab:"extras", name:"Salsa mostaza y miel", pieces:0, price:1300, desc:"Unidad.", img:"" },
     { id:"maracuya", tab:"extras", name:"Salsa maracuyá", pieces:0, price:1500, desc:"Unidad.", img:"" },
-
-    // Si querés mantener “Guacamole” como adicional aparte del roll:
     { id:"guacamole_extra", tab:"extras", name:"Guacamole (adicional)", pieces:0, price:850, desc:"Unidad.", img:"" },
-
     { id:"criolla", tab:"extras", name:"Criolla", pieces:0, price:750, desc:"Unidad.", img:"" },
     { id:"jengibre", tab:"extras", name:"Jengibre", pieces:0, price:750, desc:"Unidad.", img:"" },
     { id:"pepino", tab:"extras", name:"Pepino", pieces:0, price:700, desc:"Unidad.", img:"" }
@@ -432,6 +671,18 @@
     try { if (navigator.vibrate) navigator.vibrate(12); } catch(e){}
   }
 
+  // ===== Botones “se nota presionado” (también en iPhone) =====
+  function bindPressFeedback(){
+    const pressables = document.querySelectorAll("button, .tab, .chip");
+    pressables.forEach(el=>{
+      el.addEventListener("pointerdown", ()=> el.classList.add("is-pressed"));
+      const off = ()=> el.classList.remove("is-pressed");
+      el.addEventListener("pointerup", off);
+      el.addEventListener("pointercancel", off);
+      el.addEventListener("pointerleave", off);
+    });
+  }
+
   function setTab(tab, el){
     activeTab = tab;
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
@@ -440,11 +691,122 @@
     window.scrollTo({top:0, behavior:"smooth"});
   }
 
+  // ===== Modal imagen =====
+  function openImgModal(name, src){
+    if (!src) return;
+    document.getElementById("imgModalTitle").textContent = name || "Imagen";
+    document.getElementById("imgModalEl").src = src;
+    document.getElementById("imgModal").classList.add("show");
+  }
+  function closeImgModal(){
+    document.getElementById("imgModal").classList.remove("show");
+    document.getElementById("imgModalEl").src = "";
+  }
+  // cerrar tocando afuera
+  document.getElementById("imgModal").addEventListener("click", (e)=>{
+    if (e.target.id === "imgModal") closeImgModal();
+  });
+
+  // ===== Modal elección salsas =====
+  let pendingSaucePick = null; // {comboId, count}
+  function sauceChoicePool(){
+    // “Salsa a elección”: excluimos SOJA (es fija) y excluimos los incluidos (jengibre/pepino)
+    const excluded = new Set(["soja","jengibre","pepino"]);
+    return MENU.filter(x => x.tab === "extras" && x.pieces === 0 && !excluded.has(x.id));
+  }
+
+  function openSauceModal(comboItem){
+    const count = Number(comboItem.chooseSauces||0);
+    if (!count) return;
+
+    pendingSaucePick = { comboId: comboItem.id, count };
+
+    document.getElementById("sauceModalTitle").textContent =
+      count === 1 ? "Elegí 1 salsa" : `Elegí ${count} salsas`;
+
+    document.getElementById("sauceHelper").textContent =
+      count === 1 ? "Elegí 1 salsa (soja ya va incluida)." : `Elegí ${count} salsas (soja ya va incluida).`;
+
+    const pool = sauceChoicePool();
+    const list = document.getElementById("sauceList");
+
+    list.innerHTML = pool.map(s=>{
+      return `
+        <label class="chip">
+          <div class="left">
+            <div class="nm">${s.name}</div>
+            <div class="pr">$${fmtMoney(s.price||0)}</div>
+          </div>
+          <input type="checkbox" value="${s.id}" />
+        </label>
+      `;
+    }).join("");
+
+    // limitar selección
+    list.querySelectorAll("input").forEach(inp=>{
+      inp.addEventListener("change", ()=>{
+        const checked = [...list.querySelectorAll("input:checked")];
+        if (checked.length > pendingSaucePick.count){
+          inp.checked = false;
+        }
+      });
+    });
+
+    document.getElementById("sauceModal").classList.add("show");
+    bindPressFeedback();
+  }
+
+  function closeSauceModal(isCancel){
+    document.getElementById("sauceModal").classList.remove("show");
+
+    // si cancela, NO tocamos el combo (queda agregado igual),
+    // porque el cliente puede elegir después en la solapa de Salsas.
+    pendingSaucePick = null;
+
+    if (isCancel){
+      // nada
+    }
+  }
+
+  // cerrar tocando afuera
+  document.getElementById("sauceModal").addEventListener("click", (e)=>{
+    if (e.target.id === "sauceModal") closeSauceModal(true);
+  });
+
+  function confirmSauces(){
+    if (!pendingSaucePick) return;
+
+    const list = document.getElementById("sauceList");
+    const ids = [...list.querySelectorAll("input:checked")].map(x=>x.value);
+
+    if (ids.length !== pendingSaucePick.count){
+      alert(`Elegí ${pendingSaucePick.count} salsa${pendingSaucePick.count>1?'s':''}.`);
+      return;
+    }
+
+    // agregar cada salsa elegida (1 unidad cada una)
+    ids.forEach(id=>{
+      cart[id] = (cart[id]||0) + 1;
+    });
+
+    haptic();
+    updateTotals();
+    updateQtyPills();
+    closeSauceModal(false);
+  }
+
+  // ===== Carrito =====
   function add(id){
     cart[id] = (cart[id]||0) + 1;
     haptic();
     updateTotals();
     updateQtyPills();
+
+    // si es combo con “salsa a elección”, abrir selector
+    const item = MENU.find(x=>x.id===id);
+    if (item && item.tab==="combos" && Number(item.chooseSauces||0) > 0){
+      openSauceModal(item);
+    }
   }
 
   function sub(id){
@@ -478,7 +840,6 @@
   }
 
   function extrasSummary(){
-    // solo salsas/adicionales (pieces == 0)
     const extras = Object.entries(cart)
       .map(([id, qty]) => ({qty, item: MENU.find(x => x.id === id)}))
       .filter(x => x.item && x.item.pieces === 0)
@@ -552,12 +913,17 @@
     window.open(url, "_blank");
   }
 
+  // ===== Cards =====
   function cardHTML(item){
     const price = item.price ? `$${fmtMoney(item.price)}` : "—";
     const qty = getQty(item.id);
 
-    const imgBlock = item.img
-      ? `<div class="imgBox"><img src="${item.img}" alt="${item.name}"></div>`
+    const hasImg = !!item.img;
+    const imgBlock = hasImg
+      ? `<div class="imgBox" onclick="openImgModal('${escapeQuotes(item.name)}','${escapeQuotes(item.img)}')">
+           <div class="tapHint">Tocá para agrandar</div>
+           <img src="${item.img}" alt="${escapeQuotes(item.name)}">
+         </div>`
       : `<div class="imgBox">Foto (pendiente)</div>`;
 
     const base = (item.pieces === 5) ? "x5 piezas" : (item.pieces > 0 ? `${item.pieces} piezas` : "Unidad");
@@ -586,6 +952,10 @@
     `;
   }
 
+  function escapeQuotes(s){
+    return String(s||"").replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  }
+
   function render(){
     const root = document.getElementById("content");
     const items = MENU.filter(x => x.tab === activeTab);
@@ -603,6 +973,7 @@
 
     updateTotals();
     updateQtyPills();
+    bindPressFeedback();
   }
 
   document.getElementById("btnClear").addEventListener("click", clearCart);
