@@ -10,7 +10,6 @@
     --bg:#0b0b0c;
     --panel:#101114;
     --card:#15161a;
-    --card2:#121318;
     --line:#262830;
     --text:#f3f3f3;
     --muted:#b7b7b7;
@@ -18,6 +17,10 @@
     --gold2:#8f6f3f;
     --shadow: 0 18px 55px rgba(0,0,0,.55);
     --radius:18px;
+
+    /* Ajuste para que en COMBOS y SALSAS se vea 1 card por pantalla */
+    --chrome: 270px; /* header + paddings + footer aprox */
+    --cardTall: calc(100vh - var(--chrome));
   }
 
   *{box-sizing:border-box}
@@ -31,7 +34,7 @@
     color:var(--text);
   }
 
-  /* Layout fijo */
+  /* Header fijo */
   header{
     position:fixed; top:0; left:0; right:0;
     z-index:1000;
@@ -60,27 +63,35 @@
     color: rgba(255,255,255,.70);
   }
   .note span{color:var(--gold); font-weight:800;}
-  .tabs{margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;}
+
+  /* Tabs en una línea */
+  .tabs{margin-top:10px; display:flex; gap:10px; flex-wrap:nowrap;}
   .tab{
+    flex:1;
+    text-align:center;
     padding:9px 12px;
     border-radius:14px;
     cursor:pointer;
     font-size:13px;
-    font-weight:800;
+    font-weight:900;
     color: rgba(255,255,255,.85);
     background: rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.10);
     user-select:none;
-    transition: transform .08s ease, background .15s ease, border-color .15s ease;
+    transition: transform .08s ease, background .15s ease, border-color .15s ease, box-shadow .12s ease;
+    -webkit-tap-highlight-color: transparent;
   }
-  .tab:active{transform: translateY(1px) scale(.99);}
+  .tab:active{
+    transform: translateY(2px) scale(.985);
+    box-shadow: inset 0 0 0 999px rgba(0,0,0,.18);
+  }
   .tab.active{
     background: rgba(202,167,106,.16);
     border-color: rgba(202,167,106,.35);
     color:#fff;
   }
 
-  /* Contenido scroll */
+  /* Contenido */
   .content{
     max-width:920px;
     margin:0 auto;
@@ -96,29 +107,14 @@
     text-transform: uppercase;
   }
 
-  /* GRID base */
+  /* Grilla: 1 columna SIEMPRE (como pediste) */
   .grid{
     display:grid;
     gap:14px;
-  }
-
-  /* ROLLS: 2 columnas SIEMPRE (celu incluido) */
-  .grid.rollsGrid{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  /* COMBOS y SALSAS: 1 columna */
-  .grid.singleGrid{
     grid-template-columns: 1fr;
   }
 
-  /* En pantallas grandes: rolls puede abrir un poco más (sigue 2 columnas) */
-  @media (min-width: 900px){
-    .grid.rollsGrid{
-      grid-template-columns: repeat(2, minmax(320px, 1fr));
-    }
-  }
-
+  /* Cards */
   .card{
     background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
     border:1px solid rgba(255,255,255,.08);
@@ -128,10 +124,21 @@
     position:relative;
   }
 
-  /* FOTO: Opción A (SIN RECORTAR NI DEFORMAR) */
+  /* En combos y salsas: 1 card “por pantalla” + scroll tipo bloques */
+  body[data-tab="combos"] .content,
+  body[data-tab="extras"] .content{
+    scroll-snap-type: y mandatory;
+  }
+  body[data-tab="combos"] .card,
+  body[data-tab="extras"] .card{
+    min-height: var(--cardTall);
+    scroll-snap-align: start;
+  }
+
+  /* Imagen: se ve toda, sin recortar y sin deformar */
   .imgBox{
-    height: 175px;               /* un toque más alta para que se luzca */
-    padding: 10px;               /* margen para que no pegue al borde */
+    height: 175px;
+    padding: 0; /* más ancha (ocupa todo el card) */
     background:
       radial-gradient(220px 140px at 20% 20%, rgba(202,167,106,.18), transparent 60%),
       radial-gradient(220px 140px at 80% 0%, rgba(255,255,255,.06), transparent 60%),
@@ -143,14 +150,19 @@
     color: rgba(255,255,255,.35);
     font-weight:900;
     letter-spacing:.08em;
+    overflow:hidden;
   }
+  body[data-tab="combos"] .imgBox,
+  body[data-tab="extras"] .imgBox{
+    height: min(240px, 34vh); /* en combos/salsas se luce más sin cortar */
+  }
+
   .imgBox img{
     width:100%;
     height:100%;
-    object-fit: contain;         /* CLAVE: se ve toda la imagen */
-    object-position: center;
+    object-fit: contain; /* clave: se ve todo */
+    object-position:center;
     display:block;
-    border-radius: 12px;
   }
 
   .priceTag{
@@ -176,6 +188,18 @@
     color: rgba(255,255,255,.78);
     font-size: 12.5px;
     line-height:1.35;
+  }
+
+  /* Para que en combos/salsas no quede “aire raro”, empujamos botones abajo */
+  body[data-tab="combos"] .body,
+  body[data-tab="extras"] .body{
+    display:flex;
+    flex-direction:column;
+    min-height: calc(var(--cardTall) - min(240px, 34vh));
+  }
+  body[data-tab="combos"] .bottomRow,
+  body[data-tab="extras"] .bottomRow{
+    margin-top:auto;
   }
 
   .bottomRow{
@@ -234,7 +258,7 @@
     background: rgba(255,255,255,.04);
   }
 
-  /* Footer fijo compacto */
+  /* Footer fijo */
   .footer{
     position:fixed; left:0; right:0; bottom:0;
     z-index:1000;
@@ -274,10 +298,14 @@
     color:#fff;
     font-weight:1000;
     cursor:pointer;
-    transition: transform .08s ease, filter .15s ease;
+    transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
   }
-  .btnGhost:active{transform: translateY(2px) scale(.97); filter:brightness(.92);}
+  .btnGhost:active{
+    transform: translateY(2px) scale(.97);
+    filter:brightness(.92);
+    box-shadow: 0 8px 22px rgba(0,0,0,.40) inset;
+  }
   .btnWA{
     padding:12px 16px;
     border-radius: 14px;
@@ -288,10 +316,14 @@
     cursor:pointer;
     min-width: 190px;
     text-align:center;
-    transition: transform .08s ease, filter .15s ease;
+    transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
   }
-  .btnWA:active{transform: translateY(2px) scale(.97); filter:brightness(.92);}
+  .btnWA:active{
+    transform: translateY(2px) scale(.97);
+    filter:brightness(.92);
+    box-shadow: 0 8px 22px rgba(0,0,0,.28) inset;
+  }
 
   @media (max-width:520px){
     .totals{min-width: 100%;}
@@ -301,14 +333,14 @@
 </style>
 </head>
 
-<body>
+<body data-tab="combos">
 <header>
   <div class="wrap">
     <div class="brandRow">
       <div class="logo">✦</div>
       <div>
         <h1>STELLA MARIS SUSHI</h1>
-        <div class="sub">Menú digital · <b style="color:var(--gold);font-weight:900;">Retiro en el local</b> (sin delivery)</div>
+        <div class="sub">Retiro en el local (sin delivery)</div>
       </div>
     </div>
 
@@ -318,8 +350,8 @@
 
     <div class="tabs">
       <div class="tab active" onclick="setTab('combos', this)">Combos</div>
-      <div class="tab" onclick="setTab('rolls', this)">Rolls & Piezas</div>
-      <div class="tab" onclick="setTab('extras', this)">Salsas & Adicionales</div>
+      <div class="tab" onclick="setTab('rolls', this)">Rolls</div>
+      <div class="tab" onclick="setTab('extras', this)">Salsas</div>
     </div>
   </div>
 </header>
@@ -348,7 +380,7 @@
   };
 
   let activeTab = "combos";
-  const cart = {};
+  const cart = {}; // id -> qty
 
   const MENU = [
     // ===== Combos =====
@@ -367,7 +399,7 @@
       pieces:15,
       price:22000,
       includesRule:"Incluye 1 salsa de soja fija",
-      composition:["5 New York","5 California","5 Buenos Aires"],
+      composition:["(A definir)"],
       img:""
     },
     {
@@ -376,7 +408,7 @@
       pieces:20,
       price:30000,
       includesRule:"Incluye 1 salsa de soja fija",
-      composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese salmón"],
+      composition:["(A definir)"],
       img:""
     },
     {
@@ -385,7 +417,7 @@
       pieces:30,
       price:45000,
       includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección",
-      composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"],
+      composition:["(A definir)"],
       img:""
     },
     {
@@ -409,34 +441,10 @@
 
     // ===== Rolls & piezas (x5) =====
     { id:"philadelphia", tab:"rolls", name:"Philadelphia", pieces:5, price:9000, desc:"Salmón fresco + queso crema.", img:"philadelphia.PNG" },
-    { id:"buenos_aires", tab:"rolls", name:"Buenos Aires", pieces:5, price:11000, desc:"Langostino + queso + palta, con salsa BA.", img:"buenos-aires.PNG" },
+    { id:"buenos_aires", tab:"rolls", name:"Buenos Aires", pieces:5, price:11000, desc:"(Completás ingredientes).", img:"buenos-aires.PNG" },
 
     { id:"newyork", tab:"rolls", name:"New York", pieces:5, price:9000, desc:"(Completás ingredientes).", img:"" },
     { id:"california", tab:"rolls", name:"California", pieces:5, price:8500, desc:"(Completás ingredientes).", img:"" },
-    { id:"alaska", tab:"rolls", name:"Alaska", pieces:5, price:9500, desc:"(Completás ingredientes).", img:"" },
-    { id:"alaska_ahumado", tab:"rolls", name:"Alaska Ahumado", pieces:5, price:10000, desc:"(Completás ingredientes).", img:"" },
-    { id:"avocado", tab:"rolls", name:"Avocado", pieces:5, price:9000, desc:"(Completás ingredientes).", img:"" },
-    { id:"vegetariano", tab:"rolls", name:"Vegetariano", pieces:5, price:7500, desc:"Zanahoria + palta + queso.", img:"" },
-    { id:"crazy", tab:"rolls", name:"Crazy", pieces:5, price:10500, desc:"(Completás ingredientes).", img:"" },
-    { id:"paradise", tab:"rolls", name:"Paradise", pieces:5, price:11500, desc:"(Completás ingredientes).", img:"" },
-    { id:"japan_flowers", tab:"rolls", name:"Japan Flowers", pieces:5, price:11000, desc:"(Completás ingredientes).", img:"" },
-    { id:"tamago_roll", tab:"rolls", name:"Tamago", pieces:5, price:8000, desc:"(Completás ingredientes).", img:"" },
-    { id:"salmon_crispy", tab:"rolls", name:"Salmón Crispy", pieces:5, price:10500, desc:"(Completás ingredientes).", img:"" },
-
-    // Makis (x5)
-    { id:"maki_salmon", tab:"rolls", name:"Maki de salmón", pieces:5, price:8500, desc:"Salmón.", img:"" },
-    { id:"maki_salmon_ahumado", tab:"rolls", name:"Maki de salmón ahumado", pieces:5, price:9500, desc:"Salmón ahumado.", img:"" },
-    { id:"maki_atun", tab:"rolls", name:"Maki de atún", pieces:5, price:8000, desc:"Atún.", img:"" },
-    { id:"maki_veggie", tab:"rolls", name:"Maki veggie", pieces:5, price:7500, desc:"Vegetales.", img:"" },
-
-    // Niguiris (x5)
-    { id:"niguiri_salmon", tab:"rolls", name:"Niguiri de salmón", pieces:5, price:8500, desc:"Arroz + salmón.", img:"" },
-    { id:"niguiri_salmon_ah", tab:"rolls", name:"Niguiri de salmón ahumado", pieces:5, price:9500, desc:"Arroz + salmón ahumado.", img:"" },
-    { id:"keki_niguiri", tab:"rolls", name:"Niguiri Keki", pieces:5, price:10500, desc:"(Completás).", img:"" },
-
-    // Sashimis (x5)
-    { id:"sashimi_salmon", tab:"rolls", name:"Sashimi de salmón", pieces:5, price:10000, desc:"Cortes de salmón.", img:"" },
-    { id:"sashimi_flameado", tab:"rolls", name:"Sashimi de salmón flameado", pieces:5, price:11500, desc:"Cortes flameados.", img:"" },
 
     // ===== Extras (unidad) =====
     { id:"soja", tab:"extras", name:"Salsa de soja", pieces:0, price:850, desc:"Unidad.", img:"" },
@@ -457,8 +465,11 @@
 
   function setTab(tab, el){
     activeTab = tab;
+    document.body.setAttribute("data-tab", tab);
+
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
     el.classList.add("active");
+
     render();
     window.scrollTo({top:0, behavior:"smooth"});
   }
@@ -527,9 +538,7 @@
     let totalPieces = 0;
 
     for (const {qty, item} of entries){
-      const lineMoney = (item.price||0) * qty;
-      totalMoney += lineMoney;
-
+      totalMoney += (item.price||0) * qty;
       const itemPieces = (item.pieces||0) * qty;
       totalPieces += itemPieces;
 
@@ -605,13 +614,11 @@
 
     const title = activeTab === "combos"
       ? "COMBOS"
-      : (activeTab === "rolls" ? "ROLLS & PIEZAS" : "SALSAS & ADICIONALES");
-
-    const gridClass = (activeTab === "rolls") ? "rollsGrid" : "singleGrid";
+      : (activeTab === "rolls" ? "ROLLS" : "SALSAS");
 
     root.innerHTML = `
       <div class="sectionTitle">${title}</div>
-      <div class="grid ${gridClass}">
+      <div class="grid">
         ${items.map(cardHTML).join("")}
       </div>
     `;
