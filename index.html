@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Stella Maris Sushi</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
       margin: 0;
@@ -23,21 +24,22 @@
     .card {
       background: #1e1e1e;
       margin: 20px;
-      padding: 20px;
+      padding: 25px;
       border-radius: 12px;
     }
 
-    button {
+    .btn {
+      display: inline-block;
       background: #e60023;
       color: white;
-      border: none;
       padding: 12px 20px;
       border-radius: 8px;
+      text-decoration: none;
       font-size: 16px;
-      cursor: pointer;
+      margin-top: 10px;
     }
 
-    button:hover {
+    .btn:hover {
       background: #ff0033;
     }
   </style>
@@ -52,17 +54,19 @@
 <div class="card">
   <h2>Combo 15 piezas</h2>
   <p>$27.000</p>
-  <button onclick="alert('Pedido enviado por WhatsApp próximamente 😉')">
-    Pedir
-  </button>
+  <a class="btn" target="_blank"
+     href="https://wa.me/5491164194866?text=Hola%20Stella%20Maris%20Sushi%20🍣%0AQuiero%20el%20Combo%2015%20piezas%20($27.000).">
+     Pedir por WhatsApp
+  </a>
 </div>
 
 <div class="card">
   <h2>Combo 30 piezas</h2>
   <p>$48.000</p>
-  <button onclick="alert('Pedido enviado por WhatsApp próximamente 😉')">
-    Pedir
-  </button>
+  <a class="btn" target="_blank"
+     href="https://wa.me/5491164194866?text=Hola%20Stella%20Maris%20Sushi%20🍣%0AQuiero%20el%20Combo%2030%20piezas%20($48.000).">
+     Pedir por WhatsApp
+  </a>
 </div>
 
 </body>
