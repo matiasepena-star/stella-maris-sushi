@@ -1,73 +1,425 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Stella Maris Sushi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: white;
-      text-align: center;
+    :root{
+      --bg:#0b0b0b;
+      --panel:#141414;
+      --panel2:#1b1b1b;
+      --gold:#c9a24a;
+      --text:#f4f4f4;
+      --muted:#b9b9b9;
+      --line:rgba(255,255,255,.08);
+      --btn:#b88c2a;
+      --btn2:#1f1f1f;
+      --danger:#e11d2e;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", "Noto Sans", "Liberation Sans", sans-serif;
+      background: radial-gradient(1200px 800px at 50% -20%, #1b1b1b 0%, var(--bg) 55%, #050505 100%);
+      color:var(--text);
+    }
+    a{color:inherit}
+    .wrap{max-width:980px;margin:0 auto;padding:18px 14px 110px}
+    header{
+      background: linear-gradient(180deg, rgba(0,0,0,.85), rgba(0,0,0,.35));
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px 16px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky;
+      top:10px;
+      z-index:5;
+      backdrop-filter: blur(10px);
+    }
+    .brand{
+      display:flex;gap:12px;align-items:center;min-width:0;
+    }
+    .logo{
+      width:42px;height:42px;border-radius:14px;
+      border:1px solid var(--line);
+      background:
+        radial-gradient(12px 12px at 50% 35%, rgba(201,162,74,.9) 0%, rgba(201,162,74,0) 60%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      display:grid;place-items:center;
+      flex:0 0 auto;
+    }
+    .logo:before{
+      content:"✦";
+      color:var(--gold);
+      font-size:18px;
+      opacity:.9;
+    }
+    .title{
+      min-width:0;
+    }
+    .title h1{margin:0;font-size:18px;letter-spacing:.6px}
+    .title .sub{margin-top:4px;color:var(--muted);font-size:12px}
+    .pill{
+      padding:8px 10px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      font-size:12px;
+      color:var(--muted);
+      text-align:right;
+      line-height:1.2;
+      flex:0 0 auto;
     }
 
-    header {
-      padding: 20px;
-      background: black;
-      font-size: 24px;
-      font-weight: bold;
+    .section{
+      margin-top:16px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+    }
+    .sectionHead{
+      padding:14px 14px 10px;
+      border-bottom:1px solid var(--line);
+      background: rgba(0,0,0,.35);
+    }
+    .sectionHead h2{margin:0;font-size:16px;letter-spacing:.5px;color:var(--gold)}
+    .sectionHead .hint{margin-top:6px;font-size:12px;color:var(--muted)}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:12px;
+      padding:14px;
+    }
+    @media (min-width:760px){
+      .grid{grid-template-columns: repeat(3, minmax(0, 1fr));}
     }
 
-    .card {
-      background: #1e1e1e;
-      margin: 20px;
-      padding: 25px;
-      border-radius: 12px;
+    .card{
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.15));
+      border-radius:18px;
+      overflow:hidden;
+      position:relative;
     }
-
-    .btn {
-      display: inline-block;
-      background: #e60023;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 16px;
-      margin-top: 10px;
+    .pic{
+      height:148px;
+      background: linear-gradient(180deg, rgba(201,162,74,.10), rgba(0,0,0,.55));
+      border-bottom:1px solid var(--line);
+      display:grid;place-items:center;
+      position:relative;
     }
+    .pic img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter: contrast(1.05) saturate(1.05);
+    }
+    .badgePrice{
+      position:absolute;
+      top:10px; right:10px;
+      background: rgba(0,0,0,.55);
+      border:1px solid var(--line);
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:700;
+      letter-spacing:.3px;
+      font-size:12px;
+      backdrop-filter: blur(8px);
+    }
+    .cardBody{
+      padding:12px 12px 14px;
+    }
+    .nameRow{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+    }
+    .name{
+      font-weight:800;
+      font-size:14px;
+      margin:0;
+      line-height:1.15;
+    }
+    .desc{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:12px;
+      min-height:16px;
+    }
+    .actions{
+      margin-top:12px;
+      display:flex;justify-content:flex-end;
+    }
+    .plus{
+      width:42px;height:42px;border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(201,162,74,.12);
+      color:var(--gold);
+      font-size:24px;
+      cursor:pointer;
+    }
+    .plus:active{transform:scale(.98)}
+    .plus:hover{background: rgba(201,162,74,.18)}
 
-    .btn:hover {
-      background: #ff0033;
+    .footerBar{
+      position:fixed;
+      left:0; right:0; bottom:0;
+      padding:10px 12px 14px;
+      background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.55) 30%, rgba(0,0,0,.88));
+      backdrop-filter: blur(10px);
+      border-top:1px solid var(--line);
+      z-index:10;
+    }
+    .barInner{
+      max-width:980px;margin:0 auto;
+      display:flex;gap:10px;align-items:center;justify-content:space-between;
+    }
+    .totalBox{
+      background: rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:10px 12px;
+      min-width:150px;
+    }
+    .totalBox .t{font-size:11px;color:var(--muted)}
+    .totalBox .v{font-size:16px;font-weight:900;margin-top:2px}
+    .btn{
+      border:0;
+      border-radius:16px;
+      padding:12px 14px;
+      font-weight:900;
+      letter-spacing:.2px;
+      cursor:pointer;
+      display:flex;gap:8px;align-items:center;justify-content:center;
+      white-space:nowrap;
+    }
+    .btnPrimary{
+      background: linear-gradient(180deg, #d6b15d, var(--btn));
+      color:#161616;
+      min-width:220px;
+    }
+    .btnPrimary:disabled{
+      opacity:.45; cursor:not-allowed;
+    }
+    .btnGhost{
+      background: rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      color:var(--text);
+    }
+    .cart{
+      margin-top:14px;
+      border-top:1px solid var(--line);
+      padding-top:12px;
+      color:var(--muted);
+      font-size:12px;
+      display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+    }
+    .chip{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      border-radius:999px;
+      padding:6px 10px;
+      display:flex;gap:8px;align-items:center;
+    }
+    .chip b{font-weight:900}
+    .chip button{
+      border:0;background:transparent;color:var(--muted);
+      font-size:16px; cursor:pointer; padding:0 4px;
+    }
+    .chip button:hover{color:var(--text)}
+    .warn{
+      color:#ffcc66;
+      font-size:12px;
+      margin-top:8px;
     }
   </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo"></div>
+        <div class="title">
+          <h1>STELLA MARIS SUSHI</h1>
+          <div class="sub">Menú digital · Retiro en el local</div>
+        </div>
+      </div>
+      <div class="pill">
+        <div><b>Rolls & Piezas</b></div>
+        <div>todas las opciones son de <b>5 piezas</b></div>
+      </div>
+    </header>
 
-<header>
-  Stella Maris Sushi
-</header>
+    <div class="section">
+      <div class="sectionHead">
+        <h2>ESPECIALES</h2>
+        <div class="hint">Tocá el <b>+</b> para sumar al pedido. Abajo se arma el total y el mensaje de WhatsApp.</div>
+      </div>
+      <div class="grid" id="grid"></div>
 
-<div class="card">
-  <h2>Combo 15 piezas</h2>
-  <p>$27.000</p>
-  <a class="btn" target="_blank"
-     href="https://wa.me/5491164194866?text=Hola%20Stella%20Maris%20Sushi%20🍣%0AQuiero%20el%20Combo%2015%20piezas%20($27.000).">
-     Pedir por WhatsApp
-  </a>
-</div>
+      <div style="padding:0 14px 14px;">
+        <div class="cart" id="cart"></div>
+        <div class="warn" id="warn" style="display:none;">
+          Si alguna foto no aparece, subila al repo con el mismo nombre (o dejala, funciona igual).
+        </div>
+      </div>
+    </div>
+  </div>
 
-<div class="card">
-  <h2>Combo 30 piezas</h2>
-  <p>$48.000</p>
-  <a class="btn" target="_blank"
-     href="https://wa.me/5491164194866?text=Hola%20Stella%20Maris%20Sushi%20🍣%0AQuiero%20el%20Combo%2030%20piezas%20($48.000).">
-     Pedir por WhatsApp
-  </a>
-</div>
+  <div class="footerBar">
+    <div class="barInner">
+      <div class="totalBox">
+        <div class="t">Tu pedido</div>
+        <div class="v" id="total">$0</div>
+      </div>
+      <button class="btn btnGhost" id="btnClear" title="Vaciar pedido">Vaciar</button>
+      <button class="btn btnPrimary" id="btnWa" disabled>CONFIRMAR POR WHATSAPP →</button>
+    </div>
+  </div>
 
+  <script>
+    // ✅ WhatsApp destino (el tuyo)
+    const WA_NUMBER = "5491164194866";
+
+    // Productos (podés cambiar nombres y precios cuando quieras)
+    // IMÁGENES: el sistema busca archivos en el repo: ./img/<archivo>
+    // Si no existen, igual se ve la card (solo sin foto).
+    const PRODUCTS = [
+      { id:"tamago", name:"Tamago",      desc:"Lltane",  price:8000,  img:"tamago.jpg" },
+      { id:"keki",   name:"Keki",        desc:"Flowen",  price:10500, img:"keki.jpg" },
+      { id:"maki",   name:"Maki de atún",desc:"Fpzas",   price:10500, img:"maki-de-atun.jpg" },
+      { id:"crazy",  name:"Crazy",       desc:"Flowen",  price:10500, img:"crazy.jpg" },
+      { id:"avocado",name:"Avocado",     desc:"",        price:9000,  img:"avocado.jpg" },
+
+      // Combos (los que ya tenías)
+      { id:"combo15",name:"Combo 15 piezas", desc:"", price:27000, img:"combo-15.jpg" },
+      { id:"combo30",name:"Combo 30 piezas", desc:"", price:48000, img:"combo-30.jpg" }
+    ];
+
+    const money = n => "$" + n.toLocaleString("es-AR");
+
+    // Carrito simple: {id: qty}
+    const cart = {};
+
+    const gridEl  = document.getElementById("grid");
+    const cartEl  = document.getElementById("cart");
+    const totalEl = document.getElementById("total");
+    const btnWa   = document.getElementById("btnWa");
+    const btnClear= document.getElementById("btnClear");
+    const warnEl  = document.getElementById("warn");
+
+    function renderGrid(){
+      gridEl.innerHTML = "";
+      PRODUCTS.forEach(p=>{
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+          <div class="pic">
+            <span class="badgePrice">${money(p.price)}</span>
+            <img src="img/${p.img}" alt="${p.name}"
+              onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(180deg, rgba(201,162,74,.10), rgba(0,0,0,.55))'; window.__missingImg=true;">
+          </div>
+          <div class="cardBody">
+            <div class="nameRow">
+              <p class="name">${p.name}</p>
+            </div>
+            <div class="desc">${p.desc || "&nbsp;"}</div>
+            <div class="actions">
+              <button class="plus" aria-label="Sumar ${p.name}">+</button>
+            </div>
+          </div>
+        `;
+        card.querySelector(".plus").addEventListener("click", ()=>{
+          cart[p.id] = (cart[p.id]||0) + 1;
+          renderCart();
+        });
+        gridEl.appendChild(card);
+      });
+    }
+
+    function renderCart(){
+      const items = Object.entries(cart).filter(([_,q])=>q>0);
+      if(items.length===0){
+        cartEl.innerHTML = `<span style="color:var(--muted)">Tu pedido está vacío.</span>`;
+        totalEl.textContent = "$0";
+        btnWa.disabled = true;
+        return;
+      }
+
+      let total = 0;
+      cartEl.innerHTML = "";
+
+      items.forEach(([id,qty])=>{
+        const p = PRODUCTS.find(x=>x.id===id);
+        if(!p) return;
+        total += p.price * qty;
+
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.innerHTML = `
+          <button title="Restar">−</button>
+          <b>${qty}×</b> ${p.name}
+          <span style="color:var(--muted)">${money(p.price*qty)}</span>
+          <button title="Sumar">+</button>
+        `;
+        const [minusBtn, plusBtn] = chip.querySelectorAll("button");
+        minusBtn.addEventListener("click", ()=>{
+          cart[id] = Math.max(0, (cart[id]||0) - 1);
+          if(cart[id]===0) delete cart[id];
+          renderCart();
+        });
+        plusBtn.addEventListener("click", ()=>{
+          cart[id] = (cart[id]||0) + 1;
+          renderCart();
+        });
+
+        cartEl.appendChild(chip);
+      });
+
+      totalEl.textContent = money(total);
+      btnWa.disabled = false;
+
+      if(window.__missingImg){ warnEl.style.display = "block"; }
+    }
+
+    function buildWhatsAppMessage(){
+      const lines = [];
+      lines.push("Hola Stella Maris Sushi 🍣");
+      lines.push("");
+      lines.push("Quiero pedir:");
+      let total = 0;
+
+      Object.entries(cart).forEach(([id,qty])=>{
+        const p = PRODUCTS.find(x=>x.id===id);
+        if(!p) return;
+        total += p.price * qty;
+        lines.push(`- ${qty}x ${p.name} (${money(p.price*qty)})`);
+      });
+
+      lines.push("");
+      lines.push(`Total: ${money(total)}.`);
+      return lines.join("\n");
+    }
+
+    btnWa.addEventListener("click", ()=>{
+      const msg = buildWhatsAppMessage();
+      const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+      window.location.href = url;
+    });
+
+    btnClear.addEventListener("click", ()=>{
+      Object.keys(cart).forEach(k=>delete cart[k]);
+      renderCart();
+    });
+
+    renderGrid();
+    renderCart();
+  </script>
 </body>
 </html>
