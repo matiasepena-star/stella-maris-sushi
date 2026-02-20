@@ -18,8 +18,11 @@
     --shadow: 0 18px 55px rgba(0,0,0,.55);
     --radius:20px;
 
-    /* Ajuste clave: alto de foto (compacto) */
-    --imgH: 250px;
+    /* Alto de foto */
+    --imgH: 240px;
+
+    /* Altura “objetivo” del footer para reservar espacio abajo */
+    --footerSafe: 122px;
   }
 
   *{box-sizing:border-box}
@@ -40,13 +43,13 @@
     background: rgba(12,12,14,.88);
     backdrop-filter: blur(14px);
     border-bottom:1px solid rgba(255,255,255,.10);
-    padding:14px 14px 12px;
+    padding:12px 14px 10px;
   }
 
   .wrap{max-width:920px; margin:0 auto;}
   .brandRow{display:flex; align-items:center; gap:12px;}
   .logo{
-    width:44px; height:44px; border-radius:16px;
+    width:42px; height:42px; border-radius:16px;
     display:grid; place-items:center;
     color:var(--gold);
     background:
@@ -58,14 +61,14 @@
   }
   h1{
     margin:0;
-    font-size:22px;
-    letter-spacing:.12em;
+    font-size:20px;
+    letter-spacing:.10em;
     font-weight:1000;
   }
 
-  .tabs{margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;}
+  .tabs{margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;}
   .tab{
-    padding:12px 16px;
+    padding:11px 16px;
     border-radius:18px;
     cursor:pointer;
     font-size:16px;
@@ -88,7 +91,7 @@
   .content{
     max-width:920px;
     margin:0 auto;
-    padding: 122px 14px 150px;
+    padding: 112px 14px calc(var(--footerSafe) + 18px);
   }
 
   .sectionTitle{
@@ -100,7 +103,7 @@
     text-transform: uppercase;
   }
 
-  /* UNA COLUMNA SIEMPRE (como pediste) */
+  /* UNA COLUMNA */
   .grid{
     display:grid;
     gap:14px;
@@ -116,8 +119,6 @@
     position:relative;
   }
 
-  /* ===== Foto: completa + sin estirar + ocupa el ancho del recuadro =====
-     Truco: fondo blur (cover) + foto principal (contain). */
   .imgWrap{
     height: var(--imgH);
     position:relative;
@@ -144,7 +145,7 @@
   .imgMain img{
     width:100%;
     height:100%;
-    object-fit:contain; /* foto completa */
+    object-fit:contain;
     display:block;
   }
   .imgOverlay{
@@ -173,7 +174,7 @@
     top:12px; right:12px;
     background: rgba(0,0,0,.55);
     border:1px solid rgba(255,255,255,.12);
-    padding:9px 12px;
+    padding:8px 12px;
     border-radius:999px;
     font-weight:1100;
     letter-spacing:.3px;
@@ -183,13 +184,13 @@
   .body{ padding: 14px 14px 14px; }
   .name{
     margin:0;
-    font-size: 28px;
+    font-size: 26px;
     font-weight:1100;
     line-height:1.08;
   }
   .meta{
     margin-top:8px;
-    font-size:18px;
+    font-size:17px;
     color: rgba(255,255,255,.82);
     line-height:1.25;
   }
@@ -198,7 +199,7 @@
     margin:10px 0 0;
     padding-left: 18px;
     color: rgba(255,255,255,.78);
-    font-size: 16.5px;
+    font-size: 16px;
     line-height:1.35;
   }
 
@@ -214,7 +215,7 @@
 
   .qty{
     display:flex; align-items:center; gap:10px;
-    font-size:17px;
+    font-size:16px;
     color: rgba(255,255,255,.75);
     font-weight:900;
   }
@@ -235,7 +236,7 @@
     cursor:pointer;
     user-select:none;
     font-weight:1100;
-    padding:14px 18px;
+    padding:13px 18px;
     border-radius: 16px;
     background: rgba(255,255,255,.06);
     border:1px solid rgba(255,255,255,.12);
@@ -243,13 +244,10 @@
     transition: transform .08s ease, filter .15s ease, box-shadow .15s ease, background .15s ease;
     -webkit-tap-highlight-color: transparent;
   }
-
-  /* Botón con “se nota que toca” */
   .btn:active{
     transform: translateY(1px) scale(.98);
     filter: brightness(.95);
   }
-
   .btn.add{
     background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
     border:1px solid rgba(202,167,106,.55);
@@ -259,7 +257,6 @@
   .btn.add:active{
     box-shadow: 0 0 0 3px rgba(202,167,106,.25), 0 8px 18px rgba(0,0,0,.25);
   }
-
   .btn.minus{
     width:56px;
     text-align:center;
@@ -267,14 +264,14 @@
     background: rgba(255,255,255,.04);
   }
 
-  /* Footer fijo */
+  /* ===== Footer: MÁS BAJO y sin agrandarse ===== */
   .footer{
     position:fixed; left:0; right:0; bottom:0;
     z-index:1000;
-    background: rgba(10,10,12,.88);
+    background: rgba(10,10,12,.90);
     backdrop-filter: blur(12px);
     border-top:1px solid rgba(255,255,255,.10);
-    padding:10px 12px;
+    padding:8px 12px;
   }
   .footerInner{
     max-width:920px;
@@ -283,25 +280,40 @@
     gap:10px;
     align-items:center;
     justify-content:space-between;
-    flex-wrap:wrap;
+    flex-wrap:nowrap; /* clave: no se va a 2 filas en pantallas normales */
   }
   .totals{
     display:flex;
     flex-direction:column;
-    gap:6px;
-    padding:12px 14px;
+    gap:4px;
+    padding:10px 12px;
     border-radius: 18px;
     background: rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.10);
-    min-width: 320px;
+    min-width: 280px;
+    flex: 1;
   }
-  .totals .big{font-weight:1100; font-size:22px;}
-  .totals .small{color:rgba(255,255,255,.85); font-weight:1000; font-size:18px;}
-  .totals .extras{color:rgba(202,167,106,.95); font-weight:1100; font-size:18px;}
+  .totals .big{font-weight:1100; font-size:18px;}
+  .totals .small{color:rgba(255,255,255,.88); font-weight:1000; font-size:16px;}
 
-  .footerBtns{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+  /* Una sola línea SIEMPRE para que no agrande el footer */
+  .totals .extras{
+    color:rgba(202,167,106,.95);
+    font-weight:1100;
+    font-size:15px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .footerBtns{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex: 0 0 auto;
+  }
   .btnGhost{
-    padding:16px 18px;
+    padding:14px 16px;
     border-radius: 16px;
     background: rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.10);
@@ -310,21 +322,21 @@
     cursor:pointer;
     transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
-    min-width: 120px;
+    min-width: 110px;
   }
   .btnGhost:active{
     transform: translateY(1px) scale(.98);
     filter:brightness(.95);
   }
   .btnWA{
-    padding:16px 20px;
+    padding:14px 18px;
     border-radius: 16px;
     background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
     border:1px solid rgba(202,167,106,.55);
     color:#1a140b;
     font-weight:1200;
     cursor:pointer;
-    min-width: 260px;
+    min-width: 230px;
     text-align:center;
     transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
@@ -335,14 +347,16 @@
     box-shadow: 0 0 0 3px rgba(202,167,106,.22);
   }
 
+  /* En mobile sí puede bajar a 2 filas, pero controlado y con espacio reservado */
   @media (max-width:520px){
-    .totals{min-width: 100%;}
+    :root{
+      --imgH: 230px;
+      --footerSafe: 156px; /* reserva extra solo en pantallas chicas */
+    }
+    .footerInner{flex-wrap:wrap;}
+    .totals{min-width:100%;}
     .footerBtns{width:100%; justify-content:space-between;}
-    .btnWA{flex:1;}
-    .name{font-size:26px;}
-    .meta{font-size:17px;}
-    .qty{font-size:16px;}
-    :root{ --imgH: 240px; } /* un pelo más compacto en pantallas chicas */
+    .btnWA{flex:1; min-width:unset;}
   }
 
   /* ===== Modal para agrandar foto ===== */
@@ -392,7 +406,7 @@
   .modalImgWrap img{
     width:100%;
     height:100%;
-    object-fit:contain; /* se ve completa */
+    object-fit:contain;
     display:block;
     background:#000;
   }
@@ -453,66 +467,30 @@
 </div>
 
 <script>
-  // WhatsApp
   const WA = "5491164194866";
 
-  // Helpers
   const fmtMoney = (n) => {
     const x = Math.round(Number(n)||0);
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
-  // Estado
   let activeTab = "combos";
-  const cart = {}; // id -> qty
+  const cart = {};
 
-  // ===== Menú =====
-  // Importante: nombres EXACTOS como están en GitHub (mayúsculas/minúsculas).
+  // IMPORTANTE: nombres EXACTOS como están en tu repo (mayúsculas/minúsculas).
   const MENU = [
     // Combos
-    {
-      id:"combo10", tab:"combos",
-      name:"Combo 10 piezas",
-      pieces:10, price:16000,
-      includesRule:"Incluye 1 salsa de soja fija",
-      composition:["4 Philadelphia","3 New York","3 California"],
-      img:""
-    },
-    {
-      id:"combo15", tab:"combos",
-      name:"Combo 15 piezas",
-      pieces:15, price:22000,
-      includesRule:"Incluye 1 salsa de soja fija",
-      composition:["5 New York","5 California","5 Buenos Aires"],
-      img:""
-    },
-    {
-      id:"combo20", tab:"combos",
-      name:"Combo 20 piezas",
-      pieces:20, price:30000,
-      includesRule:"Incluye 1 salsa de soja fija",
-      composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese salmón"],
-      img:""
-    },
-    {
-      id:"combo30", tab:"combos",
-      name:"Combo 30 piezas",
-      pieces:30, price:45000,
-      includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección",
-      composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"],
-      img:""
-    },
+    { id:"combo10", tab:"combos", name:"Combo 10 piezas", pieces:10, price:16000, includesRule:"Incluye 1 salsa de soja fija", composition:["4 Philadelphia","3 New York","3 California"], img:"" },
+    { id:"combo15", tab:"combos", name:"Combo 15 piezas", pieces:15, price:22000, includesRule:"Incluye 1 salsa de soja fija", composition:["5 New York","5 California","5 Buenos Aires"], img:"" },
+    { id:"combo20", tab:"combos", name:"Combo 20 piezas", pieces:20, price:30000, includesRule:"Incluye 1 salsa de soja fija", composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese salmón"], img:"" },
+    { id:"combo30", tab:"combos", name:"Combo 30 piezas", pieces:30, price:45000, includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección", composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"], img:"" },
 
-    // Rolls (x5)
+    // Rolls
     { id:"philadelphia", tab:"rolls", name:"Philadelphia", pieces:5, price:9000, desc:"Salmón fresco + queso crema.", img:"philadelphia.PNG" },
     { id:"buenos_aires", tab:"rolls", name:"Buenos Aires", pieces:5, price:11000, desc:"Langostino + queso + palta, con salsa BA.", img:"buenos-aires.PNG" },
     { id:"guacamole", tab:"rolls", name:"Guacamole", pieces:5, price:10500, desc:"Salmón + queso con topping de guacamole.", img:"guacamole.PNG" },
 
-    // (podés seguir sumando los que faltan)
-    { id:"newyork", tab:"rolls", name:"New York", pieces:5, price:9000, desc:"(Completá ingredientes).", img:"" },
-    { id:"california", tab:"rolls", name:"California", pieces:5, price:8500, desc:"(Completá ingredientes).", img:"" },
-
-    // Salsas/Adicionales
+    // Salsas
     { id:"soja", tab:"salsas", name:"Salsa de soja", pieces:0, price:850, desc:"Unidad.", img:"" },
     { id:"salsa_ba", tab:"salsas", name:"Salsa Buenos Aires", pieces:0, price:1300, desc:"Unidad.", img:"" },
     { id:"mostaza_miel", tab:"salsas", name:"Salsa mostaza y miel", pieces:0, price:1300, desc:"Unidad.", img:"" },
@@ -521,9 +499,7 @@
 
   const getQty = (id) => cart[id] || 0;
 
-  function haptic() {
-    try { if (navigator.vibrate) navigator.vibrate(12); } catch(e){}
-  }
+  function haptic(){ try{ if(navigator.vibrate) navigator.vibrate(12);}catch(e){} }
 
   function setTab(tab, el){
     activeTab = tab;
@@ -560,7 +536,6 @@
   function totals(){
     let totalMoney = 0;
     let totalPieces = 0;
-
     for (const [id, qty] of Object.entries(cart)){
       const item = MENU.find(x => x.id === id);
       if (!item) continue;
@@ -608,15 +583,12 @@
     let totalPieces = 0;
 
     for (const {qty, item} of entries){
-      const lineMoney = (item.price||0) * qty;
-      totalMoney += lineMoney;
-
-      const itemPieces = (item.pieces||0) * qty;
-      totalPieces += itemPieces;
+      totalMoney += (item.price||0) * qty;
+      totalPieces += (item.pieces||0) * qty;
 
       if (item.pieces > 0) {
         const xBase = item.pieces === 5 ? " x5" : "";
-        sushiLines.push(`${qty}x ${item.name}${xBase} – ${itemPieces} piezas`);
+        sushiLines.push(`${qty}x ${item.name}${xBase}`);
       } else {
         extraLines.push(`${qty}x ${item.name}`);
       }
@@ -641,12 +613,11 @@
       alert("Agregá algo al pedido 🙂");
       return;
     }
-    const msg = buildMessage();
-    const url = `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+    const url = `https://wa.me/${WA}?text=${encodeURIComponent(buildMessage())}`;
     window.open(url, "_blank");
   }
 
-  // ===== Modal imagen =====
+  // Modal imagen
   function showModal(imgSrc, caption){
     const m = document.getElementById("imgModal");
     const i = document.getElementById("modalImg");
@@ -663,7 +634,6 @@
     i.src = "";
   }
   function closeModal(e){
-    // click afuera cierra
     if (e && e.target && e.target.id === "imgModal") hideModal();
   }
 
@@ -671,7 +641,6 @@
     const price = item.price ? `$${fmtMoney(item.price)}` : "—";
     const qty = getQty(item.id);
 
-    // Imagen: completa + fondo blur para ocupar ancho del recuadro sin estirar
     const imgBlock = item.img
       ? `
         <div class="imgWrap" onclick="showModal('${item.img}', '${item.name}')">
@@ -711,15 +680,11 @@
     const root = document.getElementById("content");
     const items = MENU.filter(x => x.tab === activeTab);
 
-    const title = activeTab === "combos"
-      ? "COMBOS"
-      : (activeTab === "rolls" ? "ROLLS" : "SALSAS");
+    const title = activeTab === "combos" ? "COMBOS" : (activeTab === "rolls" ? "ROLLS" : "SALSAS");
 
     root.innerHTML = `
       <div class="sectionTitle">${title}</div>
-      <div class="grid">
-        ${items.map(cardHTML).join("")}
-      </div>
+      <div class="grid">${items.map(cardHTML).join("")}</div>
     `;
 
     updateTotals();
