@@ -1,700 +1,884 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>STELLA MARIS SUSHI</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Stella Maris Sushi</title>
 
-<style>
-  :root{
-    --bg:#0b0b0c;
-    --panel:#0f1012;
-    --card:#14151a;
-    --line:#262830;
-    --text:#f3f3f3;
-    --muted:#b7b7b7;
-    --gold:#caa76a;
-    --gold2:#8f6f3f;
-    --shadow: 0 18px 55px rgba(0,0,0,.55);
-    --radius:20px;
-
-    /* Alto de foto */
-    --imgH: 240px;
-
-    /* Altura “objetivo” del footer para reservar espacio abajo */
-    --footerSafe: 122px;
-  }
-
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;
-    background:
-      radial-gradient(1200px 700px at 50% -10%, rgba(202,167,106,.18), transparent 55%),
-      radial-gradient(900px 550px at 20% 20%, rgba(255,255,255,.06), transparent 52%),
-      var(--bg);
-    color:var(--text);
-  }
-
-  header{
-    position:fixed; top:0; left:0; right:0;
-    z-index:1000;
-    background: rgba(12,12,14,.88);
-    backdrop-filter: blur(14px);
-    border-bottom:1px solid rgba(255,255,255,.10);
-    padding:12px 14px 10px;
-  }
-
-  .wrap{max-width:920px; margin:0 auto;}
-  .brandRow{display:flex; align-items:center; gap:12px;}
-  .logo{
-    width:42px; height:42px; border-radius:16px;
-    display:grid; place-items:center;
-    color:var(--gold);
-    background:
-      radial-gradient(circle at 30% 30%, rgba(255,255,255,.14), transparent 40%),
-      linear-gradient(135deg, rgba(202,167,106,.28), rgba(202,167,106,.08));
-    border:1px solid rgba(202,167,106,.25);
-    user-select:none;
-    box-shadow: 0 12px 26px rgba(0,0,0,.35);
-  }
-  h1{
-    margin:0;
-    font-size:20px;
-    letter-spacing:.10em;
-    font-weight:1000;
-  }
-
-  .tabs{margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;}
-  .tab{
-    padding:11px 16px;
-    border-radius:18px;
-    cursor:pointer;
-    font-size:16px;
-    font-weight:900;
-    color: rgba(255,255,255,.85);
-    background: rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.10);
-    user-select:none;
-    transition: transform .08s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .tab:active{transform: translateY(1px) scale(.99);}
-  .tab.active{
-    background: rgba(202,167,106,.14);
-    border-color: rgba(202,167,106,.35);
-    box-shadow: 0 10px 24px rgba(0,0,0,.25);
-    color:#fff;
-  }
-
-  .content{
-    max-width:920px;
-    margin:0 auto;
-    padding: 112px 14px calc(var(--footerSafe) + 18px);
-  }
-
-  .sectionTitle{
-    margin: 10px 2px 12px;
-    color: rgba(202,167,106,.95);
-    letter-spacing:.55em;
-    font-weight:1000;
-    font-size: 13px;
-    text-transform: uppercase;
-  }
-
-  /* UNA COLUMNA */
-  .grid{
-    display:grid;
-    gap:14px;
-    grid-template-columns: 1fr;
-  }
-
-  .card{
-    background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
-    border:1px solid rgba(255,255,255,.10);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    overflow:hidden;
-    position:relative;
-  }
-
-  .imgWrap{
-    height: var(--imgH);
-    position:relative;
-    border-bottom:1px solid rgba(255,255,255,.08);
-    cursor: zoom-in;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .imgBg, .imgMain{
-    position:absolute; inset:0;
-    width:100%; height:100%;
-  }
-  .imgBg img{
-    width:100%; height:100%;
-    object-fit:cover;
-    filter: blur(14px) brightness(.75);
-    transform: scale(1.08);
-  }
-  .imgMain{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:10px;
-  }
-  .imgMain img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    display:block;
-  }
-  .imgOverlay{
-    position:absolute; inset:auto 0 0 0;
-    height: 44%;
-    background: linear-gradient(180deg, transparent, rgba(0,0,0,.35), rgba(0,0,0,.55));
-    pointer-events:none;
-  }
-  .imgPlaceholder{
-    height: var(--imgH);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color: rgba(255,255,255,.35);
-    font-weight:1000;
-    letter-spacing:.08em;
-    background:
-      radial-gradient(220px 140px at 20% 20%, rgba(202,167,106,.22), transparent 60%),
-      radial-gradient(220px 140px at 80% 0%, rgba(255,255,255,.06), transparent 60%),
-      rgba(0,0,0,.20);
-    border-bottom:1px solid rgba(255,255,255,.06);
-  }
-
-  .priceTag{
-    position:absolute;
-    top:12px; right:12px;
-    background: rgba(0,0,0,.55);
-    border:1px solid rgba(255,255,255,.12);
-    padding:8px 12px;
-    border-radius:999px;
-    font-weight:1100;
-    letter-spacing:.3px;
-    font-size: 18px;
-  }
-
-  .body{ padding: 14px 14px 14px; }
-  .name{
-    margin:0;
-    font-size: 26px;
-    font-weight:1100;
-    line-height:1.08;
-  }
-  .meta{
-    margin-top:8px;
-    font-size:17px;
-    color: rgba(255,255,255,.82);
-    line-height:1.25;
-  }
-  .meta b{color:#fff; font-weight:1000;}
-  .list{
-    margin:10px 0 0;
-    padding-left: 18px;
-    color: rgba(255,255,255,.78);
-    font-size: 16px;
-    line-height:1.35;
-  }
-
-  .bottomRow{
-    margin-top:12px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    padding-top: 12px;
-    border-top: 1px solid rgba(255,255,255,.08);
-  }
-
-  .qty{
-    display:flex; align-items:center; gap:10px;
-    font-size:16px;
-    color: rgba(255,255,255,.75);
-    font-weight:900;
-  }
-  .qtyPill{
-    padding:8px 14px;
-    border-radius:999px;
-    border:1px solid rgba(202,167,106,.26);
-    background: rgba(202,167,106,.08);
-    color:#fff;
-    min-width:58px;
-    text-align:center;
-    font-weight:1100;
-  }
-
-  .btns{display:flex; gap:12px; align-items:center;}
-  .btn{
-    border:none;
-    cursor:pointer;
-    user-select:none;
-    font-weight:1100;
-    padding:13px 18px;
-    border-radius: 16px;
-    background: rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.12);
-    color:#fff;
-    transition: transform .08s ease, filter .15s ease, box-shadow .15s ease, background .15s ease;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .btn:active{
-    transform: translateY(1px) scale(.98);
-    filter: brightness(.95);
-  }
-  .btn.add{
-    background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
-    border:1px solid rgba(202,167,106,.55);
-    color:#1a140b;
-    box-shadow: 0 10px 22px rgba(202,167,106,.18);
-  }
-  .btn.add:active{
-    box-shadow: 0 0 0 3px rgba(202,167,106,.25), 0 8px 18px rgba(0,0,0,.25);
-  }
-  .btn.minus{
-    width:56px;
-    text-align:center;
-    font-size:18px;
-    background: rgba(255,255,255,.04);
-  }
-
-  /* ===== Footer: MÁS BAJO y sin agrandarse ===== */
-  .footer{
-    position:fixed; left:0; right:0; bottom:0;
-    z-index:1000;
-    background: rgba(10,10,12,.90);
-    backdrop-filter: blur(12px);
-    border-top:1px solid rgba(255,255,255,.10);
-    padding:8px 12px;
-  }
-  .footerInner{
-    max-width:920px;
-    margin:0 auto;
-    display:flex;
-    gap:10px;
-    align-items:center;
-    justify-content:space-between;
-    flex-wrap:nowrap; /* clave: no se va a 2 filas en pantallas normales */
-  }
-  .totals{
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-    padding:10px 12px;
-    border-radius: 18px;
-    background: rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.10);
-    min-width: 280px;
-    flex: 1;
-  }
-  .totals .big{font-weight:1100; font-size:18px;}
-  .totals .small{color:rgba(255,255,255,.88); font-weight:1000; font-size:16px;}
-
-  /* Una sola línea SIEMPRE para que no agrande el footer */
-  .totals .extras{
-    color:rgba(202,167,106,.95);
-    font-weight:1100;
-    font-size:15px;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
-
-  .footerBtns{
-    display:flex;
-    gap:10px;
-    align-items:center;
-    flex: 0 0 auto;
-  }
-  .btnGhost{
-    padding:14px 16px;
-    border-radius: 16px;
-    background: rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.10);
-    color:#fff;
-    font-weight:1100;
-    cursor:pointer;
-    transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
-    -webkit-tap-highlight-color: transparent;
-    min-width: 110px;
-  }
-  .btnGhost:active{
-    transform: translateY(1px) scale(.98);
-    filter:brightness(.95);
-  }
-  .btnWA{
-    padding:14px 18px;
-    border-radius: 16px;
-    background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
-    border:1px solid rgba(202,167,106,.55);
-    color:#1a140b;
-    font-weight:1200;
-    cursor:pointer;
-    min-width: 230px;
-    text-align:center;
-    transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .btnWA:active{
-    transform: translateY(1px) scale(.98);
-    filter:brightness(.95);
-    box-shadow: 0 0 0 3px rgba(202,167,106,.22);
-  }
-
-  /* En mobile sí puede bajar a 2 filas, pero controlado y con espacio reservado */
-  @media (max-width:520px){
+  <style>
     :root{
-      --imgH: 230px;
-      --footerSafe: 156px; /* reserva extra solo en pantallas chicas */
-    }
-    .footerInner{flex-wrap:wrap;}
-    .totals{min-width:100%;}
-    .footerBtns{width:100%; justify-content:space-between;}
-    .btnWA{flex:1; min-width:unset;}
-  }
+      --bg:#0b0b0c;
+      --panel:#101114;
+      --card:#141518;
+      --line:#262830;
+      --text:#f3f3f3;
+      --muted:#b7b7b7;
+      --gold:#caa76a;
+      --gold2:#8f6f3f;
+      --shadow: 0 18px 55px rgba(0,0,0,.55);
+      --radius:22px;
 
-  /* ===== Modal para agrandar foto ===== */
-  .modal{
-    position:fixed; inset:0;
-    background: rgba(0,0,0,.78);
-    backdrop-filter: blur(10px);
-    z-index:5000;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:16px;
-  }
-  .modal.show{display:flex;}
-  .modalCard{
-    width:min(920px, 100%);
-    max-height: 88vh;
-    background: rgba(12,12,14,.92);
-    border:1px solid rgba(255,255,255,.12);
-    border-radius: 18px;
-    overflow:hidden;
-    box-shadow: 0 25px 70px rgba(0,0,0,.55);
-    position:relative;
-  }
-  .modalClose{
-    position:absolute;
-    top:10px; right:10px;
-    width:42px; height:42px;
-    border-radius: 14px;
-    border:1px solid rgba(255,255,255,.12);
-    background: rgba(255,255,255,.06);
-    color:#fff;
-    font-size:22px;
-    font-weight:1000;
-    cursor:pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .modalClose:active{transform: translateY(1px) scale(.98);}
-  .modalImgWrap{
-    width:100%;
-    height: min(70vh, 560px);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#000;
-  }
-  .modalImgWrap img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    display:block;
-    background:#000;
-  }
-  .modalCaption{
-    padding:12px 14px 14px;
-    color: rgba(255,255,255,.90);
-    font-weight:1000;
-    letter-spacing:.02em;
-    font-size:18px;
-    border-top:1px solid rgba(255,255,255,.10);
-  }
-</style>
+      /* Se recalculan por JS al cargar */
+      --headerH: 112px;
+      --footerH: 148px;
+    }
+
+    *{box-sizing:border-box}
+    html, body {height:100%}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(1200px 700px at 50% -10%, rgba(202,167,106,.18), transparent 55%),
+        radial-gradient(900px 550px at 20% 20%, rgba(255,255,255,.06), transparent 52%),
+        var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ===== Header fijo (solo título + solapas) ===== */
+    header{
+      position:fixed; top:0; left:0; right:0;
+      z-index:1000;
+      background: rgba(15,16,18,.92);
+      backdrop-filter: blur(12px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding: 14px 14px 12px;
+      padding-top: calc(14px + env(safe-area-inset-top));
+    }
+    .wrap{max-width:560px; margin:0 auto;}
+
+    .brandRow{display:flex; align-items:center; gap:12px;}
+    .logo{
+      width:44px; height:44px; border-radius:16px;
+      display:grid; place-items:center;
+      color:var(--gold);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.14), transparent 40%),
+        linear-gradient(135deg, rgba(202,167,106,.28), rgba(202,167,106,.08));
+      border:1px solid rgba(202,167,106,.25);
+      user-select:none;
+      flex:0 0 auto;
+    }
+    h1{
+      margin:0;
+      font-size:24px;
+      letter-spacing:.12em;
+      font-weight:1000;
+      text-transform:uppercase;
+      line-height:1.05;
+    }
+
+    .tabs{
+      margin-top:12px;
+      display:flex;
+      gap:12px;
+    }
+    .tab{
+      flex:1;
+      text-align:center;
+      padding:12px 10px;
+      border-radius:18px;
+      cursor:pointer;
+      font-size:18px;
+      font-weight:1000;
+      color: rgba(255,255,255,.88);
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+      user-select:none;
+      transition: transform .10s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tab:active{
+      transform: translateY(1px) scale(.99);
+      box-shadow: 0 0 0 3px rgba(202,167,106,.10) inset;
+    }
+    .tab.active{
+      background: rgba(202,167,106,.16);
+      border-color: rgba(202,167,106,.40);
+      color:#fff;
+      box-shadow:
+        0 0 0 2px rgba(202,167,106,.12) inset,
+        0 10px 30px rgba(0,0,0,.35);
+    }
+
+    /* ===== Contenido (una sola columna siempre) ===== */
+    .content{
+      max-width:560px;
+      margin:0 auto;
+      padding: calc(var(--headerH) + 12px) 14px calc(var(--footerH) + 16px) 14px;
+    }
+
+    .sectionTitle{
+      margin: 10px 4px 12px;
+      color: rgba(202,167,106,.92);
+      letter-spacing:.55em;
+      font-weight:1000;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .grid{
+      display:grid;
+      gap:16px;
+      grid-template-columns: 1fr; /* 1 columna SIEMPRE */
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    /* ===== Imagen: completa, sin estirar, con laterales difuminados ===== */
+    .imgBox{
+      height: 230px; /* ajustado para que entre “justo” con footer */
+      position:relative;
+      border-bottom:1px solid rgba(255,255,255,.07);
+      background: rgba(0,0,0,.18);
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .imgBlur{
+      position:absolute; inset:0;
+      background-size: cover;
+      background-position: center;
+      filter: blur(16px) brightness(.70);
+      transform: scale(1.12);
+      opacity:.85;
+    }
+
+    .imgFade{
+      position:absolute; inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.08) 55%, rgba(0,0,0,.40));
+      pointer-events:none;
+    }
+
+    .imgMain{
+      position:absolute; inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 14px;
+    }
+    .imgMain img{
+      height:100%;
+      max-height: 210px;
+      width:auto;
+      max-width: 100%;
+      object-fit: contain; /* NO estira */
+      display:block;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.45);
+    }
+
+    .imgPlaceholder{
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:1000;
+      color: rgba(255,255,255,.25);
+      letter-spacing:.08em;
+      text-transform: uppercase;
+    }
+
+    .priceTag{
+      position:absolute;
+      top:12px; right:12px;
+      background: rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 14px;
+      border-radius:999px;
+      font-weight:1100;
+      font-size:24px;
+      letter-spacing:.6px;
+      z-index:2;
+      box-shadow: 0 10px 25px rgba(0,0,0,.35);
+    }
+
+    .body{padding: 14px 16px 16px;}
+
+    .name{
+      margin:0;
+      font-size:44px;
+      font-weight:1100;
+      line-height:1.05;
+      letter-spacing:.01em;
+    }
+
+    .meta{
+      margin-top:8px;
+      font-size:20px;
+      color: rgba(255,255,255,.78);
+      line-height:1.25;
+    }
+    .meta b{color: rgba(255,255,255,.95); font-weight:1100;}
+
+    .divider{
+      margin:14px 0;
+      height:1px;
+      background: rgba(255,255,255,.10);
+    }
+
+    .list{
+      margin: 10px 0 0;
+      padding-left: 22px;
+      color: rgba(255,255,255,.78);
+      font-size: 20px;
+      line-height:1.35;
+    }
+
+    .bottomRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .qtyLabel{
+      color: rgba(255,255,255,.70);
+      font-weight:900;
+      font-size:22px;
+    }
+
+    .qtyPill{
+      display:inline-block;
+      margin-left:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      border:1px solid rgba(202,167,106,.35);
+      background: rgba(202,167,106,.12);
+      color:#fff;
+      min-width:72px;
+      text-align:center;
+      font-weight:1100;
+      font-size:22px;
+      box-shadow: 0 0 0 2px rgba(202,167,106,.08) inset;
+    }
+
+    .btns{display:flex; gap:12px; align-items:center;}
+    .btn{
+      border:none;
+      cursor:pointer;
+      user-select:none;
+      font-weight:1100;
+      border-radius: 18px;
+      color:#fff;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .10s ease, filter .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+
+    .btn.minus{
+      width:74px;
+      height:64px;
+      font-size:32px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: 0 8px 18px rgba(0,0,0,.25);
+    }
+
+    .btn.add{
+      width:190px;
+      height:64px;
+      font-size:24px;
+      background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
+      border:1px solid rgba(202,167,106,.55);
+      color:#1a140b;
+      box-shadow:
+        0 12px 26px rgba(0,0,0,.30),
+        0 0 0 2px rgba(202,167,106,.10) inset;
+    }
+
+    /* “Se nota que se tocó” */
+    .btn:active{
+      transform: translateY(2px) scale(.985);
+      filter: brightness(.92);
+      box-shadow:
+        0 0 0 4px rgba(202,167,106,.16),
+        0 10px 22px rgba(0,0,0,.35);
+    }
+
+    /* ===== Footer fijo (compacto + NO tapa contenido) ===== */
+    .footer{
+      position:fixed; left:0; right:0; bottom:0;
+      z-index:1000;
+      background: rgba(10,10,12,.88);
+      backdrop-filter: blur(12px);
+      border-top:1px solid rgba(255,255,255,.10);
+      padding:12px 12px;
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    }
+    .footerInner{
+      max-width:560px;
+      margin:0 auto;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .totals{
+      padding:16px 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .totals .big{
+      font-weight:1100;
+      font-size:34px;
+      letter-spacing:.01em;
+    }
+    .totals .small{
+      margin-top:8px;
+      color: rgba(255,255,255,.88);
+      font-weight:1100;
+      font-size:34px;
+    }
+    .totals .extrasLine{
+      margin-top:10px;
+      color: rgba(202,167,106,.95);
+      font-weight:1100;
+      font-size:30px;
+    }
+    .totals .extrasLine span{
+      color: rgba(255,255,255,.80);
+      font-weight:1000;
+    }
+
+    .footerBtns{
+      display:flex;
+      gap:12px;
+    }
+
+    .btnGhost{
+      flex:0 0 150px;
+      height:70px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+      color:#fff;
+      font-weight:1100;
+      font-size:24px;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 10px 22px rgba(0,0,0,.22);
+      transition: transform .10s ease, filter .15s ease, box-shadow .15s ease;
+    }
+
+    .btnWA{
+      flex:1;
+      height:70px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(202,167,106,.95), rgba(143,111,63,.95));
+      border:1px solid rgba(202,167,106,.55);
+      color:#1a140b;
+      font-weight:1200;
+      font-size:24px;
+      cursor:pointer;
+      text-align:center;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow:
+        0 14px 28px rgba(0,0,0,.28),
+        0 0 0 2px rgba(202,167,106,.10) inset;
+      transition: transform .10s ease, filter .15s ease, box-shadow .15s ease;
+    }
+
+    .btnGhost:active, .btnWA:active{
+      transform: translateY(2px) scale(.985);
+      filter: brightness(.92);
+      box-shadow:
+        0 0 0 4px rgba(202,167,106,.16),
+        0 12px 26px rgba(0,0,0,.35);
+    }
+
+    /* ===== Modal para agrandar foto ===== */
+    .modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.72);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:2000;
+      padding: 18px;
+      padding-top: calc(18px + env(safe-area-inset-top));
+      padding-bottom: calc(18px + env(safe-area-inset-bottom));
+    }
+    .modal.show{display:flex;}
+    .modalCard{
+      width:min(560px, 100%);
+      border-radius: 22px;
+      overflow:hidden;
+      background: rgba(18,19,22,.92);
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow: 0 22px 70px rgba(0,0,0,.65);
+    }
+    .modalTop{
+      position:relative;
+      padding: 12px 14px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .modalTitle{
+      font-weight:1100;
+      font-size:18px;
+      color: rgba(255,255,255,.92);
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .modalClose{
+      border:none;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:#fff;
+      font-weight:1100;
+      border-radius: 14px;
+      padding: 10px 12px;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .modalClose:active{
+      transform: translateY(1px) scale(.99);
+      filter: brightness(.92);
+    }
+    .modalImgWrap{
+      background:#000;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 14px;
+    }
+    .modalImgWrap img{
+      width:100%;
+      height:auto;
+      max-height: 72vh;
+      object-fit: contain;
+      border-radius: 16px;
+    }
+
+    /* Ajustes extra en pantallas chicas */
+    @media (max-width:420px){
+      h1{font-size:22px;}
+      .tab{font-size:17px;}
+      .name{font-size:40px;}
+      .priceTag{font-size:22px;}
+      .imgBox{height: 220px;}
+      .imgMain img{max-height: 200px;}
+      .totals .big{font-size:32px;}
+      .totals .small{font-size:32px;}
+      .totals .extrasLine{font-size:28px;}
+      .btnGhost{flex-basis: 135px;}
+    }
+  </style>
 </head>
 
 <body>
-<header>
-  <div class="wrap">
-    <div class="brandRow">
-      <div class="logo">✦</div>
-      <div>
+  <header id="header">
+    <div class="wrap">
+      <div class="brandRow">
+        <div class="logo">✦</div>
         <h1>STELLA MARIS SUSHI</h1>
       </div>
-    </div>
 
-    <div class="tabs">
-      <div class="tab active" onclick="setTab('combos', this)">Combos</div>
-      <div class="tab" onclick="setTab('rolls', this)">Rolls</div>
-      <div class="tab" onclick="setTab('salsas', this)">Salsas</div>
+      <div class="tabs" role="tablist" aria-label="Menú">
+        <div class="tab active" onclick="setTab('combos', this)">Combos</div>
+        <div class="tab" onclick="setTab('rolls', this)">Rolls</div>
+        <div class="tab" onclick="setTab('salsas', this)">Salsas</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="content" id="content"></main>
+
+  <footer class="footer" id="footer">
+    <div class="footerInner">
+      <div class="totals">
+        <div class="big" id="totalMoney">Total: $0</div>
+        <div class="small" id="totalPieces">Total de piezas: 0</div>
+        <div class="extrasLine">Salsas/Adicionales: <span id="extrasSummary">—</span></div>
+      </div>
+
+      <div class="footerBtns">
+        <button class="btnGhost" id="btnClear">Vaciar</button>
+        <button class="btnWA" id="btnWA">Confirmar por WhatsApp</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal para agrandar foto -->
+  <div class="modal" id="imgModal" aria-hidden="true">
+    <div class="modalCard" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
+      <div class="modalTop">
+        <div class="modalTitle" id="modalTitle">—</div>
+        <button class="modalClose" id="modalClose">Cerrar</button>
+      </div>
+      <div class="modalImgWrap">
+        <img id="modalImg" src="" alt="">
+      </div>
     </div>
   </div>
-</header>
 
-<div class="content" id="content"></div>
+  <script>
+    // WhatsApp
+    const WA = "5491164194866";
 
-<div class="footer">
-  <div class="footerInner">
-    <div class="totals">
-      <div class="big" id="totalMoney">Total: $0</div>
-      <div class="small" id="totalPieces">Total de piezas: 0</div>
-      <div class="extras" id="totalExtras">Salsas/Adicionales: —</div>
-    </div>
-    <div class="footerBtns">
-      <button class="btnGhost" id="btnClear">Vaciar</button>
-      <button class="btnWA" id="btnWA">Confirmar por WhatsApp</button>
-    </div>
-  </div>
-</div>
+    const fmtMoney = (n) => {
+      const x = Math.round(Number(n)||0);
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    };
 
-<!-- Modal de imagen -->
-<div class="modal" id="imgModal" onclick="closeModal(event)">
-  <div class="modalCard" role="dialog" aria-modal="true" onclick="event.stopPropagation()">
-    <button class="modalClose" onclick="hideModal()" aria-label="Cerrar">×</button>
-    <div class="modalImgWrap">
-      <img id="modalImg" src="" alt="">
-    </div>
-    <div class="modalCaption" id="modalCaption"></div>
-  </div>
-</div>
+    // Estado
+    let activeTab = "combos";
+    const cart = {}; // id -> qty
 
-<script>
-  const WA = "5491164194866";
+    // ===== MENU =====
+    // Nota: GitHub Pages es "case sensitive": uso los nombres EXACTOS de tus archivos subidos.
+    const MENU = [
+      // ---- Combos
+      {
+        id:"combo10", tab:"combos",
+        name:"Combo 10 piezas",
+        pieces:10,
+        price:16000,
+        includesRule:"Incluye 1 salsa de soja fija",
+        composition:["4 Philadelphia","3 New York","3 California"],
+        img:""
+      },
+      {
+        id:"combo15", tab:"combos",
+        name:"Combo 15 piezas",
+        pieces:15,
+        price:22000,
+        includesRule:"Incluye 1 salsa de soja fija",
+        composition:["5 New York","5 California","5 Buenos Aires"],
+        img:""
+      },
+      {
+        id:"combo20", tab:"combos",
+        name:"Combo 20 piezas",
+        pieces:20,
+        price:30000,
+        includesRule:"Incluye 1 salsa de soja fija",
+        composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese salmón"],
+        img:""
+      },
+      {
+        id:"combo30", tab:"combos",
+        name:"Combo 30 piezas",
+        pieces:30,
+        price:45000,
+        includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección",
+        composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"],
+        img:""
+      },
+      {
+        id:"combo40", tab:"combos",
+        name:"Combo 40 piezas",
+        pieces:40,
+        price:55000,
+        includesRule:"Incluye 2 salsas de soja fijas + 1 salsa a elección",
+        composition:["10 Philadelphia","10 Maki de salmón","10 Niguiris de salmón","10 New York"],
+        img:""
+      },
+      {
+        id:"combo50", tab:"combos",
+        name:"Combo 50 piezas",
+        pieces:50,
+        price:70000,
+        includesRule:"Incluye 2 salsas de soja fijas + 2 salsas a elección",
+        composition:["10 Ebi langostino","10 Crazy","10 Salmón crispy","10 Tamago","10 Keki"],
+        img:""
+      },
 
-  const fmtMoney = (n) => {
-    const x = Math.round(Number(n)||0);
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  };
+      // ---- Rolls (x5)
+      { id:"philadelphia", tab:"rolls", name:"Philadelphia", pieces:5, price:9000,  desc:"Salmón fresco + queso crema.", img:"philadelphia.PNG" },
+      { id:"buenos_aires", tab:"rolls", name:"Buenos Aires", pieces:5, price:11000, desc:"Langostino + queso + palta, con salsa BA.", img:"buenos-aires.PNG" },
+      { id:"guacamole", tab:"rolls", name:"Guacamole", pieces:5, price:10500, desc:"Salmón + queso con topping de guacamole.", img:"guacamole.PNG" },
 
-  let activeTab = "combos";
-  const cart = {};
+      // (los demás los dejé como estaban, sin imagen por ahora)
+      { id:"newyork", tab:"rolls", name:"New York", pieces:5, price:9000,  desc:"(Completá ingredientes).", img:"" },
+      { id:"california", tab:"rolls", name:"California", pieces:5, price:8500, desc:"(Completá ingredientes).", img:"" },
+      { id:"alaska", tab:"rolls", name:"Alaska", pieces:5, price:9500, desc:"(Completá ingredientes).", img:"" },
+      { id:"vegetariano", tab:"rolls", name:"Vegetariano", pieces:5, price:7500, desc:"Zanahoria + palta + queso.", img:"" },
 
-  // IMPORTANTE: nombres EXACTOS como están en tu repo (mayúsculas/minúsculas).
-  const MENU = [
-    // Combos
-    { id:"combo10", tab:"combos", name:"Combo 10 piezas", pieces:10, price:16000, includesRule:"Incluye 1 salsa de soja fija", composition:["4 Philadelphia","3 New York","3 California"], img:"" },
-    { id:"combo15", tab:"combos", name:"Combo 15 piezas", pieces:15, price:22000, includesRule:"Incluye 1 salsa de soja fija", composition:["5 New York","5 California","5 Buenos Aires"], img:"" },
-    { id:"combo20", tab:"combos", name:"Combo 20 piezas", pieces:20, price:30000, includesRule:"Incluye 1 salsa de soja fija", composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese salmón"], img:"" },
-    { id:"combo30", tab:"combos", name:"Combo 30 piezas", pieces:30, price:45000, includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección", composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"], img:"" },
+      // ---- Salsas (unidad)
+      { id:"soja", tab:"salsas", name:"Salsa de soja", pieces:0, price:850,  desc:"Unidad.", img:"" },
+      { id:"salsa_ba", tab:"salsas", name:"Salsa Buenos Aires", pieces:0, price:1300, desc:"Unidad.", img:"" },
+      { id:"mostaza_miel", tab:"salsas", name:"Salsa mostaza y miel", pieces:0, price:1300, desc:"Unidad.", img:"" },
+      { id:"maracuya", tab:"salsas", name:"Salsa maracuyá", pieces:0, price:1500, desc:"Unidad.", img:"" },
+      { id:"guacamole_salsa", tab:"salsas", name:"Salsa guacamole", pieces:0, price:850,  desc:"Unidad.", img:"" },
+      { id:"criolla", tab:"salsas", name:"Criolla", pieces:0, price:750, desc:"Unidad.", img:"" },
+      { id:"jengibre", tab:"salsas", name:"Jengibre", pieces:0, price:750, desc:"Unidad.", img:"" },
+      { id:"pepino", tab:"salsas", name:"Pepino", pieces:0, price:700, desc:"Unidad.", img:"" },
+    ];
 
-    // Rolls
-    { id:"philadelphia", tab:"rolls", name:"Philadelphia", pieces:5, price:9000, desc:"Salmón fresco + queso crema.", img:"philadelphia.PNG" },
-    { id:"buenos_aires", tab:"rolls", name:"Buenos Aires", pieces:5, price:11000, desc:"Langostino + queso + palta, con salsa BA.", img:"buenos-aires.PNG" },
-    { id:"guacamole", tab:"rolls", name:"Guacamole", pieces:5, price:10500, desc:"Salmón + queso con topping de guacamole.", img:"guacamole.PNG" },
+    const getQty = (id) => cart[id] || 0;
 
-    // Salsas
-    { id:"soja", tab:"salsas", name:"Salsa de soja", pieces:0, price:850, desc:"Unidad.", img:"" },
-    { id:"salsa_ba", tab:"salsas", name:"Salsa Buenos Aires", pieces:0, price:1300, desc:"Unidad.", img:"" },
-    { id:"mostaza_miel", tab:"salsas", name:"Salsa mostaza y miel", pieces:0, price:1300, desc:"Unidad.", img:"" },
-    { id:"maracuya", tab:"salsas", name:"Salsa maracuyá", pieces:0, price:1500, desc:"Unidad.", img:"" }
-  ];
-
-  const getQty = (id) => cart[id] || 0;
-
-  function haptic(){ try{ if(navigator.vibrate) navigator.vibrate(12);}catch(e){} }
-
-  function setTab(tab, el){
-    activeTab = tab;
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-    el.classList.add("active");
-    render();
-    window.scrollTo({top:0, behavior:"smooth"});
-  }
-
-  function add(id){
-    cart[id] = (cart[id]||0) + 1;
-    haptic();
-    updateTotals();
-    updateQtyPills();
-  }
-
-  function sub(id){
-    if (!cart[id]) return;
-    cart[id] -= 1;
-    if (cart[id] <= 0) delete cart[id];
-    haptic();
-    updateTotals();
-    updateQtyPills();
-  }
-
-  function clearCart(){
-    if (Object.keys(cart).length === 0) return;
-    if (!confirm("¿Vaciar el pedido?")) return;
-    for (const k of Object.keys(cart)) delete cart[k];
-    updateTotals();
-    render();
-  }
-
-  function totals(){
-    let totalMoney = 0;
-    let totalPieces = 0;
-    for (const [id, qty] of Object.entries(cart)){
-      const item = MENU.find(x => x.id === id);
-      if (!item) continue;
-      totalMoney += (item.price||0) * qty;
-      totalPieces += (item.pieces||0) * qty;
+    function haptic() {
+      try { if (navigator.vibrate) navigator.vibrate(12); } catch(e){}
     }
-    return { totalMoney, totalPieces };
-  }
 
-  function extrasSummary(){
-    const extras = Object.entries(cart)
-      .map(([id, qty]) => ({qty, item: MENU.find(x => x.id === id)}))
-      .filter(x => x.item && x.item.pieces === 0)
-      .sort((a,b)=> a.item.name.localeCompare(b.item.name));
+    function setTab(tab, el){
+      activeTab = tab;
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      el.classList.add("active");
+      render();
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
 
-    if (!extras.length) return "—";
-    return extras.map(x => `${x.qty}x ${x.item.name}`).join(" · ");
-  }
+    function add(id){
+      cart[id] = (cart[id]||0) + 1;
+      haptic();
+      updateTotals();
+      updateQtyPills();
+    }
 
-  function updateTotals(){
-    const { totalMoney, totalPieces } = totals();
-    document.getElementById("totalMoney").textContent = `Total: $${fmtMoney(totalMoney)}`;
-    document.getElementById("totalPieces").textContent = `Total de piezas: ${totalPieces}`;
-    document.getElementById("totalExtras").textContent = `Salsas/Adicionales: ${extrasSummary()}`;
-  }
+    function sub(id){
+      if (!cart[id]) return;
+      cart[id] -= 1;
+      if (cart[id] <= 0) delete cart[id];
+      haptic();
+      updateTotals();
+      updateQtyPills();
+    }
 
-  function updateQtyPills(){
-    MENU.forEach(item => {
-      const pill = document.getElementById("qty-"+item.id);
-      if (!pill) return;
-      pill.textContent = (getQty(item.id)) + "x";
-    });
-  }
+    function clearCart(){
+      if (Object.keys(cart).length === 0) return;
+      if (!confirm("¿Vaciar el pedido?")) return;
+      for (const k of Object.keys(cart)) delete cart[k];
+      updateTotals();
+      render();
+    }
 
-  function buildMessage(){
-    const sushiLines = [];
-    const extraLines = [];
+    function totals(){
+      let totalMoney = 0;
+      let totalPieces = 0;
 
-    const entries = Object.entries(cart)
-      .map(([id, qty]) => ({ qty, item: MENU.find(x => x.id === id) }))
-      .filter(x => x.item)
-      .sort((a,b) => (a.item.tab + a.item.name).localeCompare(b.item.tab + b.item.name));
-
-    let totalMoney = 0;
-    let totalPieces = 0;
-
-    for (const {qty, item} of entries){
-      totalMoney += (item.price||0) * qty;
-      totalPieces += (item.pieces||0) * qty;
-
-      if (item.pieces > 0) {
-        const xBase = item.pieces === 5 ? " x5" : "";
-        sushiLines.push(`${qty}x ${item.name}${xBase}`);
-      } else {
-        extraLines.push(`${qty}x ${item.name}`);
+      for (const [id, qty] of Object.entries(cart)){
+        const item = MENU.find(x => x.id === id);
+        if (!item) continue;
+        totalMoney += (item.price||0) * qty;
+        totalPieces += (item.pieces||0) * qty;
       }
+      return { totalMoney, totalPieces };
     }
 
-    let msg = "";
-    msg += "Hola Stella Maris Sushi 🍣\n\n";
-    msg += "Quiero pedir:\n\n";
-    msg += "🍣 Sushi:\n";
-    msg += (sushiLines.length ? sushiLines.join("\n") : "—") + "\n\n";
-    if (extraLines.length){
-      msg += "🥣 Salsas y adicionales:\n";
-      msg += extraLines.join("\n") + "\n\n";
+    function buildExtrasSummary(){
+      const extras = Object.entries(cart)
+        .map(([id, qty]) => ({ qty, item: MENU.find(x => x.id === id) }))
+        .filter(x => x.item && x.item.tab === "salsas" && x.item.pieces === 0)
+        .sort((a,b) => a.item.name.localeCompare(b.item.name));
+
+      if (!extras.length) return "—";
+      return extras.map(x => `${x.qty}x ${x.item.name}`).join(" · ");
     }
-    msg += `Total de piezas: ${totalPieces}\n`;
-    msg += `Total: $${fmtMoney(totalMoney)}\n`;
-    return msg;
-  }
 
-  function sendWA(){
-    if (Object.keys(cart).length === 0){
-      alert("Agregá algo al pedido 🙂");
-      return;
+    function updateTotals(){
+      const { totalMoney, totalPieces } = totals();
+      document.getElementById("totalMoney").textContent = `Total: $${fmtMoney(totalMoney)}`;
+      document.getElementById("totalPieces").textContent = `Total de piezas: ${totalPieces}`;
+      document.getElementById("extrasSummary").textContent = buildExtrasSummary();
     }
-    const url = `https://wa.me/${WA}?text=${encodeURIComponent(buildMessage())}`;
-    window.open(url, "_blank");
-  }
 
-  // Modal imagen
-  function showModal(imgSrc, caption){
-    const m = document.getElementById("imgModal");
-    const i = document.getElementById("modalImg");
-    const c = document.getElementById("modalCaption");
-    i.src = imgSrc;
-    i.alt = caption || "";
-    c.textContent = caption || "";
-    m.classList.add("show");
-  }
-  function hideModal(){
-    const m = document.getElementById("imgModal");
-    const i = document.getElementById("modalImg");
-    m.classList.remove("show");
-    i.src = "";
-  }
-  function closeModal(e){
-    if (e && e.target && e.target.id === "imgModal") hideModal();
-  }
+    function updateQtyPills(){
+      MENU.forEach(item => {
+        const pill = document.getElementById("qty-"+item.id);
+        if (!pill) return;
+        pill.textContent = (getQty(item.id)) + "x";
+      });
+    }
 
-  function cardHTML(item){
-    const price = item.price ? `$${fmtMoney(item.price)}` : "—";
-    const qty = getQty(item.id);
+    function buildMessage(){
+      const sushiLines = [];
+      const extraLines = [];
 
-    const imgBlock = item.img
-      ? `
-        <div class="imgWrap" onclick="showModal('${item.img}', '${item.name}')">
-          <div class="imgBg"><img src="${item.img}" alt=""></div>
-          <div class="imgMain"><img src="${item.img}" alt="${item.name}"></div>
-          <div class="imgOverlay"></div>
-        </div>`
-      : `<div class="imgPlaceholder">Foto (pendiente)</div>`;
+      const entries = Object.entries(cart)
+        .map(([id, qty]) => ({ qty, item: MENU.find(x => x.id === id) }))
+        .filter(x => x.item)
+        .sort((a,b) => (a.item.tab + a.item.name).localeCompare(b.item.tab + b.item.name));
 
-    const base = (item.pieces === 5) ? "x5 piezas" : (item.pieces > 0 ? `${item.pieces} piezas` : "Unidad");
+      let totalMoney = 0;
+      let totalPieces = 0;
 
-    const desc = item.tab === "combos"
-      ? `<div class="meta"><b>${base}</b> · ${item.includesRule || ""}</div>
-         ${(item.composition && item.composition.length) ? `<ul class="list">${item.composition.map(x=>`<li>${x}</li>`).join("")}</ul>` : ""}`
-      : `<div class="meta"><b>${base}</b> · ${item.desc || ""}</div>`;
+      for (const {qty, item} of entries){
+        const lineMoney = (item.price||0) * qty;
+        totalMoney += lineMoney;
 
-    return `
-      <div class="card">
-        <div class="priceTag">${price}</div>
-        ${imgBlock}
-        <div class="body">
-          <p class="name">${item.name}</p>
-          ${desc}
-          <div class="bottomRow">
-            <div class="qty">En tu pedido: <span class="qtyPill" id="qty-${item.id}">${qty}x</span></div>
-            <div class="btns">
-              <button class="btn minus" onclick="sub('${item.id}')">–</button>
-              <button class="btn add" onclick="add('${item.id}')">Agregar</button>
+        const itemPieces = (item.pieces||0) * qty;
+        totalPieces += itemPieces;
+
+        if (item.pieces > 0) {
+          const xBase = item.pieces === 5 ? " x5" : "";
+          sushiLines.push(`${qty}x ${item.name}${xBase} – ${itemPieces} piezas`);
+        } else {
+          extraLines.push(`${qty}x ${item.name}`);
+        }
+      }
+
+      let msg = "";
+      msg += "Hola Stella Maris Sushi 🍣\n\n";
+      msg += "Quiero pedir:\n\n";
+      msg += "🍣 Sushi:\n";
+      msg += (sushiLines.length ? sushiLines.join("\n") : "—") + "\n\n";
+      if (extraLines.length){
+        msg += "🥣 Salsas y adicionales:\n";
+        msg += extraLines.join("\n") + "\n\n";
+      }
+      msg += `Total de piezas: ${totalPieces}\n`;
+      msg += `Total: $${fmtMoney(totalMoney)}\n`;
+      return msg;
+    }
+
+    function sendWA(){
+      if (Object.keys(cart).length === 0){
+        alert("Agregá algo al pedido 🙂");
+        return;
+      }
+      const msg = buildMessage();
+      const url = `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+      window.open(url, "_blank");
+    }
+
+    // ===== Modal imagen =====
+    const imgModal = document.getElementById("imgModal");
+    const modalImg = document.getElementById("modalImg");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalClose = document.getElementById("modalClose");
+
+    function openImg(src, title){
+      if (!src) return;
+      modalImg.src = src;
+      modalImg.alt = title || "";
+      modalTitle.textContent = title || "";
+      imgModal.classList.add("show");
+      imgModal.setAttribute("aria-hidden", "false");
+    }
+    function closeImg(){
+      imgModal.classList.remove("show");
+      imgModal.setAttribute("aria-hidden", "true");
+      modalImg.src = "";
+    }
+    modalClose.addEventListener("click", closeImg);
+    imgModal.addEventListener("click", (e) => {
+      if (e.target === imgModal) closeImg();
+    });
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeImg();
+    });
+
+    function cardHTML(item){
+      const price = item.price ? `$${fmtMoney(item.price)}` : "—";
+      const qty = getQty(item.id);
+
+      const base =
+        item.pieces === 5 ? "x5 piezas" :
+        item.pieces > 0 ? `${item.pieces} piezas` :
+        "Unidad";
+
+      let descHTML = "";
+      if (item.tab === "combos"){
+        descHTML = `
+          <div class="meta"><b>${base}</b> · ${item.includesRule || ""}</div>
+          ${(item.composition && item.composition.length)
+            ? `<ul class="list">${item.composition.map(x=>`<li>${x}</li>`).join("")}</ul>`
+            : ""
+          }
+        `;
+      } else {
+        descHTML = `<div class="meta"><b>${base}</b> · ${item.desc || ""}</div>`;
+      }
+
+      let imgHTML = "";
+      if (item.img){
+        const safeSrc = item.img;
+        imgHTML = `
+          <div class="imgBox" onclick="openImg('${safeSrc}', '${item.name.replace(/'/g,"\\'")}')">
+            <div class="imgBlur" style="background-image:url('${safeSrc}')"></div>
+            <div class="imgMain"><img src="${safeSrc}" alt="${item.name}"></div>
+            <div class="imgFade"></div>
+          </div>
+        `;
+      } else {
+        imgHTML = `
+          <div class="imgBox">
+            <div class="imgPlaceholder">Foto (pendiente)</div>
+          </div>
+        `;
+      }
+
+      return `
+        <section class="card">
+          <div class="priceTag">${price}</div>
+          ${imgHTML}
+          <div class="body">
+            <h2 class="name">${item.name}</h2>
+            ${descHTML}
+            <div class="divider"></div>
+
+            <div class="bottomRow">
+              <div class="qtyLabel">
+                En tu pedido:
+                <span class="qtyPill" id="qty-${item.id}">${qty}x</span>
+              </div>
+              <div class="btns">
+                <button class="btn minus" onclick="sub('${item.id}')">–</button>
+                <button class="btn add" onclick="add('${item.id}')">Agregar</button>
+              </div>
             </div>
           </div>
+        </section>
+      `;
+    }
+
+    function render(){
+      const root = document.getElementById("content");
+      const items = MENU.filter(x => x.tab === activeTab);
+
+      const title =
+        activeTab === "combos" ? "COMBOS" :
+        activeTab === "rolls" ? "ROLLS" :
+        "SALSAS";
+
+      root.innerHTML = `
+        <div class="sectionTitle">${title}</div>
+        <div class="grid">
+          ${items.map(cardHTML).join("")}
         </div>
-      </div>
-    `;
-  }
+      `;
 
-  function render(){
-    const root = document.getElementById("content");
-    const items = MENU.filter(x => x.tab === activeTab);
+      updateTotals();
+      updateQtyPills();
 
-    const title = activeTab === "combos" ? "COMBOS" : (activeTab === "rolls" ? "ROLLS" : "SALSAS");
+      // Recalcular alturas para que nunca tape (especial iPhone / cambios de texto)
+      recalcBars();
+    }
 
-    root.innerHTML = `
-      <div class="sectionTitle">${title}</div>
-      <div class="grid">${items.map(cardHTML).join("")}</div>
-    `;
+    function recalcBars(){
+      const h = document.getElementById("header");
+      const f = document.getElementById("footer");
+      if (!h || !f) return;
 
-    updateTotals();
-    updateQtyPills();
-  }
+      const headerH = Math.ceil(h.getBoundingClientRect().height);
+      const footerH = Math.ceil(f.getBoundingClientRect().height);
 
-  document.getElementById("btnClear").addEventListener("click", clearCart);
-  document.getElementById("btnWA").addEventListener("click", sendWA);
+      document.documentElement.style.setProperty("--headerH", headerH + "px");
+      document.documentElement.style.setProperty("--footerH", footerH + "px");
+    }
 
-  render();
-</script>
+    document.getElementById("btnClear").addEventListener("click", clearCart);
+    document.getElementById("btnWA").addEventListener("click", sendWA);
+
+    window.addEventListener("resize", recalcBars);
+
+    render();
+  </script>
 </body>
 </html>
