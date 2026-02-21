@@ -53,17 +53,18 @@
   }
   h1{margin:0; font-size:18px; letter-spacing:.2px; font-weight:950;}
 
-  /* Tabs: ahora scrolleables (porque son 8) */
+  /* Tabs: 1 línea con scroll horizontal (8 solapas) */
   .tabs{
     margin-top:12px;
     display:flex;
     gap:10px;
     flex-wrap:nowrap;
     overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
-    padding-bottom:2px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
-  .tabs::-webkit-scrollbar{height:0}
+  .tabs::-webkit-scrollbar{display:none;}
+
   .tab{
     flex:0 0 auto;
     text-align:center;
@@ -79,15 +80,12 @@
     transition: transform .08s ease, background .15s ease, border-color .15s ease, filter .15s ease;
     -webkit-tap-highlight-color: transparent;
 
-    /* profundidad base (que parezca botón siempre) */
     box-shadow:
-      0 10px 22px rgba(0,0,0,.28),
+      0 10px 22px rgba(0,0,0,.22),
       inset 0 1px 0 rgba(255,255,255,.08);
   }
   .tab.is-pressed,
-  .tab:active{
-    transform: translateY(3px) scale(.965);
-    filter:brightness(.90);
+  .tab:active{transform: translateY(3px) scale(.965); filter:brightness(.90);
     box-shadow:
       inset 0 3px 14px rgba(0,0,0,.55),
       0 3px 10px rgba(0,0,0,.20);
@@ -114,7 +112,7 @@
     text-transform: uppercase;
   }
 
-  /* SIEMPRE 1 columna */
+  /* 1 columna siempre */
   .grid{
     display:grid;
     gap:14px;
@@ -132,7 +130,7 @@
 
   /* Imagen: sin estirar + se ve toda */
   .imgBox{
-    height: 250px; /* base para “x5” */
+    height: 250px; /* default (rolls/varios) */
     background:
       radial-gradient(220px 140px at 20% 20%, rgba(202,167,106,.14), transparent 60%),
       radial-gradient(220px 140px at 80% 0%, rgba(255,255,255,.06), transparent 60%),
@@ -154,13 +152,6 @@
     background: rgba(0,0,0,.55);
   }
 
-  /* Combos / Salsas / Adicionales: un poco más bajo */
-  .card[data-tab="combos"] .imgBox,
-  .card[data-tab="salsas"] .imgBox,
-  .card[data-tab="adicionales"] .imgBox{
-    height: 200px;
-  }
-
   /* Hint "tocar para agrandar" (arriba-izquierda) */
   .tapHint{
     position:absolute;
@@ -175,6 +166,13 @@
     border:1px solid rgba(255,255,255,.12);
     user-select:none;
     pointer-events:none;
+  }
+
+  /* Combos / Salsas / Adicionales: un poco más baja */
+  .card[data-tab="combos"] .imgBox,
+  .card[data-tab="salsas"] .imgBox,
+  .card[data-tab="adicionales"] .imgBox{
+    height: 200px;
   }
 
   .priceTag{
@@ -241,7 +239,6 @@
     transition: transform .08s ease, filter .15s ease, background .15s ease, box-shadow .15s ease;
     -webkit-tap-highlight-color: transparent;
 
-    /* profundidad base */
     box-shadow:
       0 10px 22px rgba(0,0,0,.28),
       inset 0 1px 0 rgba(255,255,255,.08);
@@ -402,6 +399,7 @@
       0 10px 22px rgba(0,0,0,.28),
       inset 0 1px 0 rgba(255,255,255,.08);
   }
+  .closeBtn.is-pressed,
   .closeBtn:active{
     transform: translateY(3px) scale(.965);
     filter:brightness(.90);
@@ -411,10 +409,7 @@
   }
 
   /* modal imagen */
-  .modalBodyImg{
-    padding: 0;
-    background: rgba(0,0,0,.55);
-  }
+  .modalBodyImg{ padding: 0; background: rgba(0,0,0,.55); }
   .modalBodyImg img{
     width:100%;
     max-height: 78vh;
@@ -424,20 +419,14 @@
   }
 
   /* modal salsas */
-  .modalBody{
-    padding: 14px 14px 12px;
-  }
+  .modalBody{ padding: 14px 14px 12px; }
   .helper{
     color: rgba(255,255,255,.78);
     font-size:13px;
     font-weight:850;
     margin: 0 0 10px;
   }
-  .chips{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-  }
+  .chips{ display:flex; flex-direction:column; gap:10px; }
   .chip{
     display:flex;
     align-items:center;
@@ -451,30 +440,14 @@
     user-select:none;
   }
   .chip.is-pressed{
-    transform: translateY(3px) scale(.965);
-    filter:brightness(.90);
-    box-shadow:
-      inset 0 3px 14px rgba(0,0,0,.55),
-      0 3px 10px rgba(0,0,0,.20);
+    transform: translateY(3px) scale(.99);
+    filter:brightness(.92);
+    box-shadow: inset 0 3px 14px rgba(0,0,0,.45);
   }
-  .chip .left{
-    display:flex;
-    flex-direction:column;
-    gap:3px;
-  }
-  .chip .nm{
-    font-weight:950;
-    font-size:14px;
-  }
-  .chip .pr{
-    font-size:12.5px;
-    color: rgba(255,255,255,.70);
-    font-weight:850;
-  }
-  .chip input{
-    width:20px; height:20px;
-    accent-color: var(--gold);
-  }
+  .chip .left{ display:flex; flex-direction:column; gap:3px; }
+  .chip .nm{ font-weight:950; font-size:14px; }
+  .chip input{ width:20px; height:20px; accent-color: var(--gold); }
+
   .modalBottom{
     padding: 12px 14px 14px;
     border-top:1px solid rgba(255,255,255,.10);
@@ -495,6 +468,7 @@
       0 10px 22px rgba(0,0,0,.28),
       inset 0 1px 0 rgba(255,255,255,.08);
   }
+  .btnModal.is-pressed,
   .btnModal:active{
     transform: translateY(3px) scale(.965);
     filter:brightness(.90);
@@ -519,18 +493,20 @@
   <div class="wrap">
     <div class="brandRow">
       <div class="logo">✦</div>
-      <div><h1>Sushi Stella Maris</h1></div>
+      <div>
+        <h1>Sushi Stella Maris</h1>
+      </div>
     </div>
 
     <div class="tabs" id="tabs">
-      <div class="tab active" data-tab="combos" onclick="setTab('combos', this)">Combos</div>
-      <div class="tab" data-tab="rolls" onclick="setTab('rolls', this)">Rolls</div>
-      <div class="tab" data-tab="especiales" onclick="setTab('especiales', this)">Especiales</div>
-      <div class="tab" data-tab="makis" onclick="setTab('makis', this)">Makis</div>
-      <div class="tab" data-tab="nigiris" onclick="setTab('nigiris', this)">Nigiris</div>
-      <div class="tab" data-tab="sashimis" onclick="setTab('sashimis', this)">Sashimis</div>
-      <div class="tab" data-tab="salsas" onclick="setTab('salsas', this)">Salsas</div>
-      <div class="tab" data-tab="adicionales" onclick="setTab('adicionales', this)">Adicionales</div>
+      <div class="tab active" onclick="setTab('combos', this)">Combos</div>
+      <div class="tab" onclick="setTab('rolls', this)">Rolls</div>
+      <div class="tab" onclick="setTab('especiales', this)">Especiales</div>
+      <div class="tab" onclick="setTab('makis', this)">Makis</div>
+      <div class="tab" onclick="setTab('nigiris', this)">Nigiris</div>
+      <div class="tab" onclick="setTab('sashimis', this)">Sashimis</div>
+      <div class="tab" onclick="setTab('salsas', this)">Salsas</div>
+      <div class="tab" onclick="setTab('adicionales', this)">Adicionales</div>
     </div>
   </div>
 </header>
@@ -542,7 +518,7 @@
     <div class="totals">
       <div class="big" id="totalMoney">Total: $0</div>
       <div class="small" id="totalPieces">Total de piezas: 0</div>
-      <div class="small" id="totalExtras">Salsas y adicionales: 0</div>
+      <div class="small" id="totalExtrasCount">Salsas y adicionales: 0</div>
     </div>
     <div class="footerBtns">
       <button class="btnGhost" id="btnClear">Vaciar</button>
@@ -591,136 +567,134 @@
   };
 
   let activeTab = "combos";
+
+  // carrito de productos pagos (sushi + salsas/adicionales pagos)
   const cart = {}; // id -> qty
 
-  // Para que al bajar un combo, se “descuenten” también las salsas a elección (sin cargo)
-  // comboSaucePicks[comboId] = [ ['salsa_ba'], ['maracuya','mostaza_miel'], ... ]  (uno por cada combo agregado)
-  const comboSaucePicks = {};
+  // salsas "a elección" (sin cargo) acumuladas cuando elegís en combos
+  const freeChoiceSauces = {}; // sauceId -> qty
 
   // ===== MENÚ =====
-  // NOTA: si algún precio te falta, dejalo en 0 y después lo completás.
+  // Nota: tus imágenes van en la raíz del repo. Ej: philadelphia.PNG (con mayúsculas)
+  // Si un ítem no tiene img, queda placeholder.
   const MENU = [
-    // ===== Combos (NO x5) =====
+    // ===== COMBOS =====
     {
       id:"combo10", tab:"combos",
       name:"Combo 10 piezas",
       pieces:10,
-      price:0,
-      composition:[],
-      img:"",
-      includedSoja: 1,   // sin cargo
-      chooseSauces: 0
+      price:16000,
+      includesSoy:1,
+      chooseSauces:0, // a elección
+      includesRule:"Incluye 1 salsa de soja fija",
+      composition:["(completás si querés)"],
+      img:""
     },
     {
       id:"combo15", tab:"combos",
       name:"Combo 15 piezas",
       pieces:15,
-      price:0,
-      composition:[],
-      img:"",
-      includedSoja: 1,
-      chooseSauces: 0
+      price:22000,
+      includesSoy:1,
+      chooseSauces:0,
+      includesRule:"Incluye 1 salsa de soja fija",
+      composition:["(completás si querés)"],
+      img:""
     },
     {
       id:"combo20", tab:"combos",
       name:"Combo 20 piezas",
       pieces:20,
-      price:0,
-      composition:[],
-      img:"",
-      includedSoja: 1,
-      chooseSauces: 0
+      price:30000,
+      includesSoy:1,
+      chooseSauces:0,
+      includesRule:"Incluye 1 salsa de soja fija",
+      composition:["(completás si querés)"],
+      img:""
     },
     {
       id:"combo30", tab:"combos",
       name:"Combo 30 piezas",
       pieces:30,
-      price:0,
-      composition:[],
-      img:"",
-      includedSoja: 1,
-      chooseSauces: 1
+      price:45000,
+      includesSoy:1,
+      chooseSauces:1,
+      includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección",
+      composition:["(completás si querés)"],
+      img:""
     },
     {
       id:"combo40", tab:"combos",
       name:"Combo 40 piezas",
       pieces:40,
-      price:0,
-      composition:[],
-      img:"",
-      includedSoja: 2,
-      chooseSauces: 1
+      price:55000,
+      includesSoy:2,
+      chooseSauces:1,
+      includesRule:"Incluye 2 salsas de soja fijas + 1 salsa a elección",
+      composition:["(completás si querés)"],
+      img:""
     },
     {
       id:"combo50", tab:"combos",
       name:"Combo 50 piezas",
       pieces:50,
-      price:0,
-      composition:[],
-      img:"",
-      includedSoja: 2,
-      chooseSauces: 2
+      price:70000,
+      includesSoy:2,
+      chooseSauces:2,
+      includesRule:"Incluye 2 salsas de soja fijas + 2 salsas a elección",
+      composition:["(completás si querés)"],
+      img:""
     },
 
-    // ===== Rolls (x5) =====
-    { id:"avocado", tab:"rolls", name:"Avocado", pieces:5, price:0, desc:"(completás ingredientes).", img:"avocado.PNG" },
-    { id:"philadelphia", tab:"rolls", name:"Philadelphia", pieces:5, price:0, desc:"(completás ingredientes).", img:"philadelphia.PNG" },
-    { id:"newyork", tab:"rolls", name:"New York", pieces:5, price:0, desc:"(completás ingredientes).", img:"new-york.PNG" },
-    { id:"california", tab:"rolls", name:"California", pieces:5, price:0, desc:"(completás ingredientes).", img:"california.PNG" },
-    { id:"alaska", tab:"rolls", name:"Alaska", pieces:5, price:0, desc:"(completás ingredientes).", img:"alaska.PNG" },
-    { id:"alaska_ahumado", tab:"rolls", name:"Alaska ahumado", pieces:5, price:0, desc:"(completás ingredientes).", img:"alaska-ahumado.PNG" },
-    { id:"cheese_langostino", tab:"rolls", name:"Cheese langostino", pieces:5, price:0, desc:"(completás ingredientes).", img:"cheese-langostino.PNG" },
-    { id:"buenos_aires", tab:"rolls", name:"Buenos Aires", pieces:5, price:0, desc:"(completás ingredientes).", img:"buenos-aires.PNG" },
-    { id:"vegetariano", tab:"rolls", name:"Vegetariano", pieces:5, price:0, desc:"(completás ingredientes).", img:"vegetariano.PNG" },
+    // ===== ROLLS (x5) =====
+    { id:"avocado", tab:"rolls", type:"sushi", name:"Avocado", pieces:5, price:9000, desc:"(completás)", img:"avocado.PNG" },
+    { id:"philadelphia", tab:"rolls", type:"sushi", name:"Philadelphia", pieces:5, price:9000, desc:"Salmón fresco + queso crema.", img:"philadelphia.PNG" },
+    { id:"newyork", tab:"rolls", type:"sushi", name:"New York", pieces:5, price:9000, desc:"Salmón y palta.", img:"new-york.PNG" },
+    { id:"california", tab:"rolls", type:"sushi", name:"California", pieces:5, price:8500, desc:"Kanikama y palta.", img:"california.PNG" },
+    { id:"alaska", tab:"rolls", type:"sushi", name:"Alaska", pieces:5, price:9500, desc:"Salmón, palta y queso.", img:"alaska.PNG" },
+    { id:"alaska_ahumado", tab:"rolls", type:"sushi", name:"Alaska ahumado", pieces:5, price:10000, desc:"Salmón ahumado, palta y queso.", img:"alaska-ahumado.PNG" },
+    { id:"cheese_langostino", tab:"rolls", type:"sushi", name:"Cheese langostino", pieces:5, price:11000, desc:"(completás)", img:"cheese-langostino.PNG" },
+    { id:"buenos_aires", tab:"rolls", type:"sushi", name:"Buenos Aires", pieces:5, price:11000, desc:"Langostinos, palta y queso cubierto con salsa Bs As.", img:"buenos-aires.PNG" },
+    { id:"vegetariano", tab:"rolls", type:"sushi", name:"Vegetariano", pieces:5, price:7500, desc:"Zanahoria + palta + queso.", img:"vegetariano.PNG" },
 
-    // ===== Especiales (x5) =====
-    { id:"rocoto", tab:"especiales", name:"Rocoto", pieces:5, price:0, desc:"(completás ingredientes).", img:"rocoto.PNG" },
-    { id:"tamago", tab:"especiales", name:"Tamago", pieces:5, price:0, desc:"(completás ingredientes).", img:"tamago.PNG" },
-    { id:"salmon_crispy", tab:"especiales", name:"Salmón crispy", pieces:5, price:0, desc:"(completás ingredientes).", img:"salmon-crispy.PNG" },
-    { id:"ebi_langostino", tab:"especiales", name:"Ebi langostino", pieces:5, price:0, desc:"(completás ingredientes).", img:"ebi-langostino.PNG" },
-    { id:"paradise", tab:"especiales", name:"Paradise", pieces:5, price:0, desc:"(completás ingredientes).", img:"paradise.PNG" },
-    { id:"guacamole_roll", tab:"especiales", name:"Guacamole", pieces:5, price:0, desc:"(completás ingredientes).", img:"guacamole.PNG" },
-    { id:"japan_flowers", tab:"especiales", name:"Japan flowers", pieces:5, price:0, desc:"(completás ingredientes).", img:"japan-flowers.PNG" },
-    { id:"crazy", tab:"especiales", name:"Crazy", pieces:5, price:0, desc:"(completás ingredientes).", img:"crazy.PNG" },
+    // ===== ESPECIALES (x5) =====
+    { id:"rocoto_roll", tab:"especiales", type:"sushi", name:"Rocoto", pieces:5, price:10500, desc:"(completás)", img:"rocoto.PNG" },
+    { id:"tamago_roll", tab:"especiales", type:"sushi", name:"Tamago", pieces:5, price:8000, desc:"(completás)", img:"tamago.PNG" },
+    { id:"salmon_crispy", tab:"especiales", type:"sushi", name:"Salmón crispy", pieces:5, price:10500, desc:"Salmón y palta, topping de batata.", img:"salmon-crispy.PNG" },
+    { id:"ebi_langostino", tab:"especiales", type:"sushi", name:"Ebi langostino", pieces:5, price:11500, desc:"Langostino rebozado cubierto con salsa Bs As.", img:"ebi-langostino.PNG" },
+    { id:"paradise", tab:"especiales", type:"sushi", name:"Paradise", pieces:5, price:11500, desc:"Queso cubierto con salmón, topping de batata.", img:"paradise.PNG" },
+    { id:"guacamole", tab:"especiales", type:"sushi", name:"Guacamole", pieces:5, price:10500, desc:"Salmón y queso con topping de guacamole.", img:"guacamole.PNG" },
+    { id:"japan_flowers", tab:"especiales", type:"sushi", name:"Japan flowers", pieces:5, price:11000, desc:"Queso y palta cubierto con salmón.", img:"japan-flowers.PNG" },
+    { id:"crazy", tab:"especiales", type:"sushi", name:"Crazy", pieces:5, price:10500, desc:"Palta y queso envuelto en salmón.", img:"crazy.PNG" },
 
-    // ===== Makis (x5) =====
-    { id:"maki_salmon", tab:"makis", name:"Maki de salmón", pieces:5, price:0, desc:"(completás ingredientes).", img:"maki-de-salmon.PNG" },
-    { id:"maki_atun", tab:"makis", name:"Maki de atún", pieces:5, price:0, desc:"(completás ingredientes).", img:"maki-de-atun.PNG" },
-    { id:"maki_salmon_ahumado", tab:"makis", name:"Maki de salmón ahumado", pieces:5, price:0, desc:"(completás ingredientes).", img:"maki-de-salmon-ahumado.PNG" },
-    { id:"maki_veggie", tab:"makis", name:"Maki veggie", pieces:5, price:0, desc:"(completás ingredientes).", img:"maki-veggie.PNG" },
+    // ===== MAKIS (x5) =====
+    { id:"maki_salmon", tab:"makis", type:"sushi", name:"Maki de salmón", pieces:5, price:8500, desc:"Salmón.", img:"maki-de-salmon.PNG" },
+    { id:"maki_atun", tab:"makis", type:"sushi", name:"Maki de atún", pieces:5, price:8000, desc:"Atún.", img:"maki-de-atun.PNG" },
+    { id:"maki_salmon_ahumado", tab:"makis", type:"sushi", name:"Maki de salmón ahumado", pieces:5, price:9500, desc:"Salmón ahumado.", img:"maki-de-salmon-ahumado.PNG" },
+    { id:"maki_veggie", tab:"makis", type:"sushi", name:"Maki veggie", pieces:5, price:7500, desc:"Vegetales.", img:"maki-veggie.PNG" },
 
-    // ===== Nigiris (x5) =====
-    { id:"niguiri_salmon", tab:"nigiris", name:"Nigiri de salmón", pieces:5, price:0, desc:"(completás ingredientes).", img:"niguiri-de-salmon.PNG" },
-    { id:"niguiri_salmon_ahumado", tab:"nigiris", name:"Nigiri de salmón ahumado", pieces:5, price:0, desc:"(completás ingredientes).", img:"niguiri-de-salmón-ahumado.PNG" },
-    { id:"keki", tab:"nigiris", name:"Keki", pieces:5, price:0, desc:"(completás ingredientes).", img:"keki.PNG" },
+    // ===== NIGIRIS (x5) =====
+    { id:"niguiri_salmon", tab:"nigiris", type:"sushi", name:"Nigiri de salmón", pieces:5, price:8500, desc:"Arroz + salmón.", img:"niguiri-de-salmon.PNG" },
+    { id:"niguiri_salmon_ah", tab:"nigiris", type:"sushi", name:"Nigiri de salmón ahumado", pieces:5, price:9500, desc:"Arroz + salmón ahumado.", img:"niguiri-de-salmón-ahumado.PNG" },
+    { id:"keki_niguiri", tab:"nigiris", type:"sushi", name:"Keki", pieces:5, price:10500, desc:"(completás)", img:"keki.PNG" },
 
-    // ===== Sashimis (x5) =====
-    { id:"sashimi_salmon", tab:"sashimis", name:"Sashimi de salmón", pieces:5, price:0, desc:"(completás ingredientes).", img:"sashimi-de-salmon.PNG" },
-    { id:"sashimi_flameado", tab:"sashimis", name:"Sashimi de salmón flameado", pieces:5, price:0, desc:"(completás ingredientes).", img:"sashimi-de-salmón-flameado.PNG" },
+    // ===== SASHIMIS (x5) =====
+    { id:"sashimi_salmon", tab:"sashimis", type:"sushi", name:"Sashimi de salmón", pieces:5, price:10000, desc:"Cortes de salmón.", img:"sashimi-de-salmon.PNG" },
+    { id:"sashimi_flameado", tab:"sashimis", type:"sushi", name:"Sashimi de salmón flameado", pieces:5, price:11500, desc:"Cortes flameados.", img:"sashimi-de-salmón-flameado.PNG" },
 
-    // ===== Salsas (x1) =====
-    { id:"soja", tab:"salsas", name:"Salsa de soja", pieces:0, price:0, desc:"Unidad.", img:"salsa-de-soja.PNG" },
-    { id:"salsa_ba", tab:"salsas", name:"Salsa Buenos Aires", pieces:0, price:0, desc:"Unidad.", img:"salsa-buenos-aires.PNG" },
-    { id:"mostaza_miel", tab:"salsas", name:"Salsa mostaza y miel", pieces:0, price:0, desc:"Unidad.", img:"salsa-de-mostaza-y-miel.PNG" },
-    { id:"maracuya", tab:"salsas", name:"Salsa maracuyá", pieces:0, price:0, desc:"Unidad.", img:"salsa-de-maracuya.PNG" },
+    // ===== SALSAS (x1) =====
+    // Estas 4 también se usan para “a elección”
+    { id:"salsa_ba", tab:"salsas", type:"extra", name:"Salsa Buenos Aires", pieces:0, price:1300, desc:"Unidad.", img:"salsa-buenos-aires.PNG" },
+    { id:"maracuya", tab:"salsas", type:"extra", name:"Salsa maracuyá", pieces:0, price:1500, desc:"Unidad.", img:"salsa-de-maracuya.PNG" },
+    { id:"mostaza_miel", tab:"salsas", type:"extra", name:"Salsa mostaza y miel", pieces:0, price:1300, desc:"Unidad.", img:"salsa-de-mostaza-y-miel.PNG" },
+    { id:"soja", tab:"salsas", type:"extra", name:"Salsa de soja", pieces:0, price:850, desc:"Unidad.", img:"salsa-de-soja.PNG" },
 
-    // ===== Adicionales (x1) =====
-    { id:"jengibre", tab:"adicionales", name:"Jengibre", pieces:0, price:0, desc:"Unidad.", img:"jengibre.PNG" },
-    { id:"pepino", tab:"adicionales", name:"Pepino", pieces:0, price:0, desc:"Unidad.", img:"pepino.PNG" },
-    { id:"criolla", tab:"adicionales", name:"Criolla", pieces:0, price:0, desc:"Unidad.", img:"criolla.PNG" },
-    { id:"guacamole_extra", tab:"adicionales", name:"Guacamole (adicional)", pieces:0, price:0, desc:"Unidad.", img:"salsa-guacamole.PNG" }
+    // ===== ADICIONALES (x1) =====
+    { id:"guacamole_extra", tab:"adicionales", type:"extra", name:"Guacamole", pieces:0, price:850, desc:"Unidad.", img:"salsa-guacamole.PNG" },
+    { id:"criolla", tab:"adicionales", type:"extra", name:"Criolla", pieces:0, price:750, desc:"Unidad.", img:"criolla.PNG" },
+    { id:"jengibre", tab:"adicionales", type:"extra", name:"Jengibre", pieces:0, price:750, desc:"Unidad.", img:"jengibre.PNG" },
+    { id:"pepino", tab:"adicionales", type:"extra", name:"Pepino", pieces:0, price:700, desc:"Unidad.", img:"pepino.PNG" }
   ];
-
-  const TAB_TITLES = {
-    combos: "COMBOS",
-    rolls: "ROLLS",
-    especiales: "ESPECIALES",
-    makis: "MAKIS",
-    nigiris: "NIGIRIS",
-    sashimis: "SASHIMIS",
-    salsas: "SALSAS",
-    adicionales: "ADICIONALES"
-  };
 
   const getQty = (id) => cart[id] || 0;
 
@@ -728,7 +702,7 @@
     try { if (navigator.vibrate) navigator.vibrate(12); } catch(e){}
   }
 
-  // ===== Botones “se nota presionado” (también iPhone) =====
+  // ===== Feedback de “presionado” =====
   function bindPressFeedback(){
     const pressables = document.querySelectorAll("button, .tab, .chip");
     pressables.forEach(el=>{
@@ -763,12 +737,16 @@
     if (e.target.id === "imgModal") closeImgModal();
   });
 
-  // ===== Modal elección salsas (SIN CARGO) =====
+  // ===== Modal elección salsas (SOLO 4 opciones) =====
+  // Opciones permitidas por vos:
+  // Salsa Buenos Aires / Salsa maracuyá / Salsa mostaza y miel / Salsa de soja
+  const SAUCE_CHOICE_IDS = ["salsa_ba","maracuya","mostaza_miel","soja"];
+
   let pendingSaucePick = null; // {comboId, count}
 
-  // SOLO estas opciones (lo pediste así):
-  // Salsa Buenos Aires / Maracuyá / Mostaza y miel / Soja
-  const CHOICE_SAUCES = ["salsa_ba","maracuya","mostaza_miel","soja"];
+  function sauceChoicePool(){
+    return MENU.filter(x => SAUCE_CHOICE_IDS.includes(x.id));
+  }
 
   function openSauceModal(comboItem){
     const count = Number(comboItem.chooseSauces||0);
@@ -777,15 +755,12 @@
     pendingSaucePick = { comboId: comboItem.id, count };
 
     document.getElementById("sauceModalTitle").textContent =
-      count === 1 ? "Elegí 1 salsa (sin cargo)" : `Elegí ${count} salsas (sin cargo)`;
+      count === 1 ? "Elegí 1 salsa" : `Elegí ${count} salsas`;
 
     document.getElementById("sauceHelper").textContent =
-      count === 1 ? "Elegí 1 salsa. (Soja también puede ser opción)" : `Elegí ${count} salsas. (Soja también puede ser opción)`;
+      count === 1 ? "Elegí 1 salsa (sin cargo)." : `Elegí ${count} salsas (sin cargo).`;
 
-    const pool = CHOICE_SAUCES
-      .map(id => MENU.find(x => x.id === id))
-      .filter(Boolean);
-
+    const pool = sauceChoicePool();
     const list = document.getElementById("sauceList");
 
     list.innerHTML = pool.map(s=>{
@@ -793,14 +768,13 @@
         <label class="chip">
           <div class="left">
             <div class="nm">${s.name}</div>
-            <div class="pr">Sin cargo</div>
           </div>
           <input type="checkbox" value="${s.id}" />
         </label>
       `;
     }).join("");
 
-    // limitar selección
+    // limitar cantidad exacta
     list.querySelectorAll("input").forEach(inp=>{
       inp.addEventListener("change", ()=>{
         const checked = [...list.querySelectorAll("input:checked")];
@@ -834,12 +808,14 @@
       return;
     }
 
-    // Guardamos elecciones “sin cargo” asociadas a ESE combo agregado
-    if (!comboSaucePicks[pendingSaucePick.comboId]) comboSaucePicks[pendingSaucePick.comboId] = [];
-    comboSaucePicks[pendingSaucePick.comboId].push(ids);
+    // sumar a elección (sin cargo)
+    ids.forEach(id=>{
+      freeChoiceSauces[id] = (freeChoiceSauces[id]||0) + 1;
+    });
 
     haptic();
     updateTotals();
+    updateQtyPills();
     closeSauceModal(false);
   }
 
@@ -850,7 +826,6 @@
     updateTotals();
     updateQtyPills();
 
-    // si es combo con “salsa a elección”, abrir selector
     const item = MENU.find(x=>x.id===id);
     if (item && item.tab==="combos" && Number(item.chooseSauces||0) > 0){
       openSauceModal(item);
@@ -859,16 +834,6 @@
 
   function sub(id){
     if (!cart[id]) return;
-
-    // Si baja un combo, también baja sus elecciones “sin cargo” asociadas (la última agregada)
-    const item = MENU.find(x=>x.id===id);
-    if (item && item.tab==="combos" && Number(item.chooseSauces||0)>0){
-      const stack = comboSaucePicks[id] || [];
-      if (stack.length){
-        stack.pop();
-      }
-    }
-
     cart[id] -= 1;
     if (cart[id] <= 0) delete cart[id];
     haptic();
@@ -877,12 +842,25 @@
   }
 
   function clearCart(){
-    if (Object.keys(cart).length === 0) return;
+    if (Object.keys(cart).length === 0 && Object.keys(freeChoiceSauces).length === 0) return;
     if (!confirm("¿Vaciar el pedido?")) return;
+
     for (const k of Object.keys(cart)) delete cart[k];
-    for (const k of Object.keys(comboSaucePicks)) delete comboSaucePicks[k];
+    for (const k of Object.keys(freeChoiceSauces)) delete freeChoiceSauces[k];
+
     updateTotals();
     render();
+  }
+
+  function computeIncludedSoyCount(){
+    // soja incluida por combos (sin cargo)
+    let n = 0;
+    for (const [id, qty] of Object.entries(cart)){
+      const item = MENU.find(x => x.id === id);
+      if (!item || item.tab !== "combos") continue;
+      n += (Number(item.includesSoy||0) * qty);
+    }
+    return n;
   }
 
   function totals(){
@@ -898,55 +876,34 @@
     return { totalMoney, totalPieces };
   }
 
-  function countIncludedSoja(){
-    // Solo por combos, sin cargo
+  function extrasCountTotal(){
+    // “Salsas y adicionales” SOLO número, incluyendo:
+    // - soja incluida (por combos)
+    // - salsas a elección (sin cargo)
+    // - salsas/adicionales pagas (cart items con pieces==0)
     let n = 0;
+
+    // pagas (tab salsas/adicionales)
     for (const [id, qty] of Object.entries(cart)){
-      const it = MENU.find(x=>x.id===id);
-      if (it && it.tab==="combos"){
-        n += (Number(it.includedSoja||0) * qty);
-      }
+      const item = MENU.find(x=>x.id===id);
+      if (item && item.pieces === 0) n += qty;
     }
+
+    // a elección
+    for (const qty of Object.values(freeChoiceSauces)){
+      n += Number(qty||0);
+    }
+
+    // incluidas (soja)
+    n += computeIncludedSoyCount();
     return n;
-  }
-
-  function getFreeChoiceSaucesSummary(){
-    // suma todas las elecciones sin cargo guardadas
-    const counts = {}; // sauceId -> qty
-    for (const [comboId, stack] of Object.entries(comboSaucePicks)){
-      (stack||[]).forEach(pickArr=>{
-        (pickArr||[]).forEach(sid=>{
-          counts[sid] = (counts[sid]||0) + 1;
-        });
-      });
-    }
-    return counts;
-  }
-
-  function countPaidExtras(){
-    // Todo lo que esté en tabs salsas/adicionales y se agregó manualmente (con precio)
-    let n = 0;
-    for (const [id, qty] of Object.entries(cart)){
-      const it = MENU.find(x=>x.id===id);
-      if (!it) continue;
-      if (it.pieces === 0) n += qty;
-    }
-    return n;
-  }
-
-  function countTotalExtras(){
-    // “Salsas y adicionales” = incluidas (soja) + a elección (sin cargo) + adicionales pagas (salsas/adicionales seleccionadas)
-    const included = countIncludedSoja();
-    const freeChoices = Object.values(getFreeChoiceSaucesSummary()).reduce((a,b)=>a+(b||0),0);
-    const paid = countPaidExtras();
-    return included + freeChoices + paid;
   }
 
   function updateTotals(){
     const { totalMoney, totalPieces } = totals();
     document.getElementById("totalMoney").textContent = `Total: $${fmtMoney(totalMoney)}`;
     document.getElementById("totalPieces").textContent = `Total de piezas: ${totalPieces}`;
-    document.getElementById("totalExtras").textContent = `Salsas y adicionales: ${countTotalExtras()}`;
+    document.getElementById("totalExtrasCount").textContent = `Salsas y adicionales: ${extrasCountTotal()}`;
   }
 
   function updateQtyPills(){
@@ -957,83 +914,93 @@
     });
   }
 
-  // ===== WhatsApp (con precios por línea + secciones de salsas) =====
+  // ===== WhatsApp =====
   function buildMessage(){
-    // líneas sushi (todo con piezas > 0)
-    const sushi = Object.entries(cart)
-      .map(([id, qty]) => ({qty, item: MENU.find(x=>x.id===id)}))
-      .filter(x => x.item && x.item.pieces > 0)
-      .sort((a,b) => a.item.name.localeCompare(b.item.name));
+    // separar Sushi vs Extras pagos
+    const sushiEntries = [];
+    const paidExtrasEntries = [];
 
-    // extras pagas (salsas/adicionales seleccionadas manualmente) -> pieces == 0
-    const paidExtras = Object.entries(cart)
-      .map(([id, qty]) => ({qty, item: MENU.find(x=>x.id===id)}))
-      .filter(x => x.item && x.item.pieces === 0)
-      .sort((a,b) => a.item.name.localeCompare(b.item.name));
+    let totalMoney = 0;
+    let totalPieces = 0;
 
-    const { totalMoney, totalPieces } = totals();
+    // items del carrito (pagos)
+    const entries = Object.entries(cart)
+      .map(([id, qty]) => ({ qty, item: MENU.find(x => x.id === id) }))
+      .filter(x => x.item);
 
-    // Salsas incluidas (sin cargo): soja por combos
-    const includedSoja = countIncludedSoja();
+    // ordenar prolijo
+    entries.sort((a,b) => (a.item.tab + a.item.name).localeCompare(b.item.tab + b.item.name));
 
-    // Salsas a elección (sin cargo): las guardadas por modal
-    const freeChoiceCounts = getFreeChoiceSaucesSummary();
-    const freeChoiceLines = Object.entries(freeChoiceCounts)
-      .map(([sid, q]) => ({ q, item: MENU.find(x=>x.id===sid) }))
-      .filter(x => x.item && x.q>0)
-      .sort((a,b)=> a.item.name.localeCompare(b.item.name))
-      .map(x => `${x.q}x ${x.item.name}`);
+    for (const {qty, item} of entries){
+      const unit = item.price||0;
+      const subTotal = unit * qty;
+      totalMoney += subTotal;
+      totalPieces += (item.pieces||0) * qty;
 
-    // Sushi lines con precio por línea
-    const sushiLines = sushi.map(({qty, item})=>{
-      const itemPieces = (item.pieces||0) * qty;
-      const lineMoney = (item.price||0) * qty;
+      if ((item.pieces||0) > 0){
+        // Sushi (incluye combos y x5)
+        const itemPieces = (item.pieces||0) * qty;
+        const xBase = item.pieces === 5 ? " x5" : "";
+        sushiEntries.push({
+          line: `${qty}x ${item.name}${xBase} – ${itemPieces} piezas`,
+          unit,
+          subTotal
+        });
+      } else {
+        // Extras pagos
+        paidExtrasEntries.push({
+          line: `${qty}x ${item.name}`,
+          unit,
+          subTotal
+        });
+      }
+    }
 
-      // Para que no sea confuso:
-      // - Si es pieza x5: “2x Philadelphia x5 – 10 piezas – $...”
-      // - Si es combo: “2x Combo 50 piezas – 100 piezas – $...”
-      const xBase = (item.tab !== "combos") ? " x5" : "";
-      return `${qty}x ${item.name}${xBase} – ${itemPieces} piezas – $${fmtMoney(lineMoney)}`;
+    // Salsa incluida (sin cargo): soja por combos
+    const includedSoy = computeIncludedSoyCount();
+
+    // Salsa a elección (sin cargo): freeChoiceSauces
+    const choiceSaucesLines = [];
+    for (const id of SAUCE_CHOICE_IDS){
+      const q = Number(freeChoiceSauces[id]||0);
+      if (!q) continue;
+      const it = MENU.find(x=>x.id===id);
+      choiceSaucesLines.push(`${q}x ${it ? it.name : id}`);
+    }
+
+    // Salsa adicional (con precio): pagas
+    const paidLines = paidExtrasEntries.map(x=>{
+      const unitTxt = `$${fmtMoney(x.unit)}`;
+      const subTxt = `$${fmtMoney(x.subTotal)}`;
+      return `${x.line} (${unitTxt} c/u) = ${subTxt}`;
     });
 
-    // Salsas/adicionales pagas con precio por línea
-    const paidExtraLines = paidExtras.map(({qty, item})=>{
-      const lineMoney = (item.price||0) * qty;
-      return `${qty}x ${item.name} – $${fmtMoney(lineMoney)}`;
+    // Sushi lines con precios
+    const sushiLines = sushiEntries.map(x=>{
+      const unitTxt = `$${fmtMoney(x.unit)}`;
+      const subTxt = `$${fmtMoney(x.subTotal)}`;
+      return `${x.line} (${unitTxt} c/u) = ${subTxt}`;
     });
 
     let msg = "";
     msg += "Hola Stella Maris Sushi 🍣\n\n";
     msg += "Quiero pedir:\n\n";
+
     msg += "🍣 Sushi:\n";
     msg += (sushiLines.length ? sushiLines.join("\n") : "—") + "\n\n";
 
-    // Sección de salsas: 3 bloques como pediste
     msg += "🥣 Salsas:\n";
 
-    // Salsa incluida
-    if (includedSoja > 0){
-      msg += `Salsa incluida (sin cargo): ${includedSoja}x Salsa de soja\n`;
-    } else {
-      msg += `Salsa incluida (sin cargo): —\n`;
-    }
+    msg += "Salsa incluida (sin cargo):\n";
+    msg += (includedSoy > 0 ? `- ${includedSoy}x Salsa de soja\n` : "- —\n");
 
-    // Salsa a elección
-    if (freeChoiceLines.length){
-      msg += `Salsa a elección (sin cargo): ${freeChoiceLines.join(" • ")}\n`;
-    } else {
-      msg += `Salsa a elección (sin cargo): —\n`;
-    }
+    msg += "Salsa a elección (sin cargo):\n";
+    msg += (choiceSaucesLines.length ? choiceSaucesLines.map(x=>`- ${x}`).join("\n") + "\n" : "- —\n");
 
-    // Salsa adicional (paga): SOLO las que el cliente agregó manualmente en Salsas/Adicionales
-    if (paidExtraLines.length){
-      msg += "Salsa adicional:\n";
-      msg += paidExtraLines.join("\n") + "\n";
-    } else {
-      msg += "Salsa adicional: —\n";
-    }
+    msg += "Salsa adicional (con precio):\n";
+    msg += (paidLines.length ? paidLines.map(x=>`- ${x}`).join("\n") + "\n\n" : "- —\n\n");
 
-    msg += `\nTotal de piezas: ${totalPieces}\n`;
+    msg += `Total de piezas: ${totalPieces}\n`;
     msg += `Total: $${fmtMoney(totalMoney)}\n\n`;
     msg += "Retiro en el local.";
 
@@ -1056,7 +1023,7 @@
   }
 
   function cardHTML(item){
-    const price = (item.price && Number(item.price)>0) ? `$${fmtMoney(item.price)}` : "$—";
+    const price = (item.price != null) ? `$${fmtMoney(item.price)}` : "—";
     const qty = getQty(item.id);
 
     const hasImg = !!item.img;
@@ -1067,14 +1034,13 @@
          </div>`
       : `<div class="imgBox">Foto (pendiente)</div>`;
 
-    // etiqueta de piezas:
-    // - combos: “50 piezas”
-    // - todo lo demás sushi: “x5 piezas”
-    // - salsas/adicionales: “x1”
-    const base = (item.pieces === 0) ? "x1" : (item.tab === "combos" ? `${item.pieces} piezas` : "x5 piezas");
+    const base =
+      (item.pieces === 5) ? "x5 piezas" :
+      (item.pieces > 0) ? `${item.pieces} piezas` :
+      "Unidad";
 
     const desc = (item.tab === "combos")
-      ? `<div class="meta"><b>${base}</b> · ${comboRuleText(item)}</div>
+      ? `<div class="meta"><b>${base}</b> · ${item.includesRule || ""}</div>
          ${(item.composition && item.composition.length) ? `<ul class="list">${item.composition.map(x=>`<li>${x}</li>`).join("")}</ul>` : ""}`
       : `<div class="meta"><b>${base}</b> · ${item.desc || ""}</div>`;
 
@@ -1097,23 +1063,23 @@
     `;
   }
 
-  function comboRuleText(item){
-    const soja = Number(item.includedSoja||0);
-    const choose = Number(item.chooseSauces||0);
-    let parts = [];
-    if (soja>0) parts.push(`${soja} soja incluida`);
-    if (choose>0) parts.push(`${choose} a elección`);
-    return parts.length ? parts.join(" + ") : "";
-  }
-
   function render(){
     const root = document.getElementById("content");
     const items = MENU.filter(x => x.tab === activeTab);
 
-    const title = TAB_TITLES[activeTab] || activeTab.toUpperCase();
+    const titleMap = {
+      combos:"COMBOS",
+      rolls:"ROLLS",
+      especiales:"ESPECIALES",
+      makis:"MAKIS",
+      nigiris:"NIGIRIS",
+      sashimis:"SASHIMIS",
+      salsas:"SALSAS",
+      adicionales:"ADICIONALES"
+    };
 
     root.innerHTML = `
-      <div class="sectionTitle">${title}</div>
+      <div class="sectionTitle">${titleMap[activeTab] || "MENÚ"}</div>
       <div class="grid">
         ${items.map(cardHTML).join("")}
       </div>
