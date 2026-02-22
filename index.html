@@ -52,6 +52,7 @@
   }
   h1{margin:0; font-size:18px; letter-spacing:.2px; font-weight:950;}
 
+  /* Tabs: scroll horizontal */
   .tabs{
     margin-top:12px;
     display:flex;
@@ -158,6 +159,7 @@
     pointer-events:none;
   }
 
+  /* Combos y Salsas: imagen más baja */
   .card[data-tab="combos"] .imgBox,
   .card[data-tab="extras"] .imgBox{
     height: 200px;
@@ -251,6 +253,7 @@
   }
   .btn.minus{ background: rgba(255,255,255,.04); }
 
+  /* Footer fijo */
   .footer{
     position:fixed; left:0; right:0; bottom:0;
     z-index:1000;
@@ -371,6 +374,7 @@
       0 3px 10px rgba(0,0,0,.20);
   }
 
+  /* ===== Modales ===== */
   .modal{
     position:fixed;
     inset:0;
@@ -427,6 +431,7 @@
       0 3px 10px rgba(0,0,0,.20);
   }
 
+  /* modal imagen */
   .modalBodyImg{
     padding: 0;
     background: rgba(0,0,0,.55);
@@ -439,6 +444,7 @@
     background: rgba(0,0,0,.55);
   }
 
+  /* modal salsas */
   .modalBody{
     padding: 14px 14px 12px;
   }
@@ -525,6 +531,7 @@
       inset 0 1px 0 rgba(255,255,255,.20);
   }
 
+  /* ===== Modal pedido (preview) ===== */
   .orderBody{
     padding: 14px;
     display:flex;
@@ -610,6 +617,7 @@
   </div>
 </div>
 
+<!-- Modal Imagen -->
 <div class="modal" id="imgModal">
   <div class="modalCard">
     <div class="modalTop">
@@ -622,23 +630,25 @@
   </div>
 </div>
 
+<!-- Modal Elección de Salsas para combos -->
 <div class="modal" id="sauceModal">
   <div class="modalCard">
     <div class="modalTop">
       <div class="ttl" id="sauceModalTitle">Elegí tus salsas</div>
-      <button class="closeBtn" onclick="closeSauceModal()">×</button>
+      <button class="closeBtn" onclick="closeSauceModal(true)">×</button>
     </div>
     <div class="modalBody">
       <p class="helper" id="sauceHelper">Elegí 1 salsa (sin cargo).</p>
       <div class="chips" id="sauceList"></div>
     </div>
     <div class="modalBottom">
-      <button class="btnModal" onclick="closeSauceModal()">Cancelar</button>
+      <button class="btnModal" onclick="closeSauceModal(true)">Cancelar</button>
       <button class="btnModal primary" onclick="confirmSauces()">Confirmar</button>
     </div>
   </div>
 </div>
 
+<!-- Modal Pedido (preview) -->
 <div class="modal" id="orderModal">
   <div class="modalCard">
     <div class="modalTop">
@@ -683,37 +693,41 @@
 
   let activeTab = "combos";
 
-  const cart = {};         // items con precio
-  const sauceChoices = {}; // salsas a elección (sin cargo)
+  // Carrito SOLO para items con precio (combos, piezas, extras pagas)
+  const cart = {}; // id -> qty
+
+  // Salsas a elección (sin cargo) elegidas en modal
+  const sauceChoices = {}; // id -> qty (sin cargo)
 
   // ===== Menú =====
+  // NOTA: imágenes .PNG y sin acentos en filename
   const MENU = [
-    // ===== Combos (con nombres japoneses + fotos) =====
-    { id:"combo10", tab:"combos", name:"Osaka", pieces:10, price:16000,
-      includesRule:"Incluye 1 salsa de soja fija", composition:["4 Philadelphia","3 New York","3 California"], img:"osaka.PNG",
+    // ===== Combos =====
+    { id:"combo10", tab:"combos", name:"Combo 10 piezas", pieces:10, price:16000,
+      includesRule:"Incluye 1 salsa de soja fija", composition:["4 Philadelphia","3 New York","3 California"], img:"combo-10.PNG",
       chooseSauces:0, fixedSoja:1
     },
-    { id:"combo15", tab:"combos", name:"Sapporo", pieces:15, price:22000,
-      includesRule:"Incluye 1 salsa de soja fija", composition:["5 New York","5 California","5 Buenos Aires"], img:"sapporo.PNG",
+    { id:"combo15", tab:"combos", name:"Combo 15 piezas", pieces:15, price:22000,
+      includesRule:"Incluye 1 salsa de soja fija", composition:["5 New York","5 California","5 Buenos Aires"], img:"combo-15.PNG",
       chooseSauces:0, fixedSoja:1
     },
-    { id:"combo20", tab:"combos", name:"Tokio", pieces:20, price:30000,
-      includesRule:"Incluye 1 salsa de soja fija", composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese langostino"], img:"tokio.PNG",
+    { id:"combo20", tab:"combos", name:"Combo 20 piezas", pieces:20, price:30000,
+      includesRule:"Incluye 1 salsa de soja fija", composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese langostino"], img:"combo-20.PNG",
       chooseSauces:0, fixedSoja:1
     },
-    { id:"combo30", tab:"combos", name:"Hiroshima", pieces:30, price:45000,
+    { id:"combo30", tab:"combos", name:"Combo 30 piezas", pieces:30, price:45000,
       includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección",
-      composition:["5 Avocado","5 Maki de atún","5 California","5 Vegetariano","5 Buenos Aires","5 New York"], img:"hiroshima.PNG",
+      composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"], img:"combo-30.PNG",
       chooseSauces:1, fixedSoja:1
     },
-    { id:"combo40", tab:"combos", name:"Yokohama", pieces:40, price:55000,
+    { id:"combo40", tab:"combos", name:"Combo 40 piezas", pieces:40, price:55000,
       includesRule:"Incluye 2 salsas de soja fijas + 1 salsa a elección",
-      composition:["10 Philadelphia","10 Maki de salmón","10 Nigiris de salmón","10 New York"], img:"yokohama.PNG",
+      composition:["10 Philadelphia","10 Maki de salmón","10 Nigiris de salmón","10 New York"], img:"combo-40.PNG",
       chooseSauces:1, fixedSoja:2
     },
     { id:"combo50", tab:"combos", name:"Imperial", pieces:50, price:70000,
       includesRule:"Incluye 2 salsas de soja fijas + 2 salsas a elección",
-      composition:["10 Ebi langostino","10 Crazy","10 Salmón crispy","10 Tamago","10 Keki"], img:"imperial.PNG",
+      composition:["10 Ebi langostino","10 Crazy","10 Salmón crispy","10 Tamago","10 Keki"], img:"combo-50.PNG",
       chooseSauces:2, fixedSoja:2
     },
 
@@ -764,13 +778,13 @@
     { id:"pepino", tab:"extras", name:"Pepino", pieces:0, price:700, desc:"Unidad.", img:"pepino.PNG" }
   ];
 
+  // ===== Salsas a elección (SOLO estas 4) =====
   const SAUCE_CHOICES = [
     { id:"salsa_ba", name:"Salsa Buenos Aires" },
     { id:"maracuya", name:"Salsa maracuyá" },
     { id:"mostaza_miel", name:"Salsa mostaza y miel" },
     { id:"soja", name:"Salsa de soja" }
   ];
-  const choiceSet = new Set(SAUCE_CHOICES.map(x=>x.id));
 
   const getQty = (id) => cart[id] || 0;
 
@@ -797,6 +811,7 @@
     window.scrollTo({top:0, behavior:"smooth"});
   }
 
+  // ===== Modal imagen =====
   function openImgModal(name, src){
     if (!src) return;
     document.getElementById("imgModalTitle").textContent = name || "Imagen";
@@ -811,7 +826,8 @@
     if (e.target.id === "imgModal") closeImgModal();
   });
 
-  let pendingSaucePick = null;
+  // ===== Modal elección salsas =====
+  let pendingSaucePick = null; // {comboId, count}
 
   function openSauceModal(comboItem){
     const count = Number(comboItem.chooseSauces||0);
@@ -871,18 +887,103 @@
       return;
     }
 
+    // ✅ Estas salsas NO se cobran. Se guardan aparte del carrito.
     ids.forEach(id=>{
-      sauceChoices[id] = (sauceChoices[id]||0) + 1; // sin cargo
+      sauceChoices[id] = (sauceChoices[id]||0) + 1;
     });
+
+    // ✅ si después cambian combos, se recorta solo (reconcile)
+    reconcileSauceChoices();
 
     haptic();
     updateTotals();
     closeSauceModal();
   }
 
+  // ===== Reglas de salsas incluidas y reconcile (FIX) =====
+
+  function requiredChoiceSaucesFromCombos(){
+    let needed = 0;
+    for (const [id, qty] of Object.entries(cart)){
+      const it = MENU.find(x=>x.id===id);
+      if (it && it.tab==="combos"){
+        needed += (Number(it.chooseSauces||0) * qty);
+      }
+    }
+    return needed;
+  }
+
+  // Recorta salsas elegidas si bajan combos (ej: 2 combos -> 1 combo)
+  function reconcileSauceChoices(){
+    const required = requiredChoiceSaucesFromCombos();
+    let current = countSauceChoices();
+    if (current <= required) return;
+
+    let toRemove = current - required;
+
+    // Sacamos de atrás hacia adelante según el orden del modal
+    for (let i = SAUCE_CHOICES.length - 1; i >= 0 && toRemove > 0; i--){
+      const id = SAUCE_CHOICES[i].id;
+      const q = sauceChoices[id] || 0;
+      if (!q) continue;
+      const dec = Math.min(q, toRemove);
+      const next = q - dec;
+      if (next <= 0) delete sauceChoices[id];
+      else sauceChoices[id] = next;
+      toRemove -= dec;
+    }
+
+    // Por si hubiera algún id fuera de lista (seguridad)
+    for (const id of Object.keys(sauceChoices)){
+      if (toRemove <= 0) break;
+      const q = sauceChoices[id] || 0;
+      const dec = Math.min(q, toRemove);
+      const next = q - dec;
+      if (next <= 0) delete sauceChoices[id];
+      else sauceChoices[id] = next;
+      toRemove -= dec;
+    }
+  }
+
+  // Salsa de soja incluida por rolls (NO combos): 1 cada 10 piezas entre todos
+  function sojaIncludedFromNonCombos(){
+    let nonComboPieces = 0;
+    for (const [id, qty] of Object.entries(cart)){
+      const it = MENU.find(x=>x.id===id);
+      if (!it) continue;
+      if (it.tab !== "combos" && (it.pieces||0) > 0){
+        nonComboPieces += (it.pieces||0) * qty;
+      }
+    }
+    return Math.floor(nonComboPieces / 10);
+  }
+
+  function fixedIncludedFromCombos(){
+    // solo salsa de soja fija según combo (sin cargo)
+    let fixedSoja = 0;
+    for (const [id, qty] of Object.entries(cart)){
+      const it = MENU.find(x=>x.id===id);
+      if (it && it.tab==="combos"){
+        fixedSoja += (Number(it.fixedSoja||0) * qty);
+      }
+    }
+    return { soja: fixedSoja };
+  }
+
+  function includedSojaTotal(){
+    const fixed = fixedIncludedFromCombos().soja || 0;
+    const rolls = sojaIncludedFromNonCombos();
+    return fixed + rolls;
+  }
+
+  // ===== Carrito =====
   function add(id){
     cart[id] = (cart[id]||0) + 1;
     haptic();
+
+    // ✅ FIX: si se agregó/quitó combo, mantener salsas a elección alineadas
+    reconcileSauceChoices();
+
     updateTotals();
     updateQtyPills();
 
@@ -897,6 +998,10 @@
     cart[id] -= 1;
     if (cart[id] <= 0) delete cart[id];
     haptic();
+
+    // ✅ FIX: si bajan combos, recortar salsas elegidas excedentes
+    reconcileSauceChoices();
+
     updateTotals();
     updateQtyPills();
   }
@@ -926,36 +1031,8 @@
     return { totalMoney, totalPieces };
   }
 
-  function fixedIncludedFromCombos(){
-    let fixedSoja = 0;
-    for (const [id, qty] of Object.entries(cart)){
-      const it = MENU.find(x=>x.id===id);
-      if (it && it.tab==="combos"){
-        fixedSoja += (Number(it.fixedSoja||0) * qty);
-      }
-    }
-    return { soja: fixedSoja };
-  }
-
-  function nonComboPiecesTotal(){
-    let p = 0;
-    for (const [id, qty] of Object.entries(cart)){
-      const it = MENU.find(x=>x.id===id);
-      if (!it) continue;
-      if (it.tab !== "combos" && (it.pieces||0) > 0){
-        p += (it.pieces||0) * qty;
-      }
-    }
-    return p;
-  }
-
-  function includedSojaByPiecesRule(){
-    // 1 soja cada 10 piezas entre TODO lo que NO es combo
-    const p = nonComboPiecesTotal();
-    return Math.floor(p / 10);
-  }
-
   function countPaidExtras(){
+    // cuenta solo extras/adicionales pagas (items del carrito con pieces==0)
     let c = 0;
     for (const [id, qty] of Object.entries(cart)){
       const it = MENU.find(x=>x.id===id);
@@ -971,10 +1048,8 @@
   }
 
   function countSaucesTotal(){
-    const fixed = fixedIncludedFromCombos();
-    const fixedCount = fixed.soja || 0;
-    const byPieces = includedSojaByPiecesRule();
-    return fixedCount + byPieces + countSauceChoices() + countPaidExtras();
+    // Total salsas = incluidas soja (combos + regla 10 piezas) + a elección sin cargo + adicionales pagas (extras)
+    return includedSojaTotal() + countSauceChoices() + countPaidExtras();
   }
 
   function updateTotals(){
@@ -992,6 +1067,7 @@
     });
   }
 
+  // ===== Preview Pedido =====
   function openOrderModal(){
     const hasAnything = Object.keys(cart).length>0 || Object.keys(sauceChoices).length>0;
     if (!hasAnything){
@@ -1005,6 +1081,7 @@
     const sushiLines = [];
     const paidSaucesLines = [];
 
+    // Sushi + extras pagas
     for (const [id, qty] of Object.entries(cart)){
       const it = MENU.find(x=>x.id===id);
       if (!it) continue;
@@ -1014,18 +1091,17 @@
         const priceLine = `$${fmtMoney((it.price||0)*qty)}`;
         sushiLines.push(`${qty}x ${it.name} – ${labelPieces} – ${priceLine}`);
       } else {
+        // extras pagas
         paidSaucesLines.push(`${qty}x ${it.name} – $${fmtMoney((it.price||0)*qty)}`);
       }
     }
 
-    const fixed = fixedIncludedFromCombos();
-    const byPieces = includedSojaByPiecesRule();
-    const includedParts = [];
-    if ((fixed.soja||0) > 0) includedParts.push(`${fixed.soja}x Salsa de soja (por combos)`);
-    if (byPieces > 0) includedParts.push(`${byPieces}x Salsa de soja (cada 10 piezas)`);
-    const includedText = includedParts.length ? includedParts.join(" + ") : "—";
+    // Salsa incluida (soja) por regla + combos
+    const sojaInc = includedSojaTotal();
+    const includedText = sojaInc > 0 ? `${sojaInc}x Salsa de soja (sin cargo)` : "—";
     document.getElementById("orderIncludedLine").textContent = `Salsa incluida (sin cargo): ${includedText}`;
 
+    // Salsas a elección (sin cargo)
     const choiceLines = [];
     for (const [id, qty] of Object.entries(sauceChoices)){
       const it = MENU.find(x=>x.id===id);
@@ -1033,6 +1109,7 @@
       choiceLines.push(`${qty}x ${nm} (sin cargo)`);
     }
 
+    // Render lists
     sushiList.innerHTML = sushiLines.length ? sushiLines.map(x=>`<li>${escapeHTML(x)}</li>`).join("") : "<li>—</li>";
 
     const allSaucesLines = [];
@@ -1066,52 +1143,55 @@
       .replaceAll("'","&#039;");
   }
 
+  // ===== WhatsApp =====
   function buildMessage(){
     const sushiLines = [];
-    const paidSauceLines = [];
-    const choiceLines = [];
+    const sauceIncludedLines = [];
+    const sauceChoiceLines = [];
+    const saucePaidLines = [];
 
+    // Sushi + extras pagas
     for (const [id, qty] of Object.entries(cart)){
       const it = MENU.find(x=>x.id===id);
       if (!it) continue;
 
       if (it.pieces > 0){
-        const labelPieces = it.pieces === 5 ? "5 piezas" : `${it.pieces} piezas`;
-        sushiLines.push(`${qty}x ${it.name} – ${labelPieces} – $${fmtMoney((it.price||0)*qty)}`);
+        const xBase = it.pieces === 5 ? " x5" : "";
+        sushiLines.push(`${qty}x ${it.name}${xBase} – ${(it.pieces||0)*qty} piezas – $${fmtMoney((it.price||0)*qty)}`);
       } else {
-        paidSauceLines.push(`${qty}x ${it.name} – $${fmtMoney((it.price||0)*qty)}`);
+        saucePaidLines.push(`${qty}x ${it.name} – $${fmtMoney((it.price||0)*qty)}`);
       }
     }
 
+    // Salsa incluida (soja) por regla + combos
+    const sojaInc = includedSojaTotal();
+    if (sojaInc > 0){
+      sauceIncludedLines.push(`${sojaInc}x Salsa de soja (sin cargo)`);
+    }
+
+    // A elección (sin cargo)
     for (const [id, qty] of Object.entries(sauceChoices)){
       const it = MENU.find(x=>x.id===id);
       const nm = it ? it.name : (SAUCE_CHOICES.find(x=>x.id===id)?.name || id);
-      choiceLines.push(`${qty}x ${nm}`);
+      sauceChoiceLines.push(`${qty}x ${nm} (sin cargo)`);
     }
-
-    const fixed = fixedIncludedFromCombos();
-    const byPieces = includedSojaByPiecesRule();
-    const includedCount = (fixed.soja||0) + byPieces;
 
     const { totalMoney, totalPieces } = totals();
     const totalSauces = countSaucesTotal();
 
     let msg = "";
     msg += "Pedido Sushi Stella Maris 🍣\n\n";
+
     msg += (sushiLines.length ? sushiLines.join("\n") : "—") + "\n\n";
 
     msg += "Salsa incluida (sin cargo):\n";
-    msg += (includedCount > 0 ? `- ${includedCount}x Salsa de soja\n\n` : "- —\n\n");
+    msg += (sauceIncludedLines.length ? ("- " + sauceIncludedLines.join("\n- ")) : "- —") + "\n\n";
 
-    if (choiceLines.length){
-      msg += "Salsa a elección (sin cargo):\n";
-      msg += choiceLines.map(x=>`- ${x}`).join("\n") + "\n\n";
-    }
+    msg += "Salsa a elección (sin cargo):\n";
+    msg += (sauceChoiceLines.length ? ("- " + sauceChoiceLines.join("\n- ")) : "- —") + "\n\n";
 
-    if (paidSauceLines.length){
-      msg += "Salsa adicional:\n";
-      msg += paidSauceLines.map(x=>`- ${x}`).join("\n") + "\n\n";
-    }
+    msg += "Salsa adicional:\n";
+    msg += (saucePaidLines.length ? ("- " + saucePaidLines.join("\n- ")) : "- —") + "\n\n";
 
     msg += `Total piezas: ${totalPieces}\n`;
     msg += `Total salsas: ${totalSauces}\n`;
@@ -1130,12 +1210,15 @@
     window.open(url, "_blank");
   }
 
+  // ===== Fallback de imágenes =====
   function attachImgFallback(imgEl){
     imgEl.addEventListener("error", ()=>{
       const original = imgEl.getAttribute("data-src") || imgEl.src;
       const alts = [];
+
       if (original.endsWith(".PNG")) alts.push(original.replace(".PNG",".png"));
       if (original.endsWith(".png")) alts.push(original.replace(".png",".PNG"));
+
       if (!original.startsWith("http") && !original.startsWith("./")) alts.push("./"+original);
 
       const tried = JSON.parse(imgEl.getAttribute("data-tried") || "[]");
@@ -1214,6 +1297,9 @@
     `;
 
     document.querySelectorAll(".menuImg").forEach(img => attachImgFallback(img));
+
+    // ✅ por las dudas, mantener consistente siempre
+    reconcileSauceChoices();
 
     updateTotals();
     updateQtyPills();
