@@ -635,14 +635,14 @@
   <div class="modalCard">
     <div class="modalTop">
       <div class="ttl" id="sauceModalTitle">Elegí tus salsas</div>
-      <button class="closeBtn" onclick="closeSauceModal(true)">×</button>
+      <button class="closeBtn" onclick="closeSauceModal()">×</button>
     </div>
     <div class="modalBody">
       <p class="helper" id="sauceHelper">Elegí 1 salsa (sin cargo).</p>
       <div class="chips" id="sauceList"></div>
     </div>
     <div class="modalBottom">
-      <button class="btnModal" onclick="closeSauceModal(true)">Cancelar</button>
+      <button class="btnModal" onclick="closeSauceModal()">Cancelar</button>
       <button class="btnModal primary" onclick="confirmSauces()">Confirmar</button>
     </div>
   </div>
@@ -700,34 +700,33 @@
   const sauceChoices = {}; // id -> qty (sin cargo)
 
   // ===== Menú =====
-  // NOTA: imágenes .PNG y sin acentos en filename
   const MENU = [
-    // ===== Combos =====
-    { id:"combo10", tab:"combos", name:"Combo 10 piezas", pieces:10, price:16000,
-      includesRule:"Incluye 1 salsa de soja fija", composition:["4 Philadelphia","3 New York","3 California"], img:"combo-10.PNG",
+    // ===== Combos (NOMBRES + FOTOS) =====
+    { id:"combo10", tab:"combos", name:"Osaka", pieces:10, price:16000,
+      includesRule:"Incluye 1 salsa de soja fija", composition:["4 Philadelphia","3 New York","3 California"], img:"osaka.PNG",
       chooseSauces:0, fixedSoja:1
     },
-    { id:"combo15", tab:"combos", name:"Combo 15 piezas", pieces:15, price:22000,
-      includesRule:"Incluye 1 salsa de soja fija", composition:["5 New York","5 California","5 Buenos Aires"], img:"combo-15.PNG",
+    { id:"combo15", tab:"combos", name:"Sapporo", pieces:15, price:22000,
+      includesRule:"Incluye 1 salsa de soja fija", composition:["5 New York","5 California","5 Buenos Aires"], img:"sapporo.PNG",
       chooseSauces:0, fixedSoja:1
     },
-    { id:"combo20", tab:"combos", name:"Combo 20 piezas", pieces:20, price:30000,
-      includesRule:"Incluye 1 salsa de soja fija", composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese langostino"], img:"combo-20.PNG",
+    { id:"combo20", tab:"combos", name:"Tokio", pieces:20, price:30000,
+      includesRule:"Incluye 1 salsa de soja fija", composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese langostino"], img:"tokio.PNG",
       chooseSauces:0, fixedSoja:1
     },
-    { id:"combo30", tab:"combos", name:"Combo 30 piezas", pieces:30, price:45000,
+    { id:"combo30", tab:"combos", name:"Hiroshima", pieces:30, price:45000,
       includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección",
-      composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"], img:"combo-30.PNG",
+      composition:["5 Avocado","5 Maki de atún","5 California","5 Vegetariano","5 Buenos Aires","5 New York"], img:"hiroshima.PNG",
       chooseSauces:1, fixedSoja:1
     },
-    { id:"combo40", tab:"combos", name:"Combo 40 piezas", pieces:40, price:55000,
+    { id:"combo40", tab:"combos", name:"Yokohama", pieces:40, price:55000,
       includesRule:"Incluye 2 salsas de soja fijas + 1 salsa a elección",
-      composition:["10 Philadelphia","10 Maki de salmón","10 Nigiris de salmón","10 New York"], img:"combo-40.PNG",
+      composition:["10 Philadelphia","10 Maki de salmón","10 Nigiris de salmón","10 New York"], img:"yokohama.PNG",
       chooseSauces:1, fixedSoja:2
     },
     { id:"combo50", tab:"combos", name:"Imperial", pieces:50, price:70000,
       includesRule:"Incluye 2 salsas de soja fijas + 2 salsas a elección",
-      composition:["10 Ebi langostino","10 Crazy","10 Salmón crispy","10 Tamago","10 Keki"], img:"combo-50.PNG",
+      composition:["10 Ebi langostino","10 Crazy","10 Salmón crispy","10 Tamago","10 Keki"], img:"imperial.PNG",
       chooseSauces:2, fixedSoja:2
     },
 
@@ -1297,9 +1296,6 @@
     `;
 
     document.querySelectorAll(".menuImg").forEach(img => attachImgFallback(img));
-
-    // ✅ por las dudas, mantener consistente siempre
-    reconcileSauceChoices();
 
     updateTotals();
     updateQtyPills();
