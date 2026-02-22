@@ -635,14 +635,14 @@
   <div class="modalCard">
     <div class="modalTop">
       <div class="ttl" id="sauceModalTitle">Elegí tus salsas</div>
-      <button class="closeBtn" onclick="closeSauceModal(true)">×</button>
+      <button class="closeBtn" onclick="closeSauceModal()">×</button>
     </div>
     <div class="modalBody">
       <p class="helper" id="sauceHelper">Elegí 1 salsa (sin cargo).</p>
       <div class="chips" id="sauceList"></div>
     </div>
     <div class="modalBottom">
-      <button class="btnModal" onclick="closeSauceModal(true)">Cancelar</button>
+      <button class="btnModal" onclick="closeSauceModal()">Cancelar</button>
       <button class="btnModal primary" onclick="confirmSauces()">Confirmar</button>
     </div>
   </div>
@@ -700,34 +700,34 @@
   const sauceChoices = {}; // id -> qty (sin cargo)
 
   // ===== Menú =====
-  // NOTA: imágenes .PNG y sin acentos en filename
+  // ✅ COMBOS con nombres + fotos (subilas con estos nombres exactos .PNG)
   const MENU = [
     // ===== Combos =====
-    { id:"combo10", tab:"combos", name:"Combo 10 piezas", pieces:10, price:16000,
-      includesRule:"Incluye 1 salsa de soja fija", composition:["4 Philadelphia","3 New York","3 California"], img:"",
+    { id:"combo10", tab:"combos", name:"Osaka", pieces:10, price:16000,
+      includesRule:"Incluye 1 salsa de soja fija", composition:["4 Philadelphia","3 New York","3 California"], img:"osaka.PNG",
       chooseSauces:0, fixedSoja:1
     },
-    { id:"combo15", tab:"combos", name:"Combo 15 piezas", pieces:15, price:22000,
-      includesRule:"Incluye 1 salsa de soja fija", composition:["5 New York","5 California","5 Buenos Aires"], img:"",
+    { id:"combo15", tab:"combos", name:"Sapporo", pieces:15, price:22000,
+      includesRule:"Incluye 1 salsa de soja fija", composition:["5 New York","5 California","5 Buenos Aires"], img:"sapporo.PNG",
       chooseSauces:0, fixedSoja:1
     },
-    { id:"combo20", tab:"combos", name:"Combo 20 piezas", pieces:20, price:30000,
-      includesRule:"Incluye 1 salsa de soja fija", composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese salmón"], img:"",
+    { id:"combo20", tab:"combos", name:"Tokio", pieces:20, price:30000,
+      includesRule:"Incluye 1 salsa de soja fija", composition:["5 Alaska","5 Vegetariano","5 Maki de atún","5 Cheese salmón"], img:"tokio.PNG",
       chooseSauces:0, fixedSoja:1
     },
-    { id:"combo30", tab:"combos", name:"Combo 30 piezas", pieces:30, price:45000,
+    { id:"combo30", tab:"combos", name:"Hiroshima", pieces:30, price:45000,
       includesRule:"Incluye 1 salsa de soja fija + 1 salsa a elección",
-      composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"], img:"",
+      composition:["5 New York","5 Buenos Aires","5 Vegetariano","5 Makis de salmón","5 Avocado","5 California"], img:"hiroshima.PNG",
       chooseSauces:1, fixedSoja:1
     },
-    { id:"combo40", tab:"combos", name:"Combo 40 piezas", pieces:40, price:55000,
+    { id:"combo40", tab:"combos", name:"Yokohama", pieces:40, price:55000,
       includesRule:"Incluye 2 salsas de soja fijas + 1 salsa a elección",
-      composition:["10 Philadelphia","10 Maki de salmón","10 Nigiris de salmón","10 New York"], img:"",
+      composition:["10 Philadelphia","10 Maki de salmón","10 Nigiris de salmón","10 New York"], img:"yokohama.PNG",
       chooseSauces:1, fixedSoja:2
     },
-    { id:"combo50", tab:"combos", name:"Combo 50 piezas", pieces:50, price:70000,
+    { id:"combo50", tab:"combos", name:"Imperial", pieces:50, price:70000,
       includesRule:"Incluye 2 salsas de soja fijas + 2 salsas a elección",
-      composition:["10 Ebi langostino","10 Crazy","10 Salmón crispy","10 Tamago","10 Keki"], img:"",
+      composition:["10 Ebi langostino","10 Crazy","10 Salmón crispy","10 Tamago","10 Keki"], img:"imperial.PNG",
       chooseSauces:2, fixedSoja:2
     },
 
@@ -785,7 +785,6 @@
     { id:"mostaza_miel", name:"Salsa mostaza y miel" },
     { id:"soja", name:"Salsa de soja" }
   ];
-  const choiceSet = new Set(SAUCE_CHOICES.map(x=>x.id));
 
   const getQty = (id) => cart[id] || 0;
 
@@ -888,7 +887,7 @@
       return;
     }
 
-    // ✅ IMPORTANTE: estas salsas NO se cobran. Se guardan aparte del carrito.
+    // ✅ SIN CARGO: se guardan aparte del carrito
     ids.forEach(id=>{
       sauceChoices[id] = (sauceChoices[id]||0) + 1;
     });
@@ -946,7 +945,7 @@
   }
 
   function fixedIncludedFromCombos(){
-    // solo salsa de soja fija según combo (sin cargo)
+    // solo soja fija según combo (sin cargo)
     let fixedSoja = 0;
     for (const [id, qty] of Object.entries(cart)){
       const it = MENU.find(x=>x.id===id);
@@ -958,7 +957,7 @@
   }
 
   function countPaidExtras(){
-    // cuenta solo extras/adicionales pagas (items del carrito con pieces==0)
+    // extras/adicionales pagas (items del carrito con pieces==0)
     let c = 0;
     for (const [id, qty] of Object.entries(cart)){
       const it = MENU.find(x=>x.id===id);
@@ -974,7 +973,7 @@
   }
 
   function countSaucesTotal(){
-    // Total salsas = incluidas fijas + a elección sin cargo + adicionales pagas (extras)
+    // Total salsas = incluidas fijas + a elección sin cargo + adicionales pagas
     const fixed = fixedIncludedFromCombos();
     const fixedCount = fixed.soja || 0;
     return fixedCount + countSauceChoices() + countPaidExtras();
@@ -1009,7 +1008,6 @@
     const sushiLines = [];
     const paidSaucesLines = [];
 
-    // Sushi + extras pagas
     for (const [id, qty] of Object.entries(cart)){
       const it = MENU.find(x=>x.id===id);
       if (!it) continue;
@@ -1019,17 +1017,14 @@
         const priceLine = `$${fmtMoney((it.price||0)*qty)}`;
         sushiLines.push(`${qty}x ${it.name} – ${labelPieces} – ${priceLine}`);
       } else {
-        // extras pagas
         paidSaucesLines.push(`${qty}x ${it.name} – $${fmtMoney((it.price||0)*qty)}`);
       }
     }
 
-    // Incluidas por combos
     const fixed = fixedIncludedFromCombos();
     const includedText = (fixed.soja||0) > 0 ? `${fixed.soja}x Salsa de soja (sin cargo)` : "—";
     document.getElementById("orderIncludedLine").textContent = `Incluidas por combos: ${includedText}`;
 
-    // Salsas a elección (sin cargo)
     const choiceLines = [];
     for (const [id, qty] of Object.entries(sauceChoices)){
       const it = MENU.find(x=>x.id===id);
@@ -1037,7 +1032,6 @@
       choiceLines.push(`${qty}x ${nm} (sin cargo)`);
     }
 
-    // Render lists
     sushiList.innerHTML = sushiLines.length ? sushiLines.map(x=>`<li>${escapeHTML(x)}</li>`).join("") : "<li>—</li>";
 
     const allSaucesLines = [];
@@ -1078,7 +1072,6 @@
     const sauceChoiceLines = [];
     const saucePaidLines = [];
 
-    // Sushi + extras pagas
     for (const [id, qty] of Object.entries(cart)){
       const it = MENU.find(x=>x.id===id);
       if (!it) continue;
@@ -1091,13 +1084,11 @@
       }
     }
 
-    // Incluidas por combos (soja fija)
     const fixed = fixedIncludedFromCombos();
     if ((fixed.soja||0) > 0){
       sauceIncludedLines.push(`${fixed.soja}x Salsa de soja (sin cargo)`);
     }
 
-    // A elección (sin cargo)
     for (const [id, qty] of Object.entries(sauceChoices)){
       const it = MENU.find(x=>x.id===id);
       const nm = it ? it.name : (SAUCE_CHOICES.find(x=>x.id===id)?.name || id);
